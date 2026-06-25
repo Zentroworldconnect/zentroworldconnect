@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         primaryColor: "#a81a29",
         secondaryColor: "#c52536",
         accentColor: "#cca353",
+        logo: 'assets/logo.jpg',
         heroTitle: 'Cultivating Pure Elegance, <br><span class="italic-serif">Exporting to the World</span>',
         heroDescription: 'Zentro World Connect delivers the finest hand-harvested fresh flowers with an unbroken cold chain. From the fertile soil of Southern India directly to global markets within 24 hours.',
         heroImage: 'assets/hero_flowers.png',
@@ -129,6 +130,12 @@ document.addEventListener('DOMContentLoaded', () => {
     /* --- RENDER CONTACT INFO --- */
     const renderContactInfo = (sets) => {
         if (!sets) return;
+
+        // Logo rendering
+        const headerLogo = document.getElementById('headerLogo');
+        const footerLogo = document.getElementById('footerLogo');
+        if (headerLogo && sets.logo) headerLogo.src = sets.logo;
+        if (footerLogo && sets.logo) footerLogo.src = sets.logo;
         
         // Top bar
         const topEmail = document.getElementById('topEmail');
