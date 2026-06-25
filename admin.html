@@ -22,7 +22,7 @@
     <div class="login-overlay" id="loginOverlay">
         <div class="login-card">
             <div class="login-header">
-                <img src="assets/logo.jpg" alt="Zentro Logo" class="login-logo">
+                <img src="assets/logo.jpg" alt="Zentro Logo" class="login-logo" id="loginLogo">
                 <h2>Zentro World Connect</h2>
                 <p>Exports Control Dashboard</p>
             </div>
@@ -54,7 +54,7 @@
         <!-- SIDEBAR -->
         <aside class="admin-sidebar">
             <div class="sidebar-header">
-                <img src="assets/logo.jpg" alt="Zentro Logo" class="sidebar-logo">
+                <img src="assets/logo.jpg" alt="Zentro Logo" class="sidebar-logo" id="sidebarLogo">
                 <div class="sidebar-brand">
                     <h3>Zentro Admin</h3>
                     <span>Exports Console</span>
@@ -255,6 +255,17 @@
                                     <div class="color-picker-wrapper">
                                         <input type="color" id="accentColor">
                                         <input type="text" id="accentColorHex" placeholder="#cca353" maxlength="7">
+                                    </div>
+                                </div>
+                                <div class="form-group color-input-group">
+                                    <label for="setLogoFile">Upload Custom Brand Logo (Max 500KB)</label>
+                                    <div class="color-picker-wrapper" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                                        <input type="file" id="setLogoFile" accept="image/*">
+                                        <input type="hidden" id="setLogo">
+                                        <div class="image-preview-box" id="logoPreviewBox" style="display: none; margin-top: 4px; padding: 8px;">
+                                            <span style="font-size: 0.75rem; font-weight:600; color: var(--primary); display:block; margin-bottom: 3px;">Logo Preview:</span>
+                                            <img id="logoPreview" src="" alt="Logo Preview" style="max-height: 40px; max-width: 120px; object-fit: contain; background: white; padding: 2px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
