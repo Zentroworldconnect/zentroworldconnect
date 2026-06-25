@@ -33,6 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('zentro_admin_password', 'zentro123');
     }
 
+    // Render stored logo immediately on load
+    const cachedLogo = localStorage.getItem('zentro_logo') || (JSON.parse(localStorage.getItem('zentro_settings')) || {}).logo || 'assets/logo.jpg';
+    const loginLogo = document.getElementById('loginLogo');
+    const sidebarLogo = document.getElementById('sidebarLogo');
+    if (loginLogo) loginLogo.src = cachedLogo;
+    if (sidebarLogo) sidebarLogo.src = cachedLogo;
+
     // Sync credentials from Supabase settings on load if configured
     const syncCredentialsFromSupabase = async () => {
         if (supabaseClient) {
@@ -208,6 +215,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (data.adminPassword) {
                             localStorage.setItem('zentro_admin_password', data.adminPassword);
                         }
+                        if (data.logo) {
+                            localStorage.setItem('zentro_logo', data.logo);
+                            const loginLogo = document.getElementById('loginLogo');
+                            const sidebarLogo = document.getElementById('sidebarLogo');
+                            if (loginLogo) loginLogo.src = data.logo;
+                            if (sidebarLogo) sidebarLogo.src = data.logo;
+                        }
                         return data;
                     }
                     console.error("Supabase select settings error:", error);
@@ -239,8 +253,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return "#" + (0x1000000 + (R<0?0:R>255?255:R)*0x10000 + (G<0?0:G>255?255:G)*0x100 + (B<0?0:B>255?255:B)).toString(16).slice(1);
         }
 
-        // Apply theme color on page load
-        getSettings().then(applyThemeColors);
+        // Apply theme color and logo on page load
+        getSettings().then(sets => {
+            applyThemeColors(sets);
+            if (sets && sets.logo) {
+                const loginLogo = document.getElementById('loginLogo');
+                const sidebarLogo = document.getElementById('sidebarLogo');
+                if (loginLogo) loginLogo.src = sets.logo;
+                if (sidebarLogo) sidebarLogo.src = sets.logo;
+            }
+        });
 
         // Update badge counts in sidebar on load
         const updateSidebarBadges = async () => {
@@ -818,6 +840,88 @@ document.addEventListener('DOMContentLoaded', () => {
         setupColorSync('secondaryColor', 'secondaryColorHex');
         setupColorSync('accentColor', 'accentColorHex');
 
+        // Logo Canvas Compression & Preview
+        const logoImageFile = document.getElementById('setLogoFile');
+        const logoImage = document.getElementById('setLogo');
+        const logoImagePreview = document.getElementById('logoPreview');
+        const logoImagePreviewBox = document.getElementById('logoPreviewBox');
+
+        if (!logoImageFile) console.error("setLogoFile element not found in DOM");
+        if (!logoImage) console.error("setLogo element not found in DOM");
+        if (!logoImagePreview) console.error("logoPreview element not found in DOM");
+        if (!logoImagePreviewBox) console.error("logoPreviewBox element not found in DOM");
+
+        if (logoImageFile) {
+            logoImageFile.addEventListener('change', (e) => {
+                try {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            const img = new Image();
+                            img.onload = () => {
+                                try {
+                                    const canvas = document.createElement('canvas');
+                                    let width = img.width;
+                                    let height = img.height;
+
+                                    // Logo should be compact (max dimension 200px)
+                                    const maxDimension = 200;
+                                    if (width > maxDimension || height > maxDimension) {
+                                        if (width > height) {
+                                            height = Math.round((height * maxDimension) / width);
+                                            width = maxDimension;
+                                        } else {
+                                            width = Math.round((width * maxDimension) / height);
+                                            height = maxDimension;
+                                        }
+                                    }
+
+                                    canvas.width = width;
+                                    canvas.height = height;
+
+                                    const ctx = canvas.getContext('2d');
+                                    ctx.drawImage(img, 0, 0, width, height);
+
+                                    // Compress to JPEG with 70% quality (under 10KB)
+                                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                                    if (logoImage) logoImage.value = compressedBase64;
+                                    
+                                    if (logoImagePreview) logoImagePreview.src = compressedBase64;
+                                    if (logoImagePreviewBox) logoImagePreviewBox.style.display = 'block';
+
+                                    // Instantly update on-page admin logos for live preview
+                                    const loginLogo = document.getElementById('loginLogo');
+                                    const sidebarLogo = document.getElementById('sidebarLogo');
+                                    if (loginLogo) loginLogo.src = compressedBase64;
+                                    if (sidebarLogo) sidebarLogo.src = compressedBase64;
+
+                                    const group = logoImageFile.closest('.form-group');
+                                    if (group) group.classList.remove('error');
+                                } catch (err) {
+                                    alert("Error processing image canvas: " + err.message);
+                                    console.error(err);
+                                }
+                            };
+                            img.onerror = (err) => {
+                                alert("Failed to load selected image into image object.");
+                            };
+                            img.src = event.target.result;
+                        } catch (err) {
+                            alert("Error inside reader onload: " + err.message);
+                            console.error(err);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                } catch (err) {
+                    alert("Error in file upload change event: " + err.message);
+                    console.error(err);
+                }
+            });
+        }
+
         // Hero Image Canvas Compression & Preview
         const heroImageFile = document.getElementById('setHeroImageFile');
         const heroImage = document.getElementById('setHeroImage');
@@ -985,6 +1089,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('accentColorHex').value = sets.accentColor.toUpperCase();
             }
 
+            // Brand Logo
+            const logoVal = sets.logo || 'assets/logo.jpg';
+            document.getElementById('setLogo').value = logoVal;
+            const logoPreview = document.getElementById('logoPreview');
+            const logoPreviewBox = document.getElementById('logoPreviewBox');
+            if (logoPreview) logoPreview.src = logoVal;
+            if (logoPreviewBox) logoPreviewBox.style.display = 'block';
+
             // Company info
             if (sets.officeName) document.getElementById('setOfficeName').value = sets.officeName;
             if (sets.officeEmail) document.getElementById('setOfficeEmail').value = sets.officeEmail;
@@ -1115,6 +1227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         primaryColor: document.getElementById('primaryColorHex').value.trim(),
                         secondaryColor: document.getElementById('secondaryColorHex').value.trim(),
                         accentColor: document.getElementById('accentColorHex').value.trim(),
+                        logo: document.getElementById('setLogo').value.trim() || 'assets/logo.jpg',
                         
                         officeName: document.getElementById('setOfficeName').value.trim(),
                         officeEmail: document.getElementById('setOfficeEmail').value.trim(),
@@ -1151,7 +1264,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             const { error } = await supabaseClient.from('settings').upsert({ id: 1, ...updatedSettings });
                             if (!error) {
                                 applyThemeColors(updatedSettings);
-                                alert("Settings saved successfully to Supabase cloud! Main landing page details and branding colors have been updated.");
+                                localStorage.setItem('zentro_settings', JSON.stringify(updatedSettings));
+                                localStorage.setItem('zentro_logo', updatedSettings.logo);
+                                alert("Settings saved successfully to Supabase cloud! Main landing page details, logo, and branding colors have been updated.");
                                 return;
                             }
                             console.error("Supabase settings upsert error:", error);
@@ -1162,11 +1277,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     localStorage.setItem('zentro_settings', JSON.stringify(updatedSettings));
+                    localStorage.setItem('zentro_logo', updatedSettings.logo);
                     
                     // Trigger live color updates on dashboard
                     applyThemeColors(updatedSettings);
                     
-                    alert("Settings saved successfully! Main landing page details and branding colors have been updated.");
+                    alert("Settings saved successfully! Main landing page details, logo, and branding colors have been updated.");
                 }
             });
         }
