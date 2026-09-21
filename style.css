@@ -238,7 +238,7 @@ ul {
 .site-logo {
     height: 100px;
     width: auto;
-    max-height: 48px;
+    max-height: 200px;
     object-fit: contain;
 }
 
