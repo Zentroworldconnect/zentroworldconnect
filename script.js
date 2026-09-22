@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const pageViews = document.querySelectorAll('.page-view');
     const navLinks = document.querySelectorAll('.nav-link, [data-view]');
 
-    const showView = (viewName) => {
+    const showView = (viewName, sectionId = null) => {
         pageViews.forEach(view => {
             view.classList.remove('active');
             if (view.id === `view-${viewName}`) {
@@ -161,7 +161,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (sectionId) {
+    setTimeout(() => {
+        document.getElementById(sectionId)?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }, 100);
+} else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
     };
 
     navLinks.forEach(link => {
@@ -169,7 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const targetView = link.getAttribute('data-view');
             if (targetView) {
                 e.preventDefault();
-                showView(targetView);
+                showView(targetView, link.getAttribute('data-section'));
             }
         });
     });
