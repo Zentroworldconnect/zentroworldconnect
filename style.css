@@ -1109,6 +1109,16 @@ ul {
     color: rgba(255, 255, 255, 0.9);
 }
 
+/* privacy policy style */
+#view-privacy {
+    padding: 80px 5%;
+}
+
+#view-privacy .privacy-policy {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
 /* ==========================================
    VIEW 3: ABOUT PAGE STYLES
    ========================================== */
