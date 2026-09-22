@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="catalog-card-body">
                     <h3>${prod.name}</h3>
                     <p>${prod.description}</p>
-                    <span class="view-link open-quote-modal" data-product="${prod.name}">View Products &rarr;</span>
+                    <span class="view-link open-quote-modal" data-product="${prod.name}">Get a Quote &rarr;</span>
                 </div>
             `;
             catalogProductGrid.appendChild(card);
