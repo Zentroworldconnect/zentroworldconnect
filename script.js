@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3>${prod.name}</h3>
                     <p>${prod.description}</p>
                     <div class="sig-actions">
-                        <button class="btn btn-sm btn-text open-quote-modal" data-product="${prod.name}">View Details</button>
+                        
                         <button class="btn btn-sm btn-primary open-quote-modal" data-product="${prod.name}">Enquire</button>
                     </div>
                 </div>
