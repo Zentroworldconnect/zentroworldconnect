@@ -10,6 +10,15 @@
 const SUPABASE_URL = "https://fvzqxddabdgybvozrlvs.supabase.co"; 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2enF4ZGRhYmRneWJ2b3pybHZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyNTU5MzMsImV4cCI6MjA5NzgzMTkzM30.6_2PebBxhvppoIXwMIWhfYJDfKDz4a73kWNecHsFlec";
 
+const categoryLabels = {
+    flowers: 'Flowers',
+    garlands: 'Garlands',
+    seasonal: 'Seasonal',
+    traditional: 'Traditional Scented',
+    cutflowers: 'Premium Cut Flowers',
+    bouquets: 'Bouquets'
+};
+
 let supabaseClient = null;
 if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     if (window.supabase) {
@@ -542,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tr.innerHTML = `
                     <td><img src="${prod.image}" alt="${prod.name}" class="product-table-img"></td>
                     <td><strong>${prod.name}</strong>${sigBadge}</td>
-                    <td style="text-transform: capitalize;">${prod.category === 'traditional' ? 'Traditional Scented' : 'Cut Flowers'}</td>
+                    <td>${categoryLabels[prod.category] || prod.category}</td>
                     <td>${prod.grade}</td>
                     <td>${prod.budLife}</td>
                     <td>${prod.availability}</td>
