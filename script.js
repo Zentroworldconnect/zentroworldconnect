@@ -135,6 +135,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (el.textContent.includes('+')) el.textContent = sets.officePhone;
                 });
             }
+           // Hero Title
+if (sets.heroTitle) {
+    const heroTitle = document.getElementById('heroTitle');
+    if (heroTitle) heroTitle.innerHTML = sets.heroTitle;
+}
+
+// Hero Description
+if (sets.heroDescription) {
+    const heroDescription = document.getElementById('heroDescription');
+    if (heroDescription) heroDescription.innerHTML = sets.heroDescription;
+}
+
+// About Title
+if (sets.aboutTitle) {
+    const aboutTitle = document.getElementById('aboutTitle');
+    if (aboutTitle) aboutTitle.innerHTML = sets.aboutTitle;
+}
+
+// About Description
+if (sets.aboutDescription) {
+    const aboutDescription = document.getElementById('aboutDescription');
+    if (aboutDescription) aboutDescription.innerHTML = sets.aboutDescription;
+}
         }
     };
 
