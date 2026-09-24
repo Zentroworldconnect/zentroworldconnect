@@ -1198,6 +1198,30 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+       const heritageImage2Select = document.getElementById('setHeritageImage2Select');
+const heritageImage2 = document.getElementById('setHeritageImage2');
+const heritageImage2Preview = document.getElementById('heritageImage2Preview');
+const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewBox');
+
+if (heritageImage2Select) {
+    heritageImage2Select.addEventListener('change', () => {
+        if (heritageImage2Select.value) {
+            heritageImage2.value = heritageImage2Select.value;
+
+            if (heritageImage2Preview) {
+                heritageImage2Preview.src = heritageImage2Select.value;
+            }
+
+            if (heritageImage2PreviewBox) {
+                heritageImage2PreviewBox.style.display = 'block';
+            }
+
+            const group = heritageImage2Select.closest('.form-group');
+            if (group) group.classList.remove('error');
+        }
+    });
+}
+
         const loadSettingsForm = async () => {
             const sets = await getSettings();
             
