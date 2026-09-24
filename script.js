@@ -158,6 +158,22 @@ if (sets.aboutDescription) {
     const aboutDescription = document.getElementById('aboutDescription');
     if (aboutDescription) aboutDescription.innerHTML = sets.aboutDescription;
 }
+
+           if (sets.aboutImage) {
+    const heritageImage1 = document.getElementById('heritageImage1');
+
+    if (heritageImage1) {
+        heritageImage1.src = sets.aboutImage;
+    }
+}
+
+if (sets.heritageImage2) {
+    const heritageImage2 = document.getElementById('heritageImage2');
+
+    if (heritageImage2) {
+        heritageImage2.src = sets.heritageImage2;
+    }
+}
         }
     };
 
