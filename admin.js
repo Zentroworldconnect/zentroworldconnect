@@ -1179,6 +1179,72 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+       if (heritageImage2File) {
+    heritageImage2File.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (heritageImage2Select) {
+            heritageImage2Select.value = '';
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const img = new Image();
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+
+                let width = img.width;
+                let height = img.height;
+
+                // Max dimension 800px for Heritage Image 2
+                const maxDimension = 800;
+
+                if (width > maxDimension || height > maxDimension) {
+                    if (width > height) {
+                        height = Math.round((height * maxDimension) / width);
+                        width = maxDimension;
+                    } else {
+                        width = Math.round((width * maxDimension) / height);
+                        height = maxDimension;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Compress to JPEG with 60% quality
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+
+                heritageImage2.value = compressedBase64;
+
+                if (heritageImage2Preview) {
+                    heritageImage2Preview.src = compressedBase64;
+                }
+
+                if (heritageImage2PreviewBox) {
+                    heritageImage2PreviewBox.style.display = 'block';
+                }
+
+                const group = heritageImage2File.closest('.form-group');
+
+                if (group) {
+                    group.classList.remove('error');
+                }
+            };
+
+            img.src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
         if (aboutImageSelect) {
             aboutImageSelect.addEventListener('change', () => {
                 if (aboutImageSelect.value) {
