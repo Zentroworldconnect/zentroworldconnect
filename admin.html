@@ -362,45 +362,106 @@
                             </div>
                         </div>
 
-                        <!-- Row 5: About Us Section Customization -->
-                        <div class="admin-card mb-4">
-                            <div class="card-header">
-                                <h3><i class="fa-solid fa-address-card"></i> About Us Section Customization</h3>
-                            </div>
-                            <div class="settings-grid">
-                                <div class="form-group col-span-2">
-                                    <label for="setAboutTitle">About Title *</label>
-                                    <input type="text" id="setAboutTitle" required placeholder="e.g. From Local Strength to Global Reach">
-                                    <span class="error-msg">About title is required</span>
-                                </div>
-                                <div class="form-group col-span-2">
-                                    <label for="setAboutDescription">About Description Text * (Supports HTML e.g. &lt;p&gt; tags)</label>
-                                    <textarea id="setAboutDescription" rows="4" required placeholder="Describe your sourcing process, cold chain logistics, region expertise..."></textarea>
-                                    <span class="error-msg">About description is required</span>
-                                </div>
-                                <div class="form-group">
-                                    <label for="setAboutImageSelect">Select Preset Image</label>
-                                    <select id="setAboutImageSelect">
-                                        <option value="" selected>-- Or Upload Custom Image Below --</option>
-                                        <option value="assets/partner_spec2.png">Premium Cut Flowers Box (Default)</option>
-                                        <option value="assets/partner_spec1.png">Traditional Garlands Box</option>
-                                        <option value="assets/hero_banner.png">Figma Hero Export Box</option>
-                                        <option value="assets/flower_jasmine.png">Madurai Jasmine Buds</option>
-                                        <option value="assets/flower_rose.png">Export Grade Red Roses</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="setAboutImageFile">Upload Custom Image (Max 3MB)</label>
-                                    <input type="file" id="setAboutImageFile" accept="image/*">
-                                    <input type="hidden" id="setAboutImage">
-                                    <span class="error-msg" id="aboutImageUploadError">About section image is required</span>
-                                    <div class="image-preview-box" id="aboutImagePreviewBox" style="display: none; margin-top: 12px;">
-                                        <span style="font-size: 0.8rem; font-weight:600; color: var(--primary); display:block; margin-bottom: 5px;">About Image Preview:</span>
-                                        <img id="aboutImagePreview" src="" alt="About Preview" class="product-upload-preview" style="max-height: 120px; max-width: 200px; object-fit: cover;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Row 5: Heritage Section Customization -->
+<div class="admin-card mb-4">
+    <div class="card-header">
+        <h3><i class="fa-solid fa-address-card"></i> Heritage Section Customization</h3>
+    </div>
+
+    <div class="settings-grid">
+
+        <!-- Heritage Title -->
+        <div class="form-group col-span-2">
+            <label for="setAboutTitle">Heritage Title *</label>
+            <input type="text" id="setAboutTitle" required
+                   placeholder="e.g. A reliable partner focused on freshness and quality.">
+            <span class="error-msg">Heritage title is required</span>
+        </div>
+
+        <!-- Heritage Description -->
+        <div class="form-group col-span-2">
+            <label for="setAboutDescription">Heritage Description Text *</label>
+            <textarea id="setAboutDescription" rows="4" required
+                      placeholder="Describe your company, flowers, sourcing and quality..."></textarea>
+            <span class="error-msg">Heritage description is required</span>
+        </div>
+
+        <!-- Heritage Image 1 -->
+        <div class="form-group">
+            <label for="setAboutImageSelect">Heritage Image 1 - Select Preset</label>
+            <select id="setAboutImageSelect">
+                <option value="" selected>-- Or Upload Custom Image Below --</option>
+                <option value="assets/partner_spec2.png">Premium Cut Flowers Box</option>
+                <option value="assets/partner_spec1.png">Traditional Garlands Box</option>
+                <option value="assets/hero_banner.png">Figma Hero Export Box</option>
+                <option value="assets/flower_jasmine.png">Madurai Jasmine Buds</option>
+                <option value="assets/flower_rose.png">Export Grade Red Roses</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="setAboutImageFile">Heritage Image 1 - Upload Custom Image (Max 3MB)</label>
+            <input type="file" id="setAboutImageFile" accept="image/*">
+            <input type="hidden" id="setAboutImage">
+
+            <span class="error-msg" id="aboutImageUploadError">
+                Heritage Image 1 is required
+            </span>
+
+            <div class="image-preview-box" id="aboutImagePreviewBox"
+                 style="display: none; margin-top: 12px;">
+
+                <span style="font-size: 0.8rem; font-weight: 600; color: var(--primary); display: block; margin-bottom: 5px;">
+                    Heritage Image 1 Preview:
+                </span>
+
+                <img id="aboutImagePreview"
+                     src=""
+                     alt="Heritage Image 1 Preview"
+                     class="product-upload-preview"
+                     style="max-height: 120px; max-width: 200px; object-fit: cover;">
+            </div>
+        </div>
+
+        <!-- Heritage Image 2 -->
+        <div class="form-group">
+            <label for="setHeritageImage2Select">Heritage Image 2 - Select Preset</label>
+            <select id="setHeritageImage2Select">
+                <option value="" selected>-- Or Upload Custom Image Below --</option>
+                <option value="assets/partner_spec1.png">Traditional Garlands Box</option>
+                <option value="assets/partner_spec2.png">Premium Cut Flowers Box</option>
+                <option value="assets/hero_banner.png">Figma Hero Export Box</option>
+                <option value="assets/flower_jasmine.png">Madurai Jasmine Buds</option>
+                <option value="assets/flower_rose.png">Export Grade Red Roses</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="setHeritageImage2File">Heritage Image 2 - Upload Custom Image (Max 3MB)</label>
+            <input type="file" id="setHeritageImage2File" accept="image/*">
+            <input type="hidden" id="setHeritageImage2">
+
+            <span class="error-msg" id="heritageImage2UploadError">
+                Heritage Image 2 is required
+            </span>
+
+            <div class="image-preview-box" id="heritageImage2PreviewBox"
+                 style="display: none; margin-top: 12px;">
+
+                <span style="font-size: 0.8rem; font-weight: 600; color: var(--primary); display: block; margin-bottom: 5px;">
+                    Heritage Image 2 Preview:
+                </span>
+
+                <img id="heritageImage2Preview"
+                     src=""
+                     alt="Heritage Image 2 Preview"
+                     class="product-upload-preview"
+                     style="max-height: 120px; max-width: 200px; object-fit: cover;">
+            </div>
+        </div>
+
+    </div>
+</div>
 
                         <!-- Row 6: Administrator Password Credentials -->
                         <div class="admin-card mb-4 security-card">
