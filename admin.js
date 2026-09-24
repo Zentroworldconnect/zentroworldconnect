@@ -1268,6 +1268,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
+           if (sets.heritageImage2) {
+    document.getElementById('setHeritageImage2').value = sets.heritageImage2;
+
+    const preview = document.getElementById('heritageImage2Preview');
+    const previewBox = document.getElementById('heritageImage2PreviewBox');
+
+    if (preview) preview.src = sets.heritageImage2;
+    if (previewBox) previewBox.style.display = 'block';
+
+    if (document.getElementById('setHeritageImage2Select')) {
+        if (sets.heritageImage2.startsWith('assets/')) {
+            document.getElementById('setHeritageImage2Select').value = sets.heritageImage2;
+        } else {
+            document.getElementById('setHeritageImage2Select').value = '';
+        }
+    }
+}
         };
 
         if (settingsForm) {
