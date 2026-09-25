@@ -1128,7 +1128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const aboutImage = document.getElementById('setAboutImage');
         const aboutImagePreview = document.getElementById('aboutImagePreview');
         const aboutImagePreviewBox = document.getElementById('aboutImagePreviewBox');
-        const aboutImageSelect = document.getElementById('setAboutImageSelect');
+        const  = document.getElementById('set');
 
        const heritageImage1Select = document.getElementById('setHeritageImage1Select');
 const heritageImage1File = document.getElementById('setHeritageImage1File');
@@ -1147,7 +1147,7 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
                 const file = e.target.files[0];
                 if (!file) return;
 
-                if (aboutImageSelect) aboutImageSelect.value = '';
+                if () .value = '';
 
                 const reader = new FileReader();
                 reader.onload = (event) => {
@@ -1191,7 +1191,7 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
             });
         }
 
-        if (aboutImageSelect) {
+        if () {
             aboutImageSelect.addEventListener('change', () => {
                 if (aboutImageSelect.value) {
                     aboutImage.value = aboutImageSelect.value;
@@ -1209,6 +1209,50 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
                 }
             });
         }
+   if (heritageImage1Select) {
+    heritageImage1Select.addEventListener('change', () => {
+        if (heritageImage1Select.value) {
+            heritageImage1.value = heritageImage1Select.value;
+
+            if (heritageImage1Preview) {
+                heritageImage1Preview.src = heritageImage1Select.value;
+            }
+
+            if (heritageImage1PreviewBox) {
+                heritageImage1PreviewBox.style.display = 'block';
+            }
+
+            const group = heritageImage1Select.closest('.form-group');
+
+            if (group) {
+                group.classList.remove('error');
+            }
+        }
+    });
+}
+
+if (heritageImage2Select) {
+    heritageImage2Select.addEventListener('change', () => {
+        if (heritageImage2Select.value) {
+            heritageImage2.value = heritageImage2Select.value;
+
+            if (heritageImage2Preview) {
+                heritageImage2Preview.src = heritageImage2Select.value;
+            }
+
+            if (heritageImage2PreviewBox) {
+                heritageImage2PreviewBox.style.display = 'block';
+            }
+
+            const group = heritageImage2Select.closest('.form-group');
+
+            if (group) {
+                group.classList.remove('error');
+            }
+        }
+    });
+}
+   
 
         const loadSettingsForm = async () => {
             const sets = await getSettings();
