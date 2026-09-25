@@ -1124,81 +1124,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // About Us Image Canvas Compression & Preview
-        const aboutImageFile = document.getElementById('setAboutImageFile');
-        const aboutImage = document.getElementById('setAboutImage');
-        const aboutImagePreview = document.getElementById('aboutImagePreview');
-        const aboutImagePreviewBox = document.getElementById('aboutImagePreviewBox');
-        const  = document.getElementById('set');
+const aboutImageFile = document.getElementById('setAboutImageFile');
+const aboutImage = document.getElementById('setAboutImage');
+const aboutImagePreview = document.getElementById('aboutImagePreview');
+const aboutImagePreviewBox = document.getElementById('aboutImagePreviewBox');
+const aboutImageSelect = document.getElementById('setAboutImageSelect');
 
-       const heritageImage1Select = document.getElementById('setHeritageImage1Select');
-const heritageImage1File = document.getElementById('setHeritageImage1File');
-const heritageImage1 = document.getElementById('setHeritageImage1');
-const heritageImage1Preview = document.getElementById('heritageImage1Preview');
-const heritageImage1PreviewBox = document.getElementById('heritageImage1PreviewBox');
-
-const heritageImage2Select = document.getElementById('setHeritageImage2Select');
-const heritageImage2File = document.getElementById('setHeritageImage2File');
-const heritageImage2 = document.getElementById('setHeritageImage2');
-const heritageImage2Preview = document.getElementById('heritageImage2Preview');
-const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewBox');
-
-        if (aboutImageFile) {
-            aboutImageFile.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                if () .value = '';
-
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-
-                        // Max dimension 800px for About Us main section image
-                        const maxDimension = 800;
-                        if (width > maxDimension || height > maxDimension) {
-                            if (width > height) {
-                                height = Math.round((height * maxDimension) / width);
-                                width = maxDimension;
-                            } else {
-                                width = Math.round((width * maxDimension) / height);
-                                height = maxDimension;
-                            }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        // Compress to JPEG with 60% quality
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-                        aboutImage.value = compressedBase64;
-                        
-                        if (aboutImagePreview) aboutImagePreview.src = compressedBase64;
-                        if (aboutImagePreviewBox) aboutImagePreviewBox.style.display = 'block';
-
-                        const group = aboutImageFile.closest('.form-group');
-                        if (group) group.classList.remove('error');
-                    };
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-   if (heritageImage1File) {
-    heritageImage1File.addEventListener('change', (e) => {
+if (aboutImageFile) {
+    aboutImageFile.addEventListener('change', (e) => {
         const file = e.target.files[0];
-
         if (!file) return;
 
-        // Clear preset selection
-        if (heritageImage1Select) {
-            heritageImage1Select.value = '';
+        if (aboutImageSelect) {
+            aboutImageSelect.value = '';
         }
 
         const reader = new FileReader();
@@ -1212,6 +1150,7 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
                 let width = img.width;
                 let height = img.height;
 
+                // Max dimension 800px for About Us main section image
                 const maxDimension = 800;
 
                 if (width > maxDimension || height > maxDimension) {
@@ -1232,30 +1171,24 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
                 canvas.height = height;
 
                 const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
 
-                ctx.drawImage(
-                    img,
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
+                // Compress to JPEG with 60% quality
                 const compressedBase64 =
                     canvas.toDataURL('image/jpeg', 0.6);
 
-                heritageImage1.value = compressedBase64;
+                aboutImage.value = compressedBase64;
 
-                if (heritageImage1Preview) {
-                    heritageImage1Preview.src = compressedBase64;
+                if (aboutImagePreview) {
+                    aboutImagePreview.src = compressedBase64;
                 }
 
-                if (heritageImage1PreviewBox) {
-                    heritageImage1PreviewBox.style.display = 'block';
+                if (aboutImagePreviewBox) {
+                    aboutImagePreviewBox.style.display = 'block';
                 }
 
                 const group =
-                    heritageImage1File.closest('.form-group');
+                    aboutImageFile.closest('.form-group');
 
                 if (group) {
                     group.classList.remove('error');
@@ -1268,119 +1201,85 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
         reader.readAsDataURL(file);
     });
 }
-   if (heritageImage2File) {
-    heritageImage2File.addEventListener('change', (e) => {
-        const file = e.target.files[0];
 
-        if (!file) return;
+// About Image preset selection
+if (aboutImageSelect) {
+    aboutImageSelect.addEventListener('change', () => {
+        if (aboutImageSelect.value) {
+            aboutImage.value = aboutImageSelect.value;
 
-        // Clear preset selection
-        if (heritageImage2Select) {
-            heritageImage2Select.value = '';
+            if (aboutImagePreview) {
+                aboutImagePreview.src = aboutImageSelect.value;
+            }
+
+            if (aboutImagePreviewBox) {
+                aboutImagePreviewBox.style.display = 'block';
+            }
+
+            if (aboutImageFile) {
+                aboutImageFile.value = '';
+            }
+
+            const group =
+                aboutImageSelect.closest('.form-group');
+
+            if (group) {
+                group.classList.remove('error');
+            }
+        } else {
+            if (!aboutImageFile || !aboutImageFile.files.length) {
+                aboutImage.value = '';
+
+                if (aboutImagePreviewBox) {
+                    aboutImagePreviewBox.style.display = 'none';
+                }
+            }
         }
-
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-            const img = new Image();
-
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-
-                let width = img.width;
-                let height = img.height;
-
-                const maxDimension = 800;
-
-                if (width > maxDimension || height > maxDimension) {
-                    if (width > height) {
-                        height = Math.round(
-                            (height * maxDimension) / width
-                        );
-                        width = maxDimension;
-                    } else {
-                        width = Math.round(
-                            (width * maxDimension) / height
-                        );
-                        height = maxDimension;
-                    }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-
-                const ctx = canvas.getContext('2d');
-
-                ctx.drawImage(
-                    img,
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-                const compressedBase64 =
-                    canvas.toDataURL('image/jpeg', 0.6);
-
-                heritageImage2.value = compressedBase64;
-
-                if (heritageImage2Preview) {
-                    heritageImage2Preview.src = compressedBase64;
-                }
-
-                if (heritageImage2PreviewBox) {
-                    heritageImage2PreviewBox.style.display = 'block';
-                }
-
-                const group =
-                    heritageImage2File.closest('.form-group');
-
-                if (group) {
-                    group.classList.remove('error');
-                }
-            };
-
-            img.src = event.target.result;
-        };
-
-        reader.readAsDataURL(file);
     });
 }
-   
 
+// Heritage Image variables
+const heritageImage1Select =
+    document.getElementById('setHeritageImage1Select');
+const heritageImage1File =
+    document.getElementById('setHeritageImage1File');
+const heritageImage1 =
+    document.getElementById('setHeritageImage1');
+const heritageImage1Preview =
+    document.getElementById('heritageImage1Preview');
+const heritageImage1PreviewBox =
+    document.getElementById('heritageImage1PreviewBox');
 
-        if () {
-            aboutImageSelect.addEventListener('change', () => {
-                if (aboutImageSelect.value) {
-                    aboutImage.value = aboutImageSelect.value;
-                    if (aboutImagePreview) aboutImagePreview.src = aboutImageSelect.value;
-                    if (aboutImagePreviewBox) aboutImagePreviewBox.style.display = 'block';
-                    if (aboutImageFile) aboutImageFile.value = '';
+const heritageImage2Select =
+    document.getElementById('setHeritageImage2Select');
+const heritageImage2File =
+    document.getElementById('setHeritageImage2File');
+const heritageImage2 =
+    document.getElementById('setHeritageImage2');
+const heritageImage2Preview =
+    document.getElementById('heritageImage2Preview');
+const heritageImage2PreviewBox =
+    document.getElementById('heritageImage2PreviewBox');
 
-                    const group = aboutImageSelect.closest('.form-group');
-                    if (group) group.classList.remove('error');
-                } else {
-                    if (!aboutImageFile.files.length) {
-                        aboutImage.value = '';
-                        if (aboutImagePreviewBox) aboutImagePreviewBox.style.display = 'none';
-                    }
-                }
-            });
-        }
-   if (heritageImage1Select) {
+// Heritage Image 1 preset selection
+if (heritageImage1Select) {
     heritageImage1Select.addEventListener('change', () => {
         if (heritageImage1Select.value) {
-            heritageImage1.value = heritageImage1Select.value;
+            heritageImage1.value =
+                heritageImage1Select.value;
 
             if (heritageImage1Preview) {
-                heritageImage1Preview.src = heritageImage1Select.value;
+                heritageImage1Preview.src =
+                    heritageImage1Select.value;
             }
 
             if (heritageImage1PreviewBox) {
-                heritageImage1PreviewBox.style.display = 'block';
+                heritageImage1PreviewBox.style.display =
+                    'block';
             }
 
-            const group = heritageImage1Select.closest('.form-group');
+            const group =
+                heritageImage1Select.closest('.form-group');
 
             if (group) {
                 group.classList.remove('error');
@@ -1389,20 +1288,25 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
     });
 }
 
+// Heritage Image 2 preset selection
 if (heritageImage2Select) {
     heritageImage2Select.addEventListener('change', () => {
         if (heritageImage2Select.value) {
-            heritageImage2.value = heritageImage2Select.value;
+            heritageImage2.value =
+                heritageImage2Select.value;
 
             if (heritageImage2Preview) {
-                heritageImage2Preview.src = heritageImage2Select.value;
+                heritageImage2Preview.src =
+                    heritageImage2Select.value;
             }
 
             if (heritageImage2PreviewBox) {
-                heritageImage2PreviewBox.style.display = 'block';
+                heritageImage2PreviewBox.style.display =
+                    'block';
             }
 
-            const group = heritageImage2Select.closest('.form-group');
+            const group =
+                heritageImage2Select.closest('.form-group');
 
             if (group) {
                 group.classList.remove('error');
