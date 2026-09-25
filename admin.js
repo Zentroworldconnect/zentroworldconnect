@@ -1130,6 +1130,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const aboutImagePreviewBox = document.getElementById('aboutImagePreviewBox');
         const aboutImageSelect = document.getElementById('setAboutImageSelect');
 
+       const heritageImage1Select = document.getElementById('setHeritageImage1Select');
+const heritageImage1File = document.getElementById('setHeritageImage1File');
+const heritageImage1 = document.getElementById('setHeritageImage1');
+const heritageImage1Preview = document.getElementById('heritageImage1Preview');
+const heritageImage1PreviewBox = document.getElementById('heritageImage1PreviewBox');
+
+const heritageImage2Select = document.getElementById('setHeritageImage2Select');
+const heritageImage2File = document.getElementById('setHeritageImage2File');
+const heritageImage2 = document.getElementById('setHeritageImage2');
+const heritageImage2Preview = document.getElementById('heritageImage2Preview');
+const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewBox');
+
         if (aboutImageFile) {
             aboutImageFile.addEventListener('change', (e) => {
                 const file = e.target.files[0];
