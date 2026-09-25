@@ -174,14 +174,7 @@ if (sets.heritageImage2) {
         heritageImage2.src = sets.heritageImage2;
     }
 }
-           if (sets.heroImage) {
-    const heroSection = document.getElementById('heroSection');
-
-    if (heroSection) {
-        heroSection.style.backgroundImage =
-            `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('${sets.heroImage}')`;
-    }
-}
+           
         }
     };
 
