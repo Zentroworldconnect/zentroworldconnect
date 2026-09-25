@@ -1421,6 +1421,9 @@ if (sets.heritageImage2) {
                         aboutTitle: document.getElementById('setAboutTitle').value.trim(),
                         aboutDescription: document.getElementById('setAboutDescription').value.trim(),
                         aboutImage: document.getElementById('setAboutImage').value
+
+                       heritageImage1: document.getElementById('setHeritageImage1').value,
+heritageImage2: document.getElementById('setHeritageImage2').value
                     };
 
                     // Update local storage password if validated successfully
