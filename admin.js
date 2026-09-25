@@ -1280,6 +1280,44 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
                     }
                 }
             }
+
+           if (sets.heritageImage1) {
+    document.getElementById('setHeritageImage1').value = sets.heritageImage1;
+
+    if (heritageImage1Preview) {
+        heritageImage1Preview.src = sets.heritageImage1;
+    }
+
+    if (heritageImage1PreviewBox) {
+        heritageImage1PreviewBox.style.display = 'block';
+    }
+
+    if (heritageImage1Select) {
+        heritageImage1Select.value =
+            sets.heritageImage1.startsWith('assets/')
+                ? sets.heritageImage1
+                : '';
+    }
+}
+
+if (sets.heritageImage2) {
+    document.getElementById('setHeritageImage2').value = sets.heritageImage2;
+
+    if (heritageImage2Preview) {
+        heritageImage2Preview.src = sets.heritageImage2;
+    }
+
+    if (heritageImage2PreviewBox) {
+        heritageImage2PreviewBox.style.display = 'block';
+    }
+
+    if (heritageImage2Select) {
+        heritageImage2Select.value =
+            sets.heritageImage2.startsWith('assets/')
+                ? sets.heritageImage2
+                : '';
+    }
+}
         };
 
         if (settingsForm) {
