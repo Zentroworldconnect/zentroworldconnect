@@ -1190,6 +1190,84 @@ const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewB
                 reader.readAsDataURL(file);
             });
         }
+   if (heritageImage1File) {
+    heritageImage1File.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        // Clear preset selection
+        if (heritageImage1Select) {
+            heritageImage1Select.value = '';
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const img = new Image();
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+
+                let width = img.width;
+                let height = img.height;
+
+                const maxDimension = 800;
+
+                if (width > maxDimension || height > maxDimension) {
+                    if (width > height) {
+                        height = Math.round(
+                            (height * maxDimension) / width
+                        );
+                        width = maxDimension;
+                    } else {
+                        width = Math.round(
+                            (width * maxDimension) / height
+                        );
+                        height = maxDimension;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+
+                ctx.drawImage(
+                    img,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+                const compressedBase64 =
+                    canvas.toDataURL('image/jpeg', 0.6);
+
+                heritageImage1.value = compressedBase64;
+
+                if (heritageImage1Preview) {
+                    heritageImage1Preview.src = compressedBase64;
+                }
+
+                if (heritageImage1PreviewBox) {
+                    heritageImage1PreviewBox.style.display = 'block';
+                }
+
+                const group =
+                    heritageImage1File.closest('.form-group');
+
+                if (group) {
+                    group.classList.remove('error');
+                }
+            };
+
+            img.src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
 
         if () {
             aboutImageSelect.addEventListener('change', () => {
