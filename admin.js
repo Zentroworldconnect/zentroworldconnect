@@ -1179,72 +1179,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-       if (heritageImage2File) {
-    heritageImage2File.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        if (heritageImage2Select) {
-            heritageImage2Select.value = '';
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-            const img = new Image();
-
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-
-                let width = img.width;
-                let height = img.height;
-
-                // Max dimension 800px for Heritage Image 2
-                const maxDimension = 800;
-
-                if (width > maxDimension || height > maxDimension) {
-                    if (width > height) {
-                        height = Math.round((height * maxDimension) / width);
-                        width = maxDimension;
-                    } else {
-                        width = Math.round((width * maxDimension) / height);
-                        height = maxDimension;
-                    }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-
-                // Compress to JPEG with 60% quality
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-
-                heritageImage2.value = compressedBase64;
-
-                if (heritageImage2Preview) {
-                    heritageImage2Preview.src = compressedBase64;
-                }
-
-                if (heritageImage2PreviewBox) {
-                    heritageImage2PreviewBox.style.display = 'block';
-                }
-
-                const group = heritageImage2File.closest('.form-group');
-
-                if (group) {
-                    group.classList.remove('error');
-                }
-            };
-
-            img.src = event.target.result;
-        };
-
-        reader.readAsDataURL(file);
-    });
-}
-
         if (aboutImageSelect) {
             aboutImageSelect.addEventListener('change', () => {
                 if (aboutImageSelect.value) {
@@ -1263,30 +1197,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
-
-       const heritageImage2Select = document.getElementById('setHeritageImage2Select');
-const heritageImage2 = document.getElementById('setHeritageImage2');
-const heritageImage2Preview = document.getElementById('heritageImage2Preview');
-const heritageImage2PreviewBox = document.getElementById('heritageImage2PreviewBox');
-
-if (heritageImage2Select) {
-    heritageImage2Select.addEventListener('change', () => {
-        if (heritageImage2Select.value) {
-            heritageImage2.value = heritageImage2Select.value;
-
-            if (heritageImage2Preview) {
-                heritageImage2Preview.src = heritageImage2Select.value;
-            }
-
-            if (heritageImage2PreviewBox) {
-                heritageImage2PreviewBox.style.display = 'block';
-            }
-
-            const group = heritageImage2Select.closest('.form-group');
-            if (group) group.classList.remove('error');
-        }
-    });
-}
 
         const loadSettingsForm = async () => {
             const sets = await getSettings();
@@ -1358,23 +1268,6 @@ if (heritageImage2Select) {
                     }
                 }
             }
-           if (sets.heritageImage2) {
-    document.getElementById('setHeritageImage2').value = sets.heritageImage2;
-
-    const preview = document.getElementById('heritageImage2Preview');
-    const previewBox = document.getElementById('heritageImage2PreviewBox');
-
-    if (preview) preview.src = sets.heritageImage2;
-    if (previewBox) previewBox.style.display = 'block';
-
-    if (document.getElementById('setHeritageImage2Select')) {
-        if (sets.heritageImage2.startsWith('assets/')) {
-            document.getElementById('setHeritageImage2Select').value = sets.heritageImage2;
-        } else {
-            document.getElementById('setHeritageImage2Select').value = '';
-        }
-    }
-}
         };
 
         if (settingsForm) {
@@ -1476,9 +1369,8 @@ if (heritageImage2Select) {
                         heroImage: document.getElementById('setHeroImage').value,
 
                         aboutTitle: document.getElementById('setAboutTitle').value.trim(),
-aboutDescription: document.getElementById('setAboutDescription').value.trim(),
-aboutImage: document.getElementById('setAboutImage').value,
-heritageImage2: document.getElementById('setHeritageImage2').value
+                        aboutDescription: document.getElementById('setAboutDescription').value.trim(),
+                        aboutImage: document.getElementById('setAboutImage').value
                     };
 
                     // Update local storage password if validated successfully
