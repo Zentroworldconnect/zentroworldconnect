@@ -64,14 +64,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             name: "Jasmine",
             category: "traditional",
             description: "Our flagship export variety, known for its strong aroma and bud quality.",
-            image: "assets/flower_jasmine.png"
+            image: "as/flower_jasmine.png"
         },
         {
             id: "8",
             name: "Garlands",
             category: "traditional",
             description: "Expertly crafted traditional garlands packed for airfreight.",
-            image: "assets/flower_garland_full.png"
+            image: "as/flower_garland_full.png"
         }
     ];
 
@@ -105,11 +105,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     const loadSettingsFromDB = async () => {
-        let sets = null;
+        let  = null;
         if (supabaseClient) {
             try {
                 const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
-                if (!error && data) sets = data;
+                if (!error && data)  = data;
             } catch (e) {}
         }
         if (!sets) {
@@ -172,6 +172,14 @@ if (sets.heritageImage2) {
 
     if (heritageImage2) {
         heritageImage2.src = sets.heritageImage2;
+    }
+}
+           if (sets.heroImage) {
+    const heroSection = document.getElementById('heroSection');
+
+    if (heroSection) {
+        heroSection.style.backgroundImage =
+            `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('${sets.heroImage}')`;
     }
 }
         }
