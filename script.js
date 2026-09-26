@@ -209,20 +209,7 @@ if (sets.aboutDescription) {
    document.querySelectorAll('.nav-to-catalog').forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-
-        const category = btn.getAttribute('data-category');
-
         showView('catalog');
-
-        if (category) {
-            const categoryButton = document.querySelector(
-                `.pill-btn[data-cat="${category}"]`
-            );
-
-            if (categoryButton) {
-                categoryButton.click();
-            }
-        }
     });
 });
 
