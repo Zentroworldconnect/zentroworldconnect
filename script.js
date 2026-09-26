@@ -166,7 +166,7 @@ if (sets.aboutDescription) {
 
     /* --- SPA VIEW SWITCHER --- */
     const pageViews = document.querySelectorAll('.page-view');
-    const navLinks = document.querySelectorAll('.nav-link, [data-view]');
+    const Links = document.querySelectorAll('.-link, [data-view]');
 
     const showView = (viewName, sectionId = null) => {
         pageViews.forEach(view => {
@@ -206,12 +206,25 @@ if (sets.aboutDescription) {
         });
     });
 
-    document.querySelectorAll('.nav-to-catalog').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            showView('catalog');
-        });
+   document.querySelectorAll('.nav-to-catalog').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const category = btn.getAttribute('data-category');
+
+        showView('catalog');
+
+        if (category) {
+            const categoryButton = document.querySelector(
+                `.pill-btn[data-cat="${category}"]`
+            );
+
+            if (categoryButton) {
+                categoryButton.click();
+            }
+        }
     });
+});
 
     /* --- RENDER CATALOG PRODUCT GRID --- */
     const catalogProductGrid = document.getElementById('catalogProductGrid');
