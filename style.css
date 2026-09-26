@@ -1667,4 +1667,6 @@ ul {
     .standard-grid, .process-grid, .testimonials-grid, .principles-grid, .catalog-grid {
         grid-template-columns: 1fr;
     }
+   .heritage-img-1 { height: 360px; }
+   .herirage-img-2 { height: 360px; }
 }
