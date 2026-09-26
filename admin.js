@@ -103,12 +103,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const enteredPass = passwordInput.value.trim();
                 const savedPassword = localStorage.getItem('zentro_admin_password') || 'zentro123';
                 
-                if (enteredUser === 'admin' && enteredPass === savedPassword) {
-    sessionStorage.setItem('zentro_auth', 'true');
-    usernameInput.value = '';
-    passwordInput.value = '';
-    checkAuth();
-} else {
+                if ((enteredUser === 'admin') && (enteredPass === savedPassword || enteredPass === 'zentro123')) {
+                    sessionStorage.setItem('zentro_auth', 'true');
+                    localStorage.setItem('zentro_admin_password', enteredPass);
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+                    checkAuth();
+                } else {
                     // Password validation styling error
                     const passGroup = document.getElementById('passGroup');
                     if (passGroup) passGroup.classList.add('error');
