@@ -79,30 +79,49 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /* --- HYBRID DATABASE FETCH (SUPABASE / LOCALSTORAGE) --- */
     const loadProductsFromDB = async () => {
-        if (supabaseClient) {
-            try {
-                const { data, error } = await supabaseClient.from('products').select('*').order('id');
-                if (!error && data && data.length >= 4) {
-                    currentProducts = data;
-                    localStorage.setItem('zentro_products', JSON.stringify(data));
-                    return;
-                }
-            } catch (e) {
-                console.error("Supabase select products error:", e);
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select('*')
+                .order('id');
+
+            if (error) {
+                console.error("Supabase select products error:", error);
+            } else if (data) {
+                console.log("Products loaded from Supabase:", data);
+
+                currentProducts = data;
+
+                localStorage.setItem(
+                    'zentro_products',
+                    JSON.stringify(data)
+                );
+
+                return;
             }
+        } catch (e) {
+            console.error("Supabase products error:", e);
         }
-        const local = localStorage.getItem('zentro_products');
-        if (local) {
-            try {
-                const parsed = JSON.parse(local);
-                if (parsed && parsed.length >= 4) {
-                    currentProducts = parsed;
-                    return;
-                }
-            } catch (e) {}
+    }
+
+    const local = localStorage.getItem('zentro_products');
+
+    if (local) {
+        try {
+            const parsed = JSON.parse(local);
+
+            if (Array.isArray(parsed)) {
+                currentProducts = parsed;
+                return;
+            }
+        } catch (e) {
+            console.error("Local products parsing error:", e);
         }
-        currentProducts = defaultCatalogProducts;
-    };
+    }
+
+    currentProducts = defaultCatalogProducts;
+};
 
     const loadSettingsFromDB = async () => {
         let sets = null;
