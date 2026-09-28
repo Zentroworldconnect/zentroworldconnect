@@ -16,64 +16,7 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
 document.addEventListener('DOMContentLoaded', async () => {
 
     /* --- DEFAULT CATALOG PRODUCTS DATA --- */
-    const defaultCatalogProducts = [
-        {
-            id: "1",
-            name: "Rose",
-            category: "flowers",
-            description: "Classic export-grade long-stem roses in red, pink, and yellow.",
-            image: "assets/flower_rose.png"
-        },
-        {
-            id: "2",
-            name: "Tuberose",
-            category: "flowers",
-            description: "Intensely fragrant white blooms for high-end events and decor.",
-            image: "assets/flower_tuberose.png"
-        },
-        {
-            id: "3",
-            name: "Pitchi",
-            category: "traditional",
-            description: "Traditional fragrant variety specifically cultivated for traditional garlands.",
-            image: "assets/flower_jasmine.png"
-        },
-        {
-            id: "4",
-            name: "Mullai",
-            category: "traditional",
-            description: "Exceptional durability and scent, perfect for daily exports.",
-            image: "assets/flower_lotus.png"
-        },
-        {
-            id: "5",
-            name: "Marigold",
-            category: "traditional",
-            description: "High-impact golden blooms for large-scale festival decorations.",
-            image: "assets/flower_marigold.png"
-        },
-        {
-            id: "6",
-            name: "Lotus",
-            category: "seasonal",
-            description: "Pristine lotus blossoms handled with extreme care.",
-            image: "assets/flower_purple.png"
-        },
-        {
-            id: "7",
-            name: "Jasmine",
-            category: "traditional",
-            description: "Our flagship export variety, known for its strong aroma and bud quality.",
-            image: "assets/flower_jasmine.png"
-        },
-        {
-            id: "8",
-            name: "Garlands",
-            category: "traditional",
-            description: "Expertly crafted traditional garlands packed for airfreight.",
-            image: "assets/flower_garland_full.png"
-        }
-    ];
+    const defaultCatalogProducts = [];
 
     let currentProducts = defaultCatalogProducts;
 
