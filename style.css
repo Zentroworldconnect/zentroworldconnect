@@ -1493,12 +1493,16 @@ ul {
     color: var(--text-muted);
     margin-bottom: 12px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .footer-contact i {
     color: var(--primary);
+    flex-shrink: 0;
 }
 
 .footer-bottom {
@@ -1669,6 +1673,13 @@ ul {
     }
    .heritage-img-1 { height: 360px; }
    .heritage-img-2 { height: 360px; }
+
+   @media (max-width: 768px) {
+    .footer-contact p {
+        width: 100%;
+        font-size: 0.85rem;
+    }
+}
 
 }
 
