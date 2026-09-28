@@ -20,14 +20,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
             id: "1",
             name: "Rose",
-            category: "cutflowers",
+            category: "flowers",
             description: "Classic export-grade long-stem roses in red, pink, and yellow.",
             image: "assets/flower_rose.png"
         },
         {
             id: "2",
             name: "Tuberose",
-            category: "cutflowers",
+            category: "flowers",
             description: "Intensely fragrant white blooms for high-end events and decor.",
             image: "assets/flower_tuberose.png"
         },
@@ -262,38 +262,48 @@ if (sets.aboutDescription) {
     renderCatalog(currentProducts);
 
     /* --- RENDER DYNAMIC SIGNATURE PRODUCTS GRID --- */
-    const renderSignatureProducts = (products) => {
-        const signatureGrid = document.getElementById('signatureProductsGrid');
-        if (!signatureGrid) return;
-        signatureGrid.innerHTML = '';
+    /* --- RENDER DYNAMIC SIGNATURE PRODUCTS GRID --- */
+const renderSignatureProducts = (products) => {
+    const signatureGrid = document.getElementById('signatureProductsGrid');
+    if (!signatureGrid) return;
+    signatureGrid.innerHTML = '';
 
-        // Filter products marked as isSignature, or fallback to top products
-        let sigList = products.filter(p => p.isSignature === true || p.isSignature === 'true');
-        if (sigList.length === 0) {
-            sigList = products.slice(0, 6);
-        }
+    // Filter products marked as isSignature, or fallback to top products
+    let sigList = products.filter(p => p.isSignature === true || p.isSignature === 'true');
 
-        sigList.forEach(prod => {
-            const card = document.createElement('div');
-            card.className = 'sig-card';
-            const tagLabel = prod.category === 'traditional' ? 'TRADITIONAL' : (prod.category === 'cutflowers' ? 'ROSES & CUT FLOWERS' : 'SPECIALITY');
-            card.innerHTML = `
-                <img src="${prod.image}" alt="${prod.name}">
-                <div class="sig-card-body">
-                    <span class="tag-label">${tagLabel}</span>
-                    <h3>${prod.name}</h3>
-                    <p>${prod.description}</p>
-                    <div class="sig-actions">
-                        
-                        <button class="btn btn-sm btn-primary open-quote-modal" data-product="${prod.name}">Enquire</button>
-                    </div>
+    if (sigList.length === 0) {
+        sigList = products.slice(0, 6);
+    }
+
+    sigList.forEach(prod => {
+        const card = document.createElement('div');
+        card.className = 'sig-card';
+
+        const tagLabel = prod.category === 'garlands'
+            ? 'GARLANDS'
+            : (prod.category === 'bouquets'
+                ? 'BOUQUETS'
+                : 'FLOWERS');
+
+        card.innerHTML = `
+            <img src="${prod.image}" alt="${prod.name}">
+            <div class="sig-card-body">
+                <span class="tag-label">${tagLabel}</span>
+                <h3>${prod.name}</h3>
+                <p>${prod.description}</p>
+                <div class="sig-actions">
+                    <button class="btn btn-sm btn-primary open-quote-modal" data-product="${prod.name}">
+                        Enquire
+                    </button>
                 </div>
-            `;
-            signatureGrid.appendChild(card);
-        });
-    };
+            </div>
+        `;
 
-    renderSignatureProducts(currentProducts);
+        signatureGrid.appendChild(card);
+    });
+};
+
+renderSignatureProducts(currentProducts);
 
     /* --- SEARCH & FILTER LOGIC --- */
     const catalogSearchInput = document.getElementById('catalogSearchInput');
