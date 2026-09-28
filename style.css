@@ -1671,4 +1671,18 @@ ul {
    .heritage-img-2 { height: 360px; }
 
 }
+
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+}
    
