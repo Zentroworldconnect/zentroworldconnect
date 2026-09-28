@@ -13,9 +13,6 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const categoryLabels = {
     flowers: 'Flowers',
     garlands: 'Garlands',
-    seasonal: 'Seasonal',
-    traditional: 'Traditional Scented',
-    cutflowers: 'Premium Cut Flowers',
     bouquets: 'Bouquets'
 };
 
@@ -197,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: "1",
                 name: "Premium Red Roses",
-                category: "cutflowers",
+                category: "flowers",
                 grade: "AAA Premium Stems (40-60cm)",
                 budLife: "7 - 10 Days",
                 availability: "Year-round",
