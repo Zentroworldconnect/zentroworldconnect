@@ -1646,10 +1646,19 @@ ul {
     font-size: 0.95rem;
 }
 
-.c-label {
-        font-size: 0.85rem;
-        word-break: break-word;
+ .c-info-card {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .c-val {
+        display: block;
+        max-width: 100%;
         overflow-wrap: anywhere;
+        word-break: break-word;
+        box-sizing: border-box;
     }
 
 /* RESPONSIVE */
