@@ -512,6 +512,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('prodPackage').value = matched.package;
             document.getElementById('prodImage').value = matched.image;
             document.getElementById('prodDescription').value = matched.description;
+           document.getElementById('prodPriceINR').value = matched.price_inr || '';
+document.getElementById('prodPriceUSD').value = matched.price_usd || '';
+document.getElementById('prodPriceUnit').value = matched.price_unit || '';
 
             const isSigEl = document.getElementById('prodIsSignature');
             if (isSigEl) isSigEl.checked = (matched.isSignature === true || matched.isSignature === 'true');
