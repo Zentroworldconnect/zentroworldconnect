@@ -603,16 +603,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     const isSigCheckbox = document.getElementById('prodIsSignature');
                     const prodObj = {
-                        name: document.getElementById('prodName').value.trim(),
-                        category: document.getElementById('prodCategory').value,
-                        grade: document.getElementById('prodGrade').value.trim(),
-                        budLife: document.getElementById('prodBudLife').value.trim(),
-                        availability: document.getElementById('prodAvailability').value.trim(),
-                        package: document.getElementById('prodPackage').value.trim(),
-                        image: prodImage.value,
-                        description: document.getElementById('prodDescription').value.trim(),
-                        isSignature: isSigCheckbox ? isSigCheckbox.checked : false
-                    };
+    name: document.getElementById('prodName').value.trim(),
+    category: document.getElementById('prodCategory').value,
+
+    price_inr: parseFloat(document.getElementById('prodPriceINR').value),
+    price_usd: parseFloat(document.getElementById('prodPriceUSD').value),
+    price_unit: document.getElementById('prodPriceUnit').value,
+
+    grade: document.getElementById('prodGrade').value.trim(),
+    budLife: document.getElementById('prodBudLife').value.trim(),
+    availability: document.getElementById('prodAvailability').value.trim(),
+    package: document.getElementById('prodPackage').value.trim(),
+    image: prodImage.value,
+    description: document.getElementById('prodDescription').value.trim(),
+    isSignature: isSigCheckbox ? isSigCheckbox.checked : false
+};
 
                     if (editId) {
                         prodObj.id = editId;
