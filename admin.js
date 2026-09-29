@@ -451,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tr.innerHTML = `
                     <td><img src="${prod.image}" alt="${prod.name}" class="product-table-img"></td>
                     <td><strong>${prod.name}</strong>${sigBadge}</td>
+                    <td>${prod.item_code || '-'}</td>
                     <td>${categoryLabels[prod.category] || prod.category}</td>
                     <td>${prod.grade}</td>
                     <td>${prod.budLife}</td>
