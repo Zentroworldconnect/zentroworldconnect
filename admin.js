@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (supabaseClient) {
                 try {
                     const { data, error } = await supabaseClient.from('products').select('*').order('id');
-                    if (!error && data && data.length >= 4) {
+                    if (!error && data) {
                         localStorage.setItem('zentro_products', JSON.stringify(data));
                         return data;
                     }
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             const local = JSON.parse(localStorage.getItem('zentro_products'));
-            if (local && local.length >= 4) {
+            if (local && Array.isArray(local)) {
                 return local;
             }
             localStorage.setItem('zentro_products', JSON.stringify(defaultAdminProducts));
