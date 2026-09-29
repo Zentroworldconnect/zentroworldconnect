@@ -474,6 +474,33 @@
                 </div>
 
                 <div class="form-row">
+    <div class="form-group">
+        <label for="prodPriceINR">Price (INR) *</label>
+        <input type="number" id="prodPriceINR" required min="0" step="0.01" placeholder="e.g. 500">
+        <span class="error-msg">INR price is required</span>
+    </div>
+
+    <div class="form-group">
+        <label for="prodPriceUSD">Price (USD) *</label>
+        <input type="number" id="prodPriceUSD" required min="0" step="0.01" placeholder="e.g. 5.20">
+        <span class="error-msg">USD price is required</span>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="prodPriceUnit">Price Unit *</label>
+        <select id="prodPriceUnit" required>
+            <option value="" disabled selected>Select unit</option>
+            <option value="kg">Kg</option>
+            <option value="bunch">Bunch</option>
+            <option value="piece">Piece</option>
+        </select>
+        <span class="error-msg">Please select a price unit</span>
+    </div>
+</div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label for="prodBudLife">Freshness/Vase Life *</label>
                         <input type="text" id="prodBudLife" required placeholder="e.g. 5 - 7 Days">
