@@ -199,6 +199,9 @@ if (sets.aboutDescription) {
                 <img src="${prod.image}" alt="${prod.name}" class="catalog-card-img">
                 <div class="catalog-card-body">
                     <h3>${prod.name}</h3>
+                    <p class="item-code">
+    Item Code: ${prod.item_code || '-'}
+</p>
                     <p>${prod.description}</p>
                     <p class="product-price">
     ₹${Number(prod.price_inr || 0).toFixed(2)} / ${prod.price_unit || ''}
