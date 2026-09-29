@@ -461,6 +461,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="btn-icon delete-btn" data-id="${prod.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </td>
+                    <td>${prod.price_inr}</td>
+                    <td>${prod.price_usd}</td>
                 `;
                 productsTableBody.appendChild(tr);
             });
