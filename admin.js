@@ -609,6 +609,7 @@ document.getElementById('prodPriceUnit').value = matched.price_unit || '';
                     const isSigCheckbox = document.getElementById('prodIsSignature');
                     const prodObj = {
     name: document.getElementById('prodName').value.trim(),
+    item_code: document.getElementById('prodItemCode').value.trim(),                       
     category: document.getElementById('prodCategory').value,
 
     price_inr: parseFloat(document.getElementById('prodPriceINR').value),
