@@ -209,7 +209,7 @@ if (sets.aboutDescription) {
 
     renderCatalog(currentProducts);
 
-    /* --- RENDER DYNAMIC SIGNATURE PRODUCTS GRID --- */
+    
     /* --- RENDER DYNAMIC SIGNATURE PRODUCTS GRID --- */
 const renderSignatureProducts = (products) => {
     const signatureGrid = document.getElementById('signatureProductsGrid');
