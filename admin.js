@@ -582,7 +582,7 @@ document.getElementById('prodPriceUnit').value = matched.price_unit || '';
                 e.preventDefault();
                 let isFormValid = true;
 
-                const fields = ['prodName', 'prodCategory', 'prodGrade', 'prodBudLife', 'prodAvailability', 'prodPackage', 'prodDescription'];
+                const fields = ['prodName', 'prodCategory', 'prodGrade', 'prodDescription'];
                 fields.forEach(fId => {
                     const input = document.getElementById(fId);
                     if (input.value.trim() === '') {
