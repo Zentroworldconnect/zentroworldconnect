@@ -1696,4 +1696,10 @@ html, body {
 img {
     max-width: 100%;
 }
+
+.product-price {
+    font-weight: 600;
+    margin: 12px 0;
+    font-size: 0.95rem;
+}
    
