@@ -246,6 +246,9 @@ const renderSignatureProducts = (products) => {
             <div class="sig-card-body">
                 <span class="tag-label">${tagLabel}</span>
                 <h3>${prod.name}</h3>
+                <p class="item-code">
+    Item Code: ${prod.item_code || '-'}
+</p>
                 <p>${prod.description}</p>
                 <div class="sig-actions">
                     <button class="btn btn-sm btn-primary open-quote-modal" data-product="${prod.name}">
