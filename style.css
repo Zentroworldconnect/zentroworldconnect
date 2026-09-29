@@ -1648,6 +1648,12 @@ ul {
  .notice-card {
         display: none;
     }
+.item-code {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
 
  
 
