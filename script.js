@@ -286,6 +286,31 @@ renderSignatureProducts(currentProducts);
         });
     });
 
+   /* --- HOME CATEGORY BUTTONS --- */
+document.querySelectorAll('.nav-to-catalog').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const category = btn.getAttribute('data-cat');
+
+        showView('catalog');
+
+        if (category) {
+            currentCategory = category;
+
+            filterPills.forEach(pill => {
+                pill.classList.remove('active');
+
+                if (pill.getAttribute('data-cat') === category) {
+                    pill.classList.add('active');
+                }
+            });
+
+            filterProducts();
+        }
+    });
+});
+
     /* --- UNIVERSAL QUOTE & CONTACT MODAL LOGIC --- */
     const quoteModal = document.getElementById('quoteModal');
     const closeQuoteModal = document.getElementById('closeQuoteModal');
