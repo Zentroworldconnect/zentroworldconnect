@@ -1747,15 +1747,15 @@ img {
         display: inline-block;
     }
       .c-info-card {
-        width: 100%;
-        max-width: 100%;
+        width: 150%;
+        max-width: 200%;
         box-sizing: border-box;
         overflow: hidden;
     }
 
     .c-val {
         display: block;
-        max-width: 100%;
+        max-width: 200%;
         overflow-wrap: anywhere;
         word-break: break-word;
         box-sizing: border-box;
