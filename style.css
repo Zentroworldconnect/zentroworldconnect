@@ -1680,6 +1680,9 @@ ul {
         font-size: 0.85rem;
     }
 }
+   .footer-links {
+    margin-left: -20px;
+}
 
 }
 
