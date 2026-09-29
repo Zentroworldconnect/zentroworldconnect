@@ -195,6 +195,11 @@ if (sets.aboutDescription) {
                 <div class="catalog-card-body">
                     <h3>${prod.name}</h3>
                     <p>${prod.description}</p>
+                    <p class="product-price">
+    ₹${Number(prod.price_inr || 0).toFixed(2)} / ${prod.price_unit || ''}
+    &nbsp; | &nbsp;
+    $${Number(prod.price_usd || 0).toFixed(2)} / ${prod.price_unit || ''}
+</p>
                     <span class="view-link open-quote-modal" data-product="${prod.name}">Get a Quote &rarr;</span>
                 </div>
             `;
