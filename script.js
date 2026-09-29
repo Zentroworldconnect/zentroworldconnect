@@ -159,14 +159,19 @@ if (sets.aboutDescription) {
     };
 
     navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            const targetView = link.getAttribute('data-view');
-            if (targetView) {
-                e.preventDefault();
-                showView(targetView, link.getAttribute('data-section'));
-            }
-        });
+    link.addEventListener('click', (e) => {
+        const targetView = link.getAttribute('data-view');
+
+        if (targetView) {
+            e.preventDefault();
+
+            showView(targetView, link.getAttribute('data-section'));
+
+            // Close mobile menu after selecting a page
+            navMenu.classList.remove('active');
+        }
     });
+});
 
     document.querySelectorAll('.nav-to-catalog').forEach(btn => {
         btn.addEventListener('click', (e) => {
