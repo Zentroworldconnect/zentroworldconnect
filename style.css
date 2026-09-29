@@ -1640,6 +1640,12 @@ ul {
     transform: scale(1.08);
 }
 
+.product-price {
+    font-weight: 600;
+    margin: 12px 0;
+    font-size: 0.95rem;
+}
+
 /* RESPONSIVE */
 @media (max-width: 992px) {
     .heritage-grid, .specialized-grid, .connectivity-grid, .about-hero-grid, .why-grid, .red-contact-grid {
@@ -1673,13 +1679,10 @@ ul {
     }
    .heritage-img-1 { height: 360px; }
    .heritage-img-2 { height: 360px; }
-
-   @media (max-width: 768px) {
-    .footer-contact p {
+   .footer-contact p {
         width: 100%;
         font-size: 0.85rem;
     }
-}
    .footer-links {
     margin-left: -20px;
 }
@@ -1700,12 +1703,6 @@ html, body {
 
 img {
     max-width: 100%;
-}
-
-.product-price {
-    font-weight: 600;
-    margin: 12px 0;
-    font-size: 0.95rem;
 }
 
 .signature-grid {
@@ -1747,4 +1744,5 @@ img {
     .sig-actions .btn {
         display: inline-block;
     }
+}
    
