@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         let height = img.height;
 
                         // Target dimensions (max 400px width/height) to ensure size < 30KB
-                        const maxDimension = 400;
+                        const maxDimension = 1200;
                         if (width > maxDimension || height > maxDimension) {
                             if (width > height) {
                                 height = Math.round((height * maxDimension) / width);
@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.drawImage(img, 0, 0, width, height);
 
                         // Compress to JPEG with 70% quality
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.9);
                         prodImage.value = compressedBase64;
                         
                         if (prodImagePreview) prodImagePreview.src = compressedBase64;
