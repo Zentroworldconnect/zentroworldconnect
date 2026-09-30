@@ -583,7 +583,7 @@ document.getElementById('prodPriceUnit').value = matched.price_unit || '';
                 e.preventDefault();
                 let isFormValid = true;
 
-                const fields = ['prodName', 'prodCategory', 'prodGrade', 'prodDescription'];
+                const fields = ['prodName', 'prodItemCode', 'prodCategory', 'prodGrade', 'prodDescription'];
                 fields.forEach(fId => {
                     const input = document.getElementById(fId);
                     if (input.value.trim() === '') {
