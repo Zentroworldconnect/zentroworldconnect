@@ -202,6 +202,13 @@ if (sets.aboutDescription) {
                     <p class="item-code">
     Item Code: ${prod.item_code || '-'}
 </p>
+<p class="product-info">
+    Vase/Bud Life: ${prod.budLife || '-'}
+</p>
+
+<p class="product-info">
+    Availability: ${prod.availability || '-'}
+</p>
                     <p>${prod.description}</p>
                     <p class="product-price">
     ${
