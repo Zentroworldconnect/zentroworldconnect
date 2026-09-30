@@ -204,9 +204,17 @@ if (sets.aboutDescription) {
 </p>
                     <p>${prod.description}</p>
                     <p class="product-price">
-    ₹${Number(prod.price_inr || 0).toFixed(2)} / ${prod.price_unit || ''}
-    &nbsp; | &nbsp;
-    $${Number(prod.price_usd || 0).toFixed(2)} / ${prod.price_unit || ''}
+    ${
+        prod.price_inr !== null && prod.price_inr !== '' && prod.price_inr !== undefined
+            ? `₹${Number(prod.price_inr).toFixed(2)} / ${prod.price_unit || ''}`
+            : ''
+    }
+
+    ${
+        prod.price_usd !== null && prod.price_usd !== '' && prod.price_usd !== undefined
+            ? `${prod.price_inr !== null && prod.price_inr !== '' && prod.price_inr !== undefined ? '&nbsp; | &nbsp;' : ''}$${Number(prod.price_usd).toFixed(2)} / ${prod.price_unit || ''}`
+            : ''
+    }
 </p>
                     <span class="view-link open-quote-modal" data-product="${prod.name}">Get a Quote &rarr;</span>
                 </div>
