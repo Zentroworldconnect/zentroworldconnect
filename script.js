@@ -123,8 +123,7 @@ if (sets.aboutDescription) {
         }
     };
 
-    await loadProductsFromDB();
-    await loadSettingsFromDB();
+    
 
     /* --- SPA VIEW SWITCHER --- */
     const pageViews = document.querySelectorAll('.page-view');
@@ -172,6 +171,9 @@ if (sets.aboutDescription) {
         }
     });
 });
+
+   await loadProductsFromDB();
+    await loadSettingsFromDB();
 
     document.querySelectorAll('.nav-to-catalog').forEach(btn => {
         btn.addEventListener('click', (e) => {
