@@ -3,12 +3,16 @@
    ========================================== */
 
 const SUPABASE_URL = "https://fvzqxddabdgybvozrlvs.supabase.co"; 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2enF4ZGRhYmRneWJ2b3pybHZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyNTU5MzMsImV4cCI6MjA5NzgzMTkzM30.6_2PebBxhvppoIXwMIWhfYJDfKDz4a73kWNecHsFlec";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmF0ZSIsInJlZiI6ImZ2enF4ZGRiYmRneWJ2b3pybHZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyNTU5MzMsImV4cCI6MjA5NzgzMTkzM30.6_2PebBxhvppoIXwMIWhfYJDfKDz4a73kWNecHsFlec";
 
 let supabaseClient = null;
+
 if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     if (window.supabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
         console.log("Supabase Client initialized");
     }
 }
@@ -22,418 +26,807 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /* --- HYBRID DATABASE FETCH (SUPABASE / LOCALSTORAGE) --- */
     const loadProductsFromDB = async () => {
-    if (supabaseClient) {
-        try {
-            const { data, error } = await supabaseClient
-                .from('products')
-                .select('*')
-                .order('id');
 
-            if (error) {
-                console.error("Supabase select products error:", error);
-            } else if (data) {
-                console.log("Products loaded from Supabase:", data);
-
-                currentProducts = data;
-
-                localStorage.setItem(
-                    'zentro_products',
-                    JSON.stringify(data)
-                );
-
-                return;
-            }
-        } catch (e) {
-            console.error("Supabase products error:", e);
-        }
-    }
-
-    const local = localStorage.getItem('zentro_products');
-
-    if (local) {
-        try {
-            const parsed = JSON.parse(local);
-
-            if (Array.isArray(parsed)) {
-                currentProducts = parsed;
-                return;
-            }
-        } catch (e) {
-            console.error("Local products parsing error:", e);
-        }
-    }
-
-    currentProducts = defaultCatalogProducts;
-};
-
-    const loadSettingsFromDB = async () => {
-        let sets = null;
         if (supabaseClient) {
             try {
-                const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
-                if (!error && data) sets = data;
-            } catch (e) {}
+                const { data, error } = await supabaseClient
+                    .from('products')
+                    .select('*')
+                    .order('id');
+
+                if (error) {
+                    console.error("Supabase select products error:", error);
+                } else if (data && data.length > 0) {
+
+                    console.log("Products loaded from Supabase:", data);
+
+                    currentProducts = data;
+
+                    localStorage.setItem(
+                        'zentro_products',
+                        JSON.stringify(data)
+                    );
+
+                    return;
+                }
+
+            } catch (e) {
+                console.error("Supabase products error:", e);
+            }
         }
+
+        /* --- LOCALSTORAGE FALLBACK --- */
+        const local = localStorage.getItem('zentro_products');
+
+        if (local) {
+            try {
+                const parsed = JSON.parse(local);
+
+                if (Array.isArray(parsed)) {
+                    currentProducts = parsed;
+                    return;
+                }
+
+            } catch (e) {
+                console.error("Local products parsing error:", e);
+            }
+        }
+
+        currentProducts = defaultCatalogProducts;
+    };
+
+
+    /* --- LOAD SETTINGS FROM SUPABASE / LOCALSTORAGE --- */
+    const loadSettingsFromDB = async () => {
+
+        let sets = null;
+
+        if (supabaseClient) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('settings')
+                    .select('*')
+                    .eq('id', 1)
+                    .maybeSingle();
+
+                if (!error && data) {
+                    sets = data;
+                }
+
+            } catch (e) {
+                console.error("Supabase settings error:", e);
+            }
+        }
+
         if (!sets) {
             const local = localStorage.getItem('zentro_settings');
-            if (local) sets = JSON.parse(local);
+
+            if (local) {
+                try {
+                    sets = JSON.parse(local);
+                } catch (e) {
+                    console.error("Local settings parsing error:", e);
+                }
+            }
         }
 
         if (sets) {
-            // Apply Dynamic Brand Color
+
+            /* --- Dynamic Brand Color --- */
             if (sets.primaryColor) {
-                document.documentElement.style.setProperty('--primary', sets.primaryColor);
+                document.documentElement.style.setProperty(
+                    '--primary',
+                    sets.primaryColor
+                );
             }
-            // Apply Dynamic Contacts if provided
+
+            /* --- Dynamic Office Email --- */
             if (sets.officeEmail) {
                 document.querySelectorAll('a[href^="mailto:"]').forEach(el => {
+
                     el.href = `mailto:${sets.officeEmail}`;
-                    if (el.textContent.includes('@')) el.textContent = sets.officeEmail;
+
+                    if (el.textContent.includes('@')) {
+                        el.textContent = sets.officeEmail;
+                    }
+
                 });
             }
+
+            /* --- Dynamic Office Phone --- */
             if (sets.officePhone) {
                 document.querySelectorAll('a[href^="tel:"]').forEach(el => {
+
                     el.href = `tel:${sets.officePhone.replace(/\s+/g, '')}`;
-                    if (el.textContent.includes('+')) el.textContent = sets.officePhone;
+
+                    if (el.textContent.includes('+')) {
+                        el.textContent = sets.officePhone;
+                    }
+
                 });
             }
-           // Hero Title
-if (sets.heroTitle) {
-    const heroTitle = document.getElementById('heroTitle');
-    if (heroTitle) heroTitle.innerHTML = sets.heroTitle;
-}
 
-// Hero Description
-if (sets.heroDescription) {
-    const heroDescription = document.getElementById('heroDescription');
-    if (heroDescription) heroDescription.innerHTML = sets.heroDescription;
-}
+            /* --- Hero Title --- */
+            if (sets.heroTitle) {
 
-// About Title
-if (sets.aboutTitle) {
-    const aboutTitle = document.getElementById('aboutTitle');
-    if (aboutTitle) aboutTitle.innerHTML = sets.aboutTitle;
-}
+                const heroTitle = document.getElementById('heroTitle');
 
-// About Description
-if (sets.aboutDescription) {
-    const aboutDescription = document.getElementById('aboutDescription');
-    if (aboutDescription) aboutDescription.innerHTML = sets.aboutDescription;
-}
+                if (heroTitle) {
+                    heroTitle.innerHTML = sets.heroTitle;
+                }
+            }
+
+            /* --- Hero Description --- */
+            if (sets.heroDescription) {
+
+                const heroDescription =
+                    document.getElementById('heroDescription');
+
+                if (heroDescription) {
+                    heroDescription.innerHTML = sets.heroDescription;
+                }
+            }
+
+            /* --- About Title --- */
+            if (sets.aboutTitle) {
+
+                const aboutTitle =
+                    document.getElementById('aboutTitle');
+
+                if (aboutTitle) {
+                    aboutTitle.innerHTML = sets.aboutTitle;
+                }
+            }
+
+            /* --- About Description --- */
+            if (sets.aboutDescription) {
+
+                const aboutDescription =
+                    document.getElementById('aboutDescription');
+
+                if (aboutDescription) {
+                    aboutDescription.innerHTML = sets.aboutDescription;
+                }
+            }
         }
     };
 
-    
 
     /* --- SPA VIEW SWITCHER --- */
     const pageViews = document.querySelectorAll('.page-view');
     const navLinks = document.querySelectorAll('.nav-link, [data-view]');
 
     const showView = (viewName, sectionId = null) => {
+
         pageViews.forEach(view => {
+
             view.classList.remove('active');
+
             if (view.id === `view-${viewName}`) {
                 view.classList.add('active');
             }
+
         });
 
         navLinks.forEach(link => {
+
             if (link.getAttribute('data-view') === viewName) {
                 link.classList.add('active');
+
             } else if (link.getAttribute('data-view')) {
                 link.classList.remove('active');
             }
+
         });
 
         if (sectionId) {
-    setTimeout(() => {
-        document.getElementById(sectionId)?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }, 100);
-} else {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+
+            setTimeout(() => {
+
+                document
+                    .getElementById(sectionId)
+                    ?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+            }, 100);
+
+        } else {
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
     };
 
+
+    /* --- NAVIGATION CLICK HANDLER --- */
     navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        const targetView = link.getAttribute('data-view');
 
-        if (targetView) {
-            e.preventDefault();
+        link.addEventListener('click', (e) => {
 
-            showView(targetView, link.getAttribute('data-section'));
+            const targetView = link.getAttribute('data-view');
 
-            // Close mobile menu after selecting a page
-            navMenu.classList.remove('active');
-        }
-    });
-});
+            if (targetView) {
 
-   await loadProductsFromDB();
-    await loadSettingsFromDB();
+                e.preventDefault();
 
-    document.querySelectorAll('.nav-to-catalog').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            showView('catalog');
+                showView(
+                    targetView,
+                    link.getAttribute('data-section')
+                );
+
+                /* Close mobile menu after selecting a page */
+                const navMenu = document.getElementById('navMenu');
+
+                if (navMenu) {
+                    navMenu.classList.remove('active');
+                }
+            }
         });
     });
 
-    /* --- RENDER CATALOG PRODUCT GRID --- */
-    const catalogProductGrid = document.getElementById('catalogProductGrid');
-    
+
+    /* =========================================================
+       CATALOG PRODUCT GRID
+       ========================================================= */
+
+    const catalogProductGrid =
+        document.getElementById('catalogProductGrid');
+
     const renderCatalog = (products) => {
+
         if (!catalogProductGrid) return;
+
         catalogProductGrid.innerHTML = '';
 
-        if (products.length === 0) {
-            catalogProductGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">No flowers found matching your search.</div>';
+        if (!products || products.length === 0) {
+
+            catalogProductGrid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
+                    No flowers found matching your search.
+                </div>
+            `;
+
             return;
         }
 
         products.forEach(prod => {
-            const card = document.createElement('div');
-            card.className = 'catalog-card';
-            card.innerHTML = `
-                <img src="${prod.image}" alt="${prod.name}" class="catalog-card-img">
-                <div class="catalog-card-body">
-                    <h3>${prod.name}</h3>
-                    <p class="item-code">
-    Item Code: ${prod.item_code || '-'}
-</p>
 
-                    <p>${prod.description}</p>
+            const card = document.createElement('div');
+
+            card.className = 'catalog-card';
+
+            card.innerHTML = `
+                <img 
+                    src="${prod.image}" 
+                    alt="${prod.name}" 
+                    class="catalog-card-img"
+                >
+
+                <div class="catalog-card-body">
+
+                    <h3>${prod.name}</h3>
+
+                    <p class="item-code">
+                        Item Code: ${prod.item_code || '-'}
+                    </p>
+
+                    <p>${prod.description || ''}</p>
+
                     <p class="product-price">
-    ₹${Number(prod.price_inr || 0).toFixed(2)} / ${prod.price_unit || ''}
-    &nbsp; | &nbsp;
-    $${Number(prod.price_usd || 0).toFixed(2)} / ${prod.price_unit || ''}
-</p>
-                    <span class="view-link open-quote-modal" data-product="${prod.name}">Get a Quote &rarr;</span>
+                        ₹${Number(prod.price_inr || 0).toFixed(2)} / ${prod.price_unit || ''}
+                        &nbsp; | &nbsp;
+                        $${Number(prod.price_usd || 0).toFixed(2)} / ${prod.price_unit || ''}
+                    </p>
+
+                    <span 
+                        class="view-link open-quote-modal" 
+                        data-product="${prod.name}"
+                    >
+                        Get a Quote &rarr;
+                    </span>
+
                 </div>
             `;
+
             catalogProductGrid.appendChild(card);
         });
     };
 
-    renderCatalog(currentProducts);
 
-    
-    /* --- RENDER DYNAMIC SIGNATURE PRODUCTS GRID --- */
-const renderSignatureProducts = (products) => {
-    const signatureGrid = document.getElementById('signatureProductsGrid');
-    if (!signatureGrid) return;
-    signatureGrid.innerHTML = '';
+    /* =========================================================
+       SIGNATURE PRODUCTS GRID
+       ========================================================= */
 
-    // Filter products marked as isSignature, or fallback to top products
-    let sigList = products.filter(p => p.isSignature === true || p.isSignature === 'true');
+    const renderSignatureProducts = (products) => {
 
-    if (sigList.length === 0) {
-        sigList = products.slice(0, 6);
-    }
+        const signatureGrid =
+            document.getElementById('signatureProductsGrid');
 
-    sigList.forEach(prod => {
-        const card = document.createElement('div');
-        card.className = 'sig-card';
+        if (!signatureGrid) return;
 
-        const tagLabel = prod.category === 'garlands'
-            ? 'GARLANDS'
-            : (prod.category === 'bouquets'
-                ? 'BOUQUETS'
-                : 'FLOWERS');
+        signatureGrid.innerHTML = '';
 
-        card.innerHTML = `
-            <img src="${prod.image}" alt="${prod.name}">
-            <div class="sig-card-body">
-                <span class="tag-label">${tagLabel}</span>
-                <h3>${prod.name}</h3>
-                <p class="item-code">
-    Item Code: ${prod.item_code || '-'}
-</p>
-                <p>${prod.description}</p>
-                <div class="sig-actions">
-                    <button class="btn btn-sm btn-primary open-quote-modal" data-product="${prod.name}">
-                        Enquire
-                    </button>
+        /* Filter products marked as signature */
+        let sigList = products.filter(
+            p =>
+                p.isSignature === true ||
+                p.isSignature === 'true'
+        );
+
+        /* Fallback to first 6 products */
+        if (sigList.length === 0) {
+            sigList = products.slice(0, 6);
+        }
+
+        sigList.forEach(prod => {
+
+            const card = document.createElement('div');
+
+            card.className = 'sig-card';
+
+            const tagLabel =
+                prod.category === 'garlands'
+                    ? 'GARLANDS'
+                    : (
+                        prod.category === 'bouquets'
+                            ? 'BOUQUETS'
+                            : 'FLOWERS'
+                    );
+
+            card.innerHTML = `
+                <img 
+                    src="${prod.image}" 
+                    alt="${prod.name}"
+                >
+
+                <div class="sig-card-body">
+
+                    <span class="tag-label">
+                        ${tagLabel}
+                    </span>
+
+                    <h3>${prod.name}</h3>
+
+                    <p class="item-code">
+                        Item Code: ${prod.item_code || '-'}
+                    </p>
+
+                    <p>${prod.description || ''}</p>
+
+                    <div class="sig-actions">
+
+                        <button 
+                            class="btn btn-sm btn-primary open-quote-modal" 
+                            data-product="${prod.name}"
+                        >
+                            Enquire
+                        </button>
+
+                    </div>
+
                 </div>
-            </div>
-        `;
+            `;
 
-        signatureGrid.appendChild(card);
-    });
-};
+            signatureGrid.appendChild(card);
+        });
+    };
 
-renderSignatureProducts(currentProducts);
 
-    /* --- SEARCH & FILTER LOGIC --- */
-    const catalogSearchInput = document.getElementById('catalogSearchInput');
-    const filterPills = document.querySelectorAll('.pill-btn');
+    /* =========================================================
+       SEARCH & FILTER LOGIC
+       ========================================================= */
+
+    const catalogSearchInput =
+        document.getElementById('catalogSearchInput');
+
+    const filterPills =
+        document.querySelectorAll('.pill-btn');
+
     let currentCategory = 'all';
 
+
     const filterProducts = () => {
-        const query = catalogSearchInput ? catalogSearchInput.value.toLowerCase().trim() : '';
+
+        const query =
+            catalogSearchInput
+                ? catalogSearchInput.value.toLowerCase().trim()
+                : '';
+
         const filtered = currentProducts.filter(p => {
-            const matchesCat = (currentCategory === 'all') || (p.category === currentCategory);
-            const matchesQuery = p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+
+            const matchesCat =
+                (currentCategory === 'all') ||
+                (p.category === currentCategory);
+
+            const productName =
+                (p.name || '').toLowerCase();
+
+            const productDescription =
+                (p.description || '').toLowerCase();
+
+            const matchesQuery =
+                productName.includes(query) ||
+                productDescription.includes(query);
+
             return matchesCat && matchesQuery;
         });
+
         renderCatalog(filtered);
     };
 
+
     if (catalogSearchInput) {
-        catalogSearchInput.addEventListener('input', filterProducts);
+
+        catalogSearchInput.addEventListener(
+            'input',
+            filterProducts
+        );
     }
 
+
     filterPills.forEach(pill => {
+
         pill.addEventListener('click', () => {
-            filterPills.forEach(p => p.classList.remove('active'));
+
+            filterPills.forEach(p => {
+                p.classList.remove('active');
+            });
+
             pill.classList.add('active');
-            currentCategory = pill.getAttribute('data-cat');
+
+            currentCategory =
+                pill.getAttribute('data-cat');
+
             filterProducts();
         });
     });
 
-   /* --- HOME CATEGORY BUTTONS --- */
-document.querySelectorAll('.nav-to-catalog').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
 
-        const category = btn.getAttribute('data-cat');
+    /* =========================================================
+       HOME CATEGORY BUTTONS
+       ========================================================= */
 
-        showView('catalog');
+    document
+        .querySelectorAll('.nav-to-catalog')
+        .forEach(btn => {
 
-        if (category) {
-            currentCategory = category;
+            btn.addEventListener('click', (e) => {
 
-            filterPills.forEach(pill => {
-                pill.classList.remove('active');
+                e.preventDefault();
 
-                if (pill.getAttribute('data-cat') === category) {
-                    pill.classList.add('active');
+                const category =
+                    btn.getAttribute('data-cat');
+
+                showView('catalog');
+
+                if (category) {
+
+                    currentCategory = category;
+
+                    filterPills.forEach(pill => {
+
+                        pill.classList.remove('active');
+
+                        if (
+                            pill.getAttribute('data-cat') ===
+                            category
+                        ) {
+                            pill.classList.add('active');
+                        }
+                    });
+
+                    filterProducts();
                 }
             });
+        });
 
-            filterProducts();
-        }
+
+    /* =========================================================
+       START DATABASE LOADING IN BACKGROUND
+       ========================================================= */
+
+    loadProductsFromDB().then(() => {
+
+        /* Render products after Supabase/localStorage loading */
+        renderCatalog(currentProducts);
+        renderSignatureProducts(currentProducts);
+
     });
-});
 
-    /* --- UNIVERSAL QUOTE & CONTACT MODAL LOGIC --- */
-    const quoteModal = document.getElementById('quoteModal');
-    const closeQuoteModal = document.getElementById('closeQuoteModal');
-    const modalQuoteForm = document.getElementById('modalQuoteForm');
-    const mTargetFlower = document.getElementById('mTargetFlower');
+
+    /* Load settings without blocking navigation */
+    loadSettingsFromDB();
+
+
+    /* =========================================================
+       UNIVERSAL QUOTE & CONTACT MODAL LOGIC
+       ========================================================= */
+
+    const quoteModal =
+        document.getElementById('quoteModal');
+
+    const closeQuoteModal =
+        document.getElementById('closeQuoteModal');
+
+    const modalQuoteForm =
+        document.getElementById('modalQuoteForm');
+
+    const mTargetFlower =
+        document.getElementById('mTargetFlower');
+
 
     const openQuoteModal = (productName = null) => {
+
         if (productName && mTargetFlower) {
-            for (let i = 0; i < mTargetFlower.options.length; i++) {
-                if (mTargetFlower.options[i].text.toLowerCase().includes(productName.toLowerCase())) {
+
+            for (
+                let i = 0;
+                i < mTargetFlower.options.length;
+                i++
+            ) {
+
+                if (
+                    mTargetFlower.options[i].text
+                        .toLowerCase()
+                        .includes(productName.toLowerCase())
+                ) {
+
                     mTargetFlower.selectedIndex = i;
                     break;
                 }
             }
         }
+
         if (quoteModal) {
+
             quoteModal.classList.add('active');
+
             document.body.style.overflow = 'hidden';
         }
     };
 
+
     const closeQuoteModalFunc = () => {
+
         if (quoteModal) {
+
             quoteModal.classList.remove('active');
+
             document.body.style.overflow = '';
         }
     };
 
-    // Global Event Delegation for Contact/Quote triggers
+
+    /* --- GLOBAL EVENT DELEGATION --- */
     document.addEventListener('click', (e) => {
-        const trigger = e.target.closest('.open-quote-modal, [href="#contact"], [data-view="contact"]');
+
+        const trigger =
+            e.target.closest(
+                '.open-quote-modal, [href="#contact"], [data-view="contact"]'
+            );
+
         if (trigger) {
+
             e.preventDefault();
-            const prodName = trigger.getAttribute('data-product');
+
+            const prodName =
+                trigger.getAttribute('data-product');
+
             openQuoteModal(prodName);
-            
+
             if (trigger.classList.contains('nav-link')) {
-                document.querySelectorAll('.nav-link').forEach(nl => nl.classList.remove('active'));
+
+                document
+                    .querySelectorAll('.nav-link')
+                    .forEach(nl => {
+                        nl.classList.remove('active');
+                    });
+
                 trigger.classList.add('active');
             }
         }
     });
 
+
+    /* --- CLOSE QUOTE MODAL --- */
     if (closeQuoteModal && quoteModal) {
-        closeQuoteModal.addEventListener('click', closeQuoteModalFunc);
+
+        closeQuoteModal.addEventListener(
+            'click',
+            closeQuoteModalFunc
+        );
 
         quoteModal.addEventListener('click', (e) => {
+
             if (e.target === quoteModal) {
                 closeQuoteModalFunc();
             }
         });
     }
 
-    /* --- FORM SUBMISSION --- */
+
+    /* =========================================================
+       FORM SUBMISSION
+       ========================================================= */
+
     if (modalQuoteForm) {
-        modalQuoteForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            let isValid = true;
 
-            const nameInput = document.getElementById('mClientName');
-            const emailInput = document.getElementById('mClientEmail');
-            const phoneInput = document.getElementById('mClientPhone');
-            const flowerSelect = document.getElementById('mTargetFlower');
-            const volumeInput = document.getElementById('mCargoVolume');
-            const destInput = document.getElementById('mDestinationAirport');
+        modalQuoteForm.addEventListener(
+            'submit',
+            async (e) => {
 
-            const checkField = (input, condition) => {
-                const grp = input.closest('.form-group');
-                if (!condition) {
-                    if (grp) grp.classList.add('error');
-                    isValid = false;
-                } else {
-                    if (grp) grp.classList.remove('error');
-                }
-            };
+                e.preventDefault();
 
-            checkField(nameInput, nameInput.value.trim() !== '');
-            checkField(emailInput, emailInput.value.trim() !== '' && emailInput.value.includes('@'));
-            checkField(phoneInput, phoneInput.value.trim() !== '');
-            checkField(flowerSelect, flowerSelect.value !== '');
-            checkField(volumeInput, volumeInput.value.trim() !== '');
-            checkField(destInput, destInput.value.trim() !== '');
+                let isValid = true;
 
-            if (isValid) {
-                const newInquiry = {
-                    id: Date.now().toString(),
-                    date: new Date().toLocaleString(),
-                    name: nameInput.value.trim(),
-                    company: document.getElementById('mCompanyName').value.trim() || 'N/A',
-                    email: emailInput.value.trim(),
-                    phone: phoneInput.value.trim(),
-                    flower: flowerSelect.options[flowerSelect.selectedIndex].text,
-                    volume: volumeInput.value.trim(),
-                    destination: destInput.value.trim(),
-                    notes: document.getElementById('mAdditionalNotes').value.trim() || 'No additional notes.'
+                const nameInput =
+                    document.getElementById('mClientName');
+
+                const emailInput =
+                    document.getElementById('mClientEmail');
+
+                const phoneInput =
+                    document.getElementById('mClientPhone');
+
+                const flowerSelect =
+                    document.getElementById('mTargetFlower');
+
+                const volumeInput =
+                    document.getElementById('mCargoVolume');
+
+                const destInput =
+                    document.getElementById('mDestinationAirport');
+
+
+                const checkField = (
+                    input,
+                    condition
+                ) => {
+
+                    const grp =
+                        input.closest('.form-group');
+
+                    if (!condition) {
+
+                        if (grp) {
+                            grp.classList.add('error');
+                        }
+
+                        isValid = false;
+
+                    } else {
+
+                        if (grp) {
+                            grp.classList.remove('error');
+                        }
+                    }
                 };
 
-                // Save to Supabase
-                if (supabaseClient) {
-                    try {
-                        await supabaseClient.from('inquiries').insert([newInquiry]);
-                    } catch (err) {
-                        console.error("Supabase insert error:", err);
+
+                checkField(
+                    nameInput,
+                    nameInput.value.trim() !== ''
+                );
+
+                checkField(
+                    emailInput,
+                    emailInput.value.trim() !== '' &&
+                    emailInput.value.includes('@')
+                );
+
+                checkField(
+                    phoneInput,
+                    phoneInput.value.trim() !== ''
+                );
+
+                checkField(
+                    flowerSelect,
+                    flowerSelect.value !== ''
+                );
+
+                checkField(
+                    volumeInput,
+                    volumeInput.value.trim() !== ''
+                );
+
+                checkField(
+                    destInput,
+                    destInput.value.trim() !== ''
+                );
+
+
+                if (isValid) {
+
+                    const newInquiry = {
+
+                        id: Date.now().toString(),
+
+                        date:
+                            new Date().toLocaleString(),
+
+                        name:
+                            nameInput.value.trim(),
+
+                        company:
+                            document
+                                .getElementById('mCompanyName')
+                                .value.trim() ||
+                            'N/A',
+
+                        email:
+                            emailInput.value.trim(),
+
+                        phone:
+                            phoneInput.value.trim(),
+
+                        flower:
+                            flowerSelect
+                                .options[
+                                    flowerSelect.selectedIndex
+                                ]
+                                .text,
+
+                        volume:
+                            volumeInput.value.trim(),
+
+                        destination:
+                            destInput.value.trim(),
+
+                        notes:
+                            document
+                                .getElementById('mAdditionalNotes')
+                                .value.trim() ||
+                            'No additional notes.'
+                    };
+
+
+                    /* --- SAVE TO SUPABASE --- */
+                    if (supabaseClient) {
+
+                        try {
+
+                            await supabaseClient
+                                .from('inquiries')
+                                .insert([newInquiry]);
+
+                        } catch (err) {
+
+                            console.error(
+                                "Supabase insert error:",
+                                err
+                            );
+                        }
                     }
-                }
 
-                // Fallback to LocalStorage
-                const currentInquiries = JSON.parse(localStorage.getItem('zentro_inquiries')) || [];
-                currentInquiries.unshift(newInquiry);
-                localStorage.setItem('zentro_inquiries', JSON.stringify(currentInquiries));
 
-                // Format WhatsApp Message & Redirect to WhatsApp
-                const whatsappNumber = "919597209593";
-                const waMessage = `Hello Zentro World Connect! 🌸
+                    /* --- FALLBACK / LOCAL COPY --- */
+                    const currentInquiries =
+                        JSON.parse(
+                            localStorage.getItem(
+                                'zentro_inquiries'
+                            )
+                        ) || [];
+
+                    currentInquiries.unshift(
+                        newInquiry
+                    );
+
+                    localStorage.setItem(
+                        'zentro_inquiries',
+                        JSON.stringify(currentInquiries)
+                    );
+
+
+                    /* --- WHATSAPP MESSAGE --- */
+                    const whatsappNumber =
+                        "919597209593";
+
+                    const waMessage =
+`Hello Zentro World Connect! 🌸
 
 I would like to request an Export Quote:
 👤 Name: ${newInquiry.name}
@@ -445,24 +838,45 @@ I would like to request an Export Quote:
 ✈️ Destination Airport: ${newInquiry.destination}
 📝 Notes: ${newInquiry.notes}`;
 
-                const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waMessage)}`;
 
-                modalQuoteForm.reset();
-                closeQuoteModalFunc();
+                    const waUrl =
+                        `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waMessage)}`;
 
-                // Open WhatsApp immediately
-                window.open(waUrl, '_blank');
+
+                    modalQuoteForm.reset();
+
+                    closeQuoteModalFunc();
+
+
+                    /* --- OPEN WHATSAPP --- */
+                    window.open(
+                        waUrl,
+                        '_blank'
+                    );
+                }
             }
-        });
+        );
     }
 
-    /* --- MOBILE MENU TOGGLE --- */
-    const navToggle = document.getElementById('navToggle');
-    const navMenu = document.getElementById('navMenu');
+
+    /* =========================================================
+       MOBILE MENU TOGGLE
+       ========================================================= */
+
+    const navToggle =
+        document.getElementById('navToggle');
+
+    const navMenu =
+        document.getElementById('navMenu');
+
 
     if (navToggle && navMenu) {
+
         navToggle.addEventListener('click', () => {
+
             navMenu.classList.toggle('active');
+
         });
     }
+
 });
