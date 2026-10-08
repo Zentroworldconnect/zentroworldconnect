@@ -42,11 +42,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     currentProducts = data;
 
-                    localStorage.setItem(
-                        'zentro_products',
-                        JSON.stringify(data)
-                    );
-
                     return;
                 }
 
