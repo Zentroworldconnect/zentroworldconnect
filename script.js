@@ -531,12 +531,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     loadProductsFromDB().then(() => {
 
-        /* Render products after Supabase/localStorage loading */
-        renderCatalog(currentProducts);
-        renderSignatureProducts(currentProducts);
+    /* Re-apply the selected category after products load */
+    filterProducts();
 
-    });
+    /* Render signature products */
+    renderSignatureProducts(currentProducts);
 
+});
 
     /* Load settings without blocking navigation */
     loadSettingsFromDB();
