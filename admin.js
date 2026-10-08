@@ -499,49 +499,49 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Open Modal for Edit
         const openProductEditModal = async (pId) => {
-            const list = await getProducts();
-            const matched = list.find(p => p.id === pId);
-            if (!matched) return;
+    const list = await getProducts();
 
-            productForm.reset();
-            document.getElementById('editProductId').value = matched.id;
-            document.getElementById('prodName').value = matched.name;
-            document.getElementById('prodCategory').value = matched.category;
-            document.getElementById('prodGrade').value = matched.grade;
-            document.getElementById('prodBudLife').value = matched.budLife;
-            document.getElementById('prodAvailability').value = matched.availability;
-            document.getElementById('prodPackage').value = matched.package;
-            document.getElementById('prodImage').value = matched.image;
-            document.getElementById('prodDescription').value = matched.description;
-           document.getElementById('prodPriceINR').value = matched.price_inr || '';
-document.getElementById('prodPriceUSD').value = matched.price_usd || '';
-document.getElementById('prodPriceUnit').value = matched.price_unit || '';
+    const matched = list.find(p => String(p.id) === String(pId));
 
-            const isSigEl = document.getElementById('prodIsSignature');
-            if (isSigEl) isSigEl.checked = (matched.isSignature === true || matched.isSignature === 'true');
+    if (!matched) {
+        alert("Product not found.");
+        return;
+    }
 
-            // Load Preview and preset selectors
-            if (matched.image) {
-                if (prodImagePreview) prodImagePreview.src = matched.image;
-                if (imagePreviewBox) imagePreviewBox.style.display = 'block';
-                if (prodImageSelect) {
-                    if (matched.image.startsWith('assets/')) {
-                        prodImageSelect.value = matched.image;
-                    } else {
-                        prodImageSelect.value = '';
-                    }
-                }
-            } else {
-                if (imagePreviewBox) imagePreviewBox.style.display = 'none';
-                if (prodImageSelect) prodImageSelect.value = '';
-            }
+    productForm.reset();
 
-            productModalTitle.innerText = 'Edit Flower Variety';
-            document.querySelectorAll('.modal-card .form-group').forEach(grp => grp.classList.remove('error'));
-            productModal.classList.add('active');
-        };
+    document.getElementById('editProductId').value = matched.id;
+    document.getElementById('prodName').value = matched.name || '';
+    document.getElementById('prodItemCode').value = matched.item_code || '';
+    document.getElementById('prodCategory').value = matched.category || '';
+    document.getElementById('prodGrade').value = matched.grade || '';
+    document.getElementById('prodBudLife').value = matched.budLife || '';
+    document.getElementById('prodAvailability').value = matched.availability || '';
+    document.getElementById('prodPackage').value = matched.package || '';
+    document.getElementById('prodImage').value = matched.image || '';
+    document.getElementById('prodDescription').value = matched.description || '';
+    document.getElementById('prodPriceINR').value = matched.price_inr || '';
+    document.getElementById('prodPriceUSD').value = matched.price_usd || '';
+    document.getElementById('prodPriceUnit').value = matched.price_unit || '';
+
+    const isSigEl = document.getElementById('prodIsSignature');
+
+    if (isSigEl) {
+        isSigEl.checked =
+            matched.isSignature === true ||
+            matched.isSignature === 'true';
+    }
+
+    // Preview handling
+    if (prodImagePreview) {
+        prodImagePreview.src = matched.image || '';
+        prodImagePreview.style.display = matched.image ? 'block' : 'none';
+    }
+
+    productModalTitle.innerText = 'Edit Flower Variety';
+    productModal.classList.add('active');
+};
 
         // Close Modal
         const closeModal = () => {
@@ -553,29 +553,61 @@ document.getElementById('prodPriceUnit').value = matched.price_unit || '';
 
         // Delete Product Action
         const deleteProductAction = async (pId) => {
-            const list = await getProducts();
-            const matched = list.find(p => p.id === pId);
-            if (!matched) return;
+    const list = await getProducts();
 
-            if (confirm(`Are you sure you want to delete ${matched.name}? This will remove it from the homepage catalog.`)) {
-                if (supabaseClient) {
-                    try {
-                        const { error } = await supabaseClient.from('products').delete().eq('id', pId);
-                        if (!error) {
-                            renderProductsTable();
-                            return;
-                        }
-                        console.error("Supabase product deletion error:", error);
-                        alert("Failed to delete product from Supabase: " + error.message);
-                    } catch (e) {
-                        console.error("Supabase exception:", e);
-                    }
-                }
-                const updated = list.filter(p => p.id !== pId);
-                localStorage.setItem('zentro_products', JSON.stringify(updated));
-                renderProductsTable();
+    const matched = list.find(p => String(p.id) === String(pId));
+
+    if (!matched) {
+        alert("Product not found.");
+        return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ${matched.name}? This will remove it from the homepage catalog.`)) {
+        return;
+    }
+
+    if (supabaseClient) {
+        try {
+            const { error } = await supabaseClient
+                .from('products')
+                .delete()
+                .eq('id', String(pId));
+
+            if (!error) {
+                const updatedList = list.filter(
+                    p => String(p.id) !== String(pId)
+                );
+
+                localStorage.setItem(
+                    'zentro_products',
+                    JSON.stringify(updatedList)
+                );
+
+                await renderProductsTable();
+                return;
             }
-        };
+
+            alert("Failed to delete product from Supabase:\n\n" + error.message);
+            return;
+
+        } catch (e) {
+            alert("Supabase error while deleting product:\n\n" + e.message);
+            return;
+        }
+    }
+
+    // LocalStorage fallback
+    const updated = list.filter(
+        p => String(p.id) !== String(pId)
+    );
+
+    localStorage.setItem(
+        'zentro_products',
+        JSON.stringify(updated)
+    );
+
+    renderProductsTable();
+};
 
         // Save / Update Form Submission
         if (productForm) {
@@ -627,47 +659,108 @@ document.getElementById('prodPriceUnit').value = matched.price_unit || '';
 };
 
                     if (editId) {
-                        prodObj.id = editId;
-                        if (supabaseClient) {
-                            try {
-                                const { error } = await supabaseClient.from('products').update(prodObj).eq('id', editId);
-                                if (!error) {
-                                    closeModal();
-                                    renderProductsTable();
-                                    return;
-                                }
-                                console.error("Supabase product update error:", error);
-                                alert("Failed to update in Supabase, using local storage. Error: " + error.message);
-                            } catch (e) {
-                                console.error("Supabase exception:", e);
-                            }
-                        }
-                        const idx = list.findIndex(p => p.id === editId);
-                        if (idx !== -1) {
-                            list[idx] = prodObj;
-                        }
-                    } else {
-                        prodObj.id = Date.now().toString();
-                        if (supabaseClient) {
-                            try {
-                                const { error } = await supabaseClient.from('products').insert([prodObj]);
-                                if (!error) {
-                                    closeModal();
-                                    renderProductsTable();
-                                    return;
-                                }
-                                console.error("Supabase product insert error:", error);
-                                alert("Failed to save to Supabase, using local storage. Error: " + error.message);
-                            } catch (e) {
-                                console.error("Supabase exception:", e);
-                            }
-                        }
-                        list.push(prodObj);
-                    }
 
-                    localStorage.setItem('zentro_products', JSON.stringify(list));
-                    closeModal();
-                    renderProductsTable();
+    // EDIT EXISTING PRODUCT
+    prodObj.id = String(editId);
+
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .update(prodObj)
+                .eq('id', String(editId))
+                .select();
+
+            if (!error) {
+                closeModal();
+
+                const updatedList = await getProducts();
+
+                localStorage.setItem(
+                    'zentro_products',
+                    JSON.stringify(updatedList)
+                );
+
+                await renderProductsTable();
+                return;
+            }
+
+            alert(
+                "Failed to update product in Supabase:\n\n" +
+                error.message
+            );
+            return;
+
+        } catch (e) {
+            alert(
+                "Supabase error while updating product:\n\n" +
+                e.message
+            );
+            return;
+        }
+    }
+
+    // LocalStorage fallback
+    const idx = list.findIndex(
+        p => String(p.id) === String(editId)
+    );
+
+    if (idx !== -1) {
+        list[idx] = prodObj;
+    }
+
+} else {
+
+    // ADD NEW PRODUCT
+    prodObj.id = Date.now().toString();
+
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .insert([prodObj])
+                .select();
+
+            if (!error) {
+                closeModal();
+
+                const updatedList = await getProducts();
+
+                localStorage.setItem(
+                    'zentro_products',
+                    JSON.stringify(updatedList)
+                );
+
+                await renderProductsTable();
+                return;
+            }
+
+            alert(
+                "Failed to add product to Supabase:\n\n" +
+                error.message
+            );
+            return;
+
+        } catch (e) {
+            alert(
+                "Supabase error while adding product:\n\n" +
+                e.message
+            );
+            return;
+        }
+    }
+
+    // LocalStorage fallback
+    list.push(prodObj);
+}
+
+localStorage.setItem(
+    'zentro_products',
+    JSON.stringify(list)
+);
+
+closeModal();
+renderProductsTable();
                 }
             });
         }
