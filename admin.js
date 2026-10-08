@@ -194,23 +194,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. Load Data Helpers (Hybrid Database routing)
         const getProducts = async () => {
-            if (supabaseClient) {
-                try {
-                    const { data, error } = await supabaseClient.from('products').select('*').order('id');
-                    if (!error && data) {
-    return data;
-}
-                } catch (e) {
-                    console.error("Supabase connection exception:", e);
-                }
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select('*')
+                .order('id');
+
+            if (!error && data) {
+                return data;
             }
-            const local = JSON.parse(localStorage.getItem('zentro_products'));
-            if (local && Array.isArray(local)) {
-                return local;
-            }
-            localStorage.setItem('zentro_products', JSON.stringify(defaultAdminProducts));
-            return defaultAdminProducts;
-        };
+
+            alert("Unable to load products from Supabase:\n\n" + error.message);
+            return [];
+
+        } catch (e) {
+            alert("Supabase error while loading products:\n\n" + e.message);
+            return [];
+        }
+    }
+
+    // LocalStorage fallback only when Supabase is not configured
+    try {
+        const local = JSON.parse(localStorage.getItem('zentro_products'));
+
+        if (local && Array.isArray(local)) {
+            return local;
+        }
+    } catch (e) {
+        console.error("Local products error:", e);
+    }
+
+    return defaultAdminProducts;
+};
 
         const getInquiries = async () => {
             if (supabaseClient) {
@@ -617,17 +633,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const deleteProductAction = async (pId) => {
     const list = await getProducts();
 
-    const matched = list.find(p => String(p.id) === String(pId));
+    const matched = list.find(
+        p => String(p.id) === String(pId)
+    );
 
     if (!matched) {
         alert("Product not found.");
         return;
     }
 
-    if (!confirm(`Are you sure you want to delete ${matched.name}? This will remove it from the homepage catalog.`)) {
+    if (!confirm(
+        `Are you sure you want to delete ${matched.name}? This will remove it from the homepage catalog.`
+    )) {
         return;
     }
 
+    // Supabase is the main database
     if (supabaseClient) {
         try {
             const { error } = await supabaseClient
@@ -635,38 +656,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 .delete()
                 .eq('id', String(pId));
 
-            if (!error) {
-                const updatedList = list.filter(
-                    p => String(p.id) !== String(pId)
+            if (error) {
+                alert(
+                    "Failed to delete product from Supabase:\n\n" +
+                    error.message
                 );
-
-                localStorage.setItem(
-                    'zentro_products',
-                    JSON.stringify(updatedList)
-                );
-
-                await renderProductsTable();
                 return;
             }
 
-            alert("Failed to delete product from Supabase:\n\n" + error.message);
+            // Reload the table directly from Supabase
+            await renderProductsTable();
             return;
 
         } catch (e) {
-            alert("Supabase error while deleting product:\n\n" + e.message);
+            alert(
+                "Supabase error while deleting product:\n\n" +
+                e.message
+            );
             return;
         }
     }
 
-    // LocalStorage fallback
+    // LocalStorage fallback only when Supabase is unavailable
     const updated = list.filter(
         p => String(p.id) !== String(pId)
     );
 
-    localStorage.setItem(
-        'zentro_products',
-        JSON.stringify(updated)
-    );
+    try {
+        localStorage.setItem(
+            'zentro_products',
+            JSON.stringify(updated)
+        );
+    } catch (e) {
+        alert("Unable to save local product data:\n\n" + e.message);
+        return;
+    }
 
     renderProductsTable();
 };
@@ -722,35 +746,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (editId) {
 
+    // ==========================
     // EDIT EXISTING PRODUCT
+    // ==========================
+
     prodObj.id = String(editId);
 
     if (supabaseClient) {
         try {
-            const { data, error } = await supabaseClient
+            const { error } = await supabaseClient
                 .from('products')
                 .update(prodObj)
-                .eq('id', String(editId))
-                .select();
+                .eq('id', String(editId));
 
-            if (!error) {
-                closeModal();
-
-                const updatedList = await getProducts();
-
-                localStorage.setItem(
-                    'zentro_products',
-                    JSON.stringify(updatedList)
+            if (error) {
+                alert(
+                    "Failed to update product in Supabase:\n\n" +
+                    error.message
                 );
-
-                await renderProductsTable();
                 return;
             }
 
-            alert(
-                "Failed to update product in Supabase:\n\n" +
-                error.message
-            );
+            closeModal();
+
+            // Reload latest products directly from Supabase
+            await renderProductsTable();
+
             return;
 
         } catch (e) {
@@ -773,34 +794,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 } else {
 
+    // ==========================
     // ADD NEW PRODUCT
+    // ==========================
+
     prodObj.id = Date.now().toString();
 
     if (supabaseClient) {
         try {
-            const { data, error } = await supabaseClient
+            const { error } = await supabaseClient
                 .from('products')
-                .insert([prodObj])
-                .select();
+                .insert([prodObj]);
 
-            if (!error) {
-                closeModal();
-
-                const updatedList = await getProducts();
-
-                localStorage.setItem(
-                    'zentro_products',
-                    JSON.stringify(updatedList)
+            if (error) {
+                alert(
+                    "Failed to add product to Supabase:\n\n" +
+                    error.message
                 );
-
-                await renderProductsTable();
                 return;
             }
 
-            alert(
-                "Failed to add product to Supabase:\n\n" +
-                error.message
-            );
+            closeModal();
+
+            // Reload latest products directly from Supabase
+            await renderProductsTable();
+
             return;
 
         } catch (e) {
@@ -816,10 +834,19 @@ document.addEventListener('DOMContentLoaded', () => {
     list.push(prodObj);
 }
 
-localStorage.setItem(
-    'zentro_products',
-    JSON.stringify(list)
-);
+// Only used when Supabase is NOT available
+try {
+    localStorage.setItem(
+        'zentro_products',
+        JSON.stringify(list)
+    );
+} catch (e) {
+    alert(
+        "Unable to save products locally:\n\n" +
+        e.message
+    );
+    return;
+}
 
 closeModal();
 renderProductsTable();
