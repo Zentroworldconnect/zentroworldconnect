@@ -198,9 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     const { data, error } = await supabaseClient.from('products').select('*').order('id');
                     if (!error && data) {
-                        localStorage.setItem('zentro_products', JSON.stringify(data));
-                        return data;
-                    }
+    return data;
+}
                 } catch (e) {
                     console.error("Supabase connection exception:", e);
                 }
@@ -448,12 +447,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             currentProds = data || [];
-
-            // Keep local copy updated
-            localStorage.setItem(
-                'zentro_products',
-                JSON.stringify(currentProds)
-            );
 
         } catch (e) {
             alert("Supabase error while loading products:\n\n" + e.message);
