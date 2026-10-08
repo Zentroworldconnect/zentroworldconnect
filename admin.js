@@ -432,58 +432,127 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const renderProductsTable = async () => {
-            const currentProds = await getProducts();
-            productsTableBody.innerHTML = '';
+    let currentProds = [];
 
-            if (currentProds.length === 0) {
-                productsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="text-center py-4 text-muted">No flowers currently listed. Add a variety.</td>
-                    </tr>
-                `;
+    // Always get the latest products from Supabase
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select('*')
+                .order('id');
+
+            if (error) {
+                alert("Unable to load products from Supabase:\n\n" + error.message);
                 return;
             }
 
-            currentProds.forEach(prod => {
-                const tr = document.createElement('tr');
-                const isSig = (prod.isSignature === true || prod.isSignature === 'true');
-                const sigBadge = isSig ? ' <span style="font-size:0.7rem; background:#FFEBEB; color:var(--primary); padding:2px 6px; border-radius:4px; font-weight:700; margin-left:4px;"><i class="fa-solid fa-star"></i> Featured</span>' : '';
-                tr.innerHTML = `
-                    <td><img src="${prod.image}" alt="${prod.name}" class="product-table-img"></td>
-                    <td><strong>${prod.name}</strong>${sigBadge}</td>
-                    <td>${prod.item_code || '-'}</td>
-                    <td>${categoryLabels[prod.category] || prod.category}</td>
-                    <td>${prod.grade}</td>
-                    <td>${prod.budLife}</td>
-                    <td>${prod.availability}</td>
-                    <td>
-                        <div class="actions-cell">
-                            <button class="btn-icon edit-btn" data-id="${prod.id}" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button class="btn-icon delete-btn" data-id="${prod.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </td>
-                    <td>${prod.price_inr}</td>
-                    <td>${prod.price_usd}</td>
-                `;
-                productsTableBody.appendChild(tr);
-            });
+            currentProds = data || [];
 
-            // Bind Edit Action Buttons
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const pId = btn.getAttribute('data-id');
-                    openProductEditModal(pId);
-                });
-            });
+            // Keep local copy updated
+            localStorage.setItem(
+                'zentro_products',
+                JSON.stringify(currentProds)
+            );
 
-            // Bind Delete Action Buttons
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const pId = btn.getAttribute('data-id');
-                    deleteProductAction(pId);
-                });
-            });
-        };
+        } catch (e) {
+            alert("Supabase error while loading products:\n\n" + e.message);
+            return;
+        }
+    } else {
+        // LocalStorage fallback
+        currentProds = await getProducts();
+    }
+
+    productsTableBody.innerHTML = '';
+
+    if (currentProds.length === 0) {
+        productsTableBody.innerHTML = `
+            <tr>
+                <td colspan="10" class="text-center py-4 text-muted">
+                    No flowers currently listed. Add a variety.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    currentProds.forEach(prod => {
+        const tr = document.createElement('tr');
+
+        const isSig =
+            prod.isSignature === true ||
+            prod.isSignature === 'true';
+
+        const sigBadge = isSig
+            ? ' <span style="font-size:0.7rem; background:#FFEBEB; color:var(--primary); padding:2px 6px; border-radius:4px; font-weight:700; margin-left:4px;"><i class="fa-solid fa-star"></i> Featured</span>'
+            : '';
+
+        tr.innerHTML = `
+            <td>
+                <img src="${prod.image || ''}" 
+                     alt="${prod.name || ''}" 
+                     class="product-table-img">
+            </td>
+
+            <td>
+                <strong>${prod.name || ''}</strong>${sigBadge}
+            </td>
+
+            <td>${prod.item_code || '-'}</td>
+
+            <td>
+                ${categoryLabels[prod.category] || prod.category || '-'}
+            </td>
+
+            <td>${prod.grade || '-'}</td>
+
+            <td>${prod.budLife || '-'}</td>
+
+            <td>${prod.availability || '-'}</td>
+
+            <td>
+                <div class="actions-cell">
+                    <button 
+                        class="btn-icon edit-btn" 
+                        data-id="${prod.id}" 
+                        title="Edit">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+
+                    <button 
+                        class="btn-icon delete-btn" 
+                        data-id="${prod.id}" 
+                        title="Delete">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+
+            <td>${prod.price_inr || '-'}</td>
+
+            <td>${prod.price_usd || '-'}</td>
+        `;
+
+        productsTableBody.appendChild(tr);
+    });
+
+    // Bind Edit buttons
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const pId = btn.getAttribute('data-id');
+            openProductEditModal(pId);
+        });
+    });
+
+    // Bind Delete buttons
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const pId = btn.getAttribute('data-id');
+            deleteProductAction(pId);
+        });
+    });
+};
 
         // Open Modal for Create
         if (addProductBtn) {
