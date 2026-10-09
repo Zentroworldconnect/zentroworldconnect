@@ -8,7 +8,7 @@
 // 2. Create tables using the schema provided in the walkthrough.
 // If either is empty, the dashboard automatically falls back to browser LocalStorage.
 const SUPABASE_URL = "https://fvzqxddabdgybvozrlvs.supabase.co"; 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2enF4ZGRhYmRneWJ2b3pybHZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyNTU5MzMsImV4cCI6MjA5NzgzMTkzM30.6_2PebBxhvppoIXwMIWhfYJDfKDz4a73kWNecHsFlec";
+const SUPABASE_ANON_KEY = "sb_publishable_iGDj_0kt5smIENeT6EqvJQ_vGxDZ8FD";
 
 const categoryLabels = {
     flowers: 'Flowers',
