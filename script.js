@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /* --- HYBRID DATABASE FETCH (SUPABASE / LOCALSTORAGE) --- */
     const loadProductsFromDB = async () => {
-
     if (!supabaseClient) {
         console.error("Supabase client is not available.");
         currentProducts = [];
@@ -34,43 +33,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-
         const { data, error } = await supabaseClient
             .from('products')
             .select('*')
             .order('id');
 
         if (error) {
-            console.error(
-                "Supabase product loading failed:",
-                error
-            );
-
+            console.error("Supabase product loading failed:", error);
             currentProducts = [];
             return;
         }
 
-        if (Array.isArray(data)) {
-
-            currentProducts = data;
-
-            console.log(
-                "Public website products loaded:",
-                currentProducts.length
-            );
-
-            return;
-        }
-
-        currentProducts = [];
+        currentProducts = Array.isArray(data) ? data : [];
 
     } catch (e) {
-
-        console.error(
-            "Unexpected Supabase product error:",
-            e
-        );
-
+        console.error("Unexpected Supabase product error:", e);
         currentProducts = [];
     }
 };
