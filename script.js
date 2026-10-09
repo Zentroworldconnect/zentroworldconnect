@@ -27,48 +27,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     /* --- HYBRID DATABASE FETCH (SUPABASE / LOCALSTORAGE) --- */
     const loadProductsFromDB = async () => {
 
-        if (supabaseClient) {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('products')
-                    .select('*')
-                    .order('id');
+    if (!supabaseClient) {
+        console.error("Supabase client is not available.");
+        currentProducts = [];
+        return;
+    }
 
-                if (error) {
-                    console.error("Supabase select products error:", error);
-                } else if (data && data.length > 0) {
+    try {
 
-                    console.log("Products loaded from Supabase:", data);
+        const { data, error } = await supabaseClient
+            .from('products')
+            .select('*')
+            .order('id');
 
-                    currentProducts = data;
+        if (error) {
+            console.error(
+                "Supabase product loading failed:",
+                error
+            );
 
-                    return;
-                }
-
-            } catch (e) {
-                console.error("Supabase products error:", e);
-            }
+            currentProducts = [];
+            return;
         }
 
-        /* --- LOCALSTORAGE FALLBACK --- */
-        const local = localStorage.getItem('zentro_products');
+        if (Array.isArray(data)) {
 
-        if (local) {
-            try {
-                const parsed = JSON.parse(local);
+            currentProducts = data;
 
-                if (Array.isArray(parsed)) {
-                    currentProducts = parsed;
-                    return;
-                }
+            console.log(
+                "Public website products loaded:",
+                currentProducts.length
+            );
 
-            } catch (e) {
-                console.error("Local products parsing error:", e);
-            }
+            return;
         }
 
-        currentProducts = defaultCatalogProducts;
-    };
+        currentProducts = [];
+
+    } catch (e) {
+
+        console.error(
+            "Unexpected Supabase product error:",
+            e
+        );
+
+        currentProducts = [];
+    }
+};
 
 
     /* --- LOAD SETTINGS FROM SUPABASE / LOCALSTORAGE --- */
