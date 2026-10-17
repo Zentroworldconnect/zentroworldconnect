@@ -577,7 +577,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        const openProductEditModal = async (pId) => {
+        
+const openProductEditModal = async (pId) => {
     const list = await getProducts();
 
     const matched = list.find(p => String(p.id) === String(pId));
@@ -585,6 +586,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!matched) {
         alert("Product not found.");
         return;
+    }
+
+    // Fetch only this product's image from Supabase
+    if (supabaseClient) {
+        const { data: imageData, error: imageError } = await supabaseClient
+            .from('products')
+            .select('image')
+            .eq('id', matched.id)
+            .single();
+
+        if (!imageError && imageData) {
+            matched.image = imageData.image;
+        } else if (imageError) {
+            console.error('Could not load product image:', imageError);
+        }
     }
 
     productForm.reset();
@@ -611,7 +627,7 @@ document.addEventListener('DOMContentLoaded', () => {
             matched.isSignature === 'true';
     }
 
-    // Preview handling
+    // Preview the existing product image
     if (prodImagePreview) {
         prodImagePreview.src = matched.image || '';
         prodImagePreview.style.display = matched.image ? 'block' : 'none';
@@ -620,6 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
     productModalTitle.innerText = 'Edit Flower Variety';
     productModal.classList.add('active');
 };
+
 
         // Close Modal
         const closeModal = () => {
