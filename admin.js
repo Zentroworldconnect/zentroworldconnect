@@ -47,71 +47,71 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sidebarLogo) sidebarLogo.src = cachedLogo;
 
     // Sync credentials from Supabase settings on load if configured
-    const syncCredentialsFromSupabase = async () => {
-        if (supabaseClient) {
-            try {
-                const { data, error } = await supabaseClient.from('settings').select('adminPassword').eq('id', 1).maybeSingle();
-                if (!error && data && data.adminPassword) {
-                    localStorage.setItem('zentro_admin_password', data.adminPassword);
-                }
-            } catch (e) {
-                console.error("Failed to sync credentials from Supabase:", e);
-            }
-        }
-    };
-    syncCredentialsFromSupabase();
+   
 
     // Check if already authenticated in this session
-    const checkAuth = () => {
-        if (sessionStorage.getItem('zentro_auth') === 'true') {
+   
+    // Check Supabase Auth session
+    let adminPanelInitialized = false;
+
+    const checkAuth = async () => {
+        if (!supabaseClient) {
+            loginOverlay.style.display = 'flex';
+            adminContainer.style.display = 'none';
+            return;
+        }
+
+        const { data: { session }, error } =
+            await supabaseClient.auth.getSession();
+
+        if (!error && session) {
             loginOverlay.style.display = 'none';
             adminContainer.style.display = 'grid';
-            initializeAdminPanel();
+
+            if (!adminPanelInitialized) {
+                adminPanelInitialized = true;
+                initializeAdminPanel();
+            }
         } else {
             loginOverlay.style.display = 'flex';
             adminContainer.style.display = 'none';
         }
     };
 
-    // Authenticate submission
+    // Login using Supabase Auth
     if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
-            let isValid = true;
 
-            if (usernameInput.value.trim() === '') {
-                showFieldError(usernameInput, true);
-                isValid = false;
-            } else {
-                showFieldError(usernameInput, false);
+            const email = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showFieldError(usernameInput, !email);
+                showFieldError(passwordInput, !password);
+                return;
             }
 
-            if (passwordInput.value.trim() === '') {
-                showFieldError(passwordInput, true);
-                isValid = false;
-            } else {
-                showFieldError(passwordInput, false);
+            const { error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+            if (error) {
+                const passGroup = document.getElementById('passGroup');
+                if (passGroup) passGroup.classList.add('error');
+                alert('Login failed. Check your email and password.');
+                return;
             }
 
-            if (isValid) {
-                const enteredUser = usernameInput.value.trim().toLowerCase();
-                const enteredPass = passwordInput.value.trim();
-                const savedPassword = localStorage.getItem('zentro_admin_password') || 'zentro123';
-                
-                if ((enteredUser === 'admin') && (enteredPass === savedPassword || enteredPass === 'zentro123')) {
-                    sessionStorage.setItem('zentro_auth', 'true');
-                    localStorage.setItem('zentro_admin_password', enteredPass);
-                    usernameInput.value = '';
-                    passwordInput.value = '';
-                    checkAuth();
-                } else {
-                    // Password validation styling error
-                    const passGroup = document.getElementById('passGroup');
-                    if (passGroup) passGroup.classList.add('error');
-                }
-            }
+            usernameInput.value = '';
+            passwordInput.value = '';
+
+            await checkAuth();
         });
     }
 
@@ -123,15 +123,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Log Out
+    // Logout using Supabase Auth
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            sessionStorage.removeItem('zentro_auth');
-            checkAuth();
+        logoutBtn.addEventListener('click', async () => {
+            const { error } = await supabaseClient.auth.signOut();
+
+            if (error) {
+                alert('Logout failed. Please try again.');
+                return;
+            }
+
+            adminPanelInitialized = false;
+            await checkAuth();
         });
     }
 
-    checkAuth(); // Run initial auth check
+    // Check session on page load
+    checkAuth();
+
 
     /* ==========================================
          ADMIN CORE CONTROLLER ACTIONS
