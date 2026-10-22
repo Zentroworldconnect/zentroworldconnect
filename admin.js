@@ -130,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            adminPanelInitialized = false;
             await checkAuth();
         });
     }
