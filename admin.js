@@ -34,10 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const logoutBtn = document.getElementById('logoutBtn');
     
-    // Initialize default password in LocalStorage if not present
-    if (!localStorage.getItem('zentro_admin_password')) {
-        localStorage.setItem('zentro_admin_password', 'zentro123');
-    }
+    
 
     // Render stored logo immediately on load
     const cachedLogo = localStorage.getItem('zentro_logo') || (JSON.parse(localStorage.getItem('zentro_settings')) || {}).logo || 'assets/logo.jpg';
@@ -255,9 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
                     if (!error && data) {
-                        if (data.adminPassword) {
-                            localStorage.setItem('zentro_admin_password', data.adminPassword);
-                        }
+                        
                         if (data.logo) {
                             localStorage.setItem('zentro_logo', data.logo);
                             const loginLogo = document.getElementById('loginLogo');
@@ -1432,42 +1427,7 @@ renderProductsTable();
                 }
 
                 // Validate Password Fields if filled
-                const currentPassInput = document.getElementById('currentPassword');
-                const newPassInput = document.getElementById('newPassword');
-                const confPassInput = document.getElementById('confirmPassword');
-
-                const hasPasswordInput = currentPassInput.value.trim() !== '' || newPassInput.value.trim() !== '' || confPassInput.value.trim() !== '';
-                let newPassValue = null;
-
-                if (hasPasswordInput) {
-                    const savedPassword = localStorage.getItem('zentro_admin_password') || 'zentro123';
-                    
-                    if (currentPassInput.value.trim() !== savedPassword) {
-                        showFieldError(currentPassInput, true);
-                        isFormValid = false;
-                    } else {
-                        showFieldError(currentPassInput, false);
-                    }
-
-                    if (newPassInput.value.trim().length < 4) {
-                        showFieldError(newPassInput, true);
-                        isFormValid = false;
-                    } else {
-                        showFieldError(newPassInput, false);
-                    }
-
-                    if (newPassInput.value.trim() !== confPassInput.value.trim()) {
-                        showFieldError(confPassInput, true);
-                        isFormValid = false;
-                    } else {
-                        showFieldError(confPassInput, false);
-                    }
-
-                    if (isFormValid) {
-                        newPassValue = newPassInput.value.trim();
-                    }
-                }
-
+                
                 if (isFormValid) {
                     const updatedSettings = {
                         primaryColor: document.getElementById('primaryColorHex').value.trim(),
@@ -1494,16 +1454,7 @@ renderProductsTable();
                     };
 
                     // Update local storage password if validated successfully
-                    if (newPassValue) {
-                        localStorage.setItem('zentro_admin_password', newPassValue);
-                        updatedSettings.adminPassword = newPassValue;
-                        currentPassInput.value = '';
-                        newPassInput.value = '';
-                        confPassInput.value = '';
-                        alert("Administrator access password updated successfully!");
-                    } else {
-                        updatedSettings.adminPassword = localStorage.getItem('zentro_admin_password') || 'zentro123';
-                    }
+                   
 
                     if (supabaseClient) {
                         try {
