@@ -10,11 +10,46 @@
 const SUPABASE_URL = "https://fvzqxddabdgybvozrlvs.supabase.co"; 
 const SUPABASE_ANON_KEY = "sb_publishable_iGDj_0kt5smIENeT6EqvJQ_vGxDZ8FD";
 
+
 const categoryLabels = {
-    flowers: 'Flowers',
-    garlands: 'Garlands',
-    bouquets: 'Bouquets'
+    'fresh-flowers-garlands': 'Fresh Flowers & Garlands',
+    rice: 'Rice',
+    'edible-oils': 'Edible Oils',
+    'spices-seasonings': 'Spices & Seasonings',
+    millets: 'Millets',
+    'other-grains-cereals': 'Other Grains & Cereals',
+    'edible-seeds-oilseeds': 'Edible Seeds & Oilseeds'
 };
+
+const subcategoryOptions = {
+    'fresh-flowers-garlands': [
+        { value: 'fresh-cut-flowers', label: 'Fresh Cut Flowers' },
+        { value: 'flower-garlands', label: 'Flower Garlands' }
+    ],
+    rice: [
+        { value: 'basmati', label: 'Basmati' },
+        { value: 'non-basmati', label: 'Non-Basmati' }
+    ],
+    'edible-oils': [
+        { value: 'vegetable-seed-based', label: 'Vegetable & Seed-Based' },
+        { value: 'coconut-palm-based', label: 'Coconut & Palm-Based' },
+        { value: 'specialty', label: 'Specialty' }
+    ],
+    'spices-seasonings': [
+        { value: 'whole-spices', label: 'Whole Spices' }
+    ],
+    millets: [
+        { value: 'millets', label: 'Millets' }
+    ],
+    'other-grains-cereals': [
+        { value: 'other-grains-cereals', label: 'Other Grains & Cereals' }
+    ],
+    'edible-seeds-oilseeds': [
+        { value: 'edible-seeds', label: 'Edible Seeds' },
+        { value: 'oilseeds', label: 'Oilseeds' }
+    ]
+};
+
 
 let supabaseClient = null;
 if (SUPABASE_URL && SUPABASE_ANON_KEY) {
