@@ -460,16 +460,30 @@
                 </div>
                 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label for="prodCategory">Category *</label>
-                        <select id="prodCategory" required>
-    <option value="" disabled selected>Select category</option>
-    <option value="flowers">Flowers</option>
-    <option value="garlands">Garlands</option>
-    <option value="bouquets">Bouquets</option>
-</select>
-                        <span class="error-msg">Please select a category</span>
-                    </div>
+                    <div class="form-row">
+                    
+<div class="form-group">
+    <label for="prodCategory">Main Category *</label>
+    <select id="prodCategory" required>
+        <option value="" disabled selected>Select main category</option>
+        <option value="fresh-flowers-garlands">Fresh Flowers & Garlands</option>
+        <option value="rice">Rice</option>
+        <option value="edible-oils">Edible Oils</option>
+        <option value="spices-seasonings">Spices & Seasonings</option>
+        <option value="millets">Millets</option>
+        <option value="other-grains-cereals">Other Grains & Cereals</option>
+        <option value="edible-seeds-oilseeds">Edible Seeds & Oilseeds</option>
+    </select>
+    <span class="error-msg">Please select a category</span>
+</div>
+
+<div class="form-group">
+    <label for="prodSubcategory">Subcategory *</label>
+    <select id="prodSubcategory" required disabled>
+        <option value="" disabled selected>Select subcategory</option>
+    </select>
+</div>
+
                     <div class="form-group">
                         <label for="prodGrade">Export Quality Grade *</label>
                         <input type="text" id="prodGrade" required placeholder="e.g. AAA Premium Grade">
