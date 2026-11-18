@@ -583,10 +583,19 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${prod.item_code || '-'}</td>
 
             <td>
-                ${categoryLabels[prod.category] || prod.category || '-'}
-            </td>
+    ${categoryLabels[prod.category] || prod.category || '-'}
+</td>
 
-            <td>${prod.grade || '-'}</td>
+<td>
+    ${
+        (subcategoryOptions[prod.category] || [])
+            .find(option => option.value === prod.subcategory)?.label
+        || prod.subcategory
+        || '-'
+    }
+</td>
+
+<td>${prod.grade || '-'}</td>
 
             <td>${prod.budLife || '-'}</td>
 
