@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     row.innerHTML = `
                         <td>${inq.date ? inq.date.split(',')[0] : 'N/A'}</td>
                         <td><strong>${inq.name}</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">${inq.company}</span></td>
-                        <td>${inq.flower}</td>
+                        <td>${inq.product_name}</td>
                         <td>${inq.volume}</td>
                         <td>${inq.destination}</td>
                         <td><span class="inquiry-status-badge">New</span></td>
@@ -980,7 +980,7 @@ renderProductsTable();
                 tr.innerHTML = `
                     <td>${inq.date ? inq.date.split(',')[0] : 'N/A'}</td>
                     <td><strong>${inq.name}</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">${inq.company}</span></td>
-                    <td>${inq.flower}</td>
+                    <td>${inq.product_name}</td>
                     <td>${inq.volume}</td>
                     <td>${inq.destination}</td>
                     <td>
@@ -1037,8 +1037,8 @@ renderProductsTable();
                         <p class="val">${inq.company}</p>
                     </div>
                     <div class="inquiry-detail-block">
-                        <span class="label">Target Flower Variety</span>
-                        <p class="val"><strong>${inq.flower}</strong></p>
+                        <span class="label">Product Enquired</span>
+                        <p class="val"><strong>${inq.product_name}</strong></p>
                     </div>
                     <div class="inquiry-detail-block">
                         <span class="label">Required Volume</span>
@@ -1114,7 +1114,7 @@ renderProductsTable();
                         `"${(inq.company || '').replace(/"/g, '""')}"`,
                         `"${(inq.email || '').replace(/"/g, '""')}"`,
                         `"${(inq.phone || '').replace(/"/g, '""')}"`,
-                        `"${(inq.flower || '').replace(/"/g, '""')}"`,
+                        `"${(inq.product_name || '').replace(/"/g, '""')}"`,
                         `"${(inq.volume || '').replace(/"/g, '""')}"`,
                         `"${(inq.destination || '').replace(/"/g, '""')}"`,
                         `"${(inq.notes || '').replace(/"/g, '""')}"`
