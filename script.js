@@ -811,7 +811,7 @@ I would like to request an Export Quote:
 🏢 Company: ${newInquiry.company}
 📧 Email: ${newInquiry.email}
 📞 Phone: ${newInquiry.phone}
-🌺 Flower Variety: ${newInquiry.flower}
+🌺 Product Name: ${newInquiry.product_name}
 📦 Expected Volume: ${newInquiry.volume}
 ✈️ Destination Airport: ${newInquiry.destination}
 📝 Notes: ${newInquiry.notes}`;
