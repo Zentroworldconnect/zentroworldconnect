@@ -253,6 +253,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     const catalogProductGrid =
         document.getElementById('catalogProductGrid');
 
+   /* --- LOAD PRODUCTS INTO QUOTE DROPDOWN --- */
+const loadQuoteProducts = () => {
+
+    const productSelect =
+        document.getElementById('mTargetFlower');
+
+    if (!productSelect) return;
+
+    productSelect.innerHTML =
+        '<option value="" disabled selected>Select a product</option>';
+
+    currentProducts.forEach(prod => {
+
+        const option = document.createElement('option');
+
+        option.value = prod.name;
+        option.textContent = prod.name;
+
+        productSelect.appendChild(option);
+    });
+
+    const otherOption = document.createElement('option');
+
+    otherOption.value = 'other';
+    otherOption.textContent = 'Other / Custom Sourcing';
+
+    productSelect.appendChild(otherOption);
+};
+
     const renderCatalog = (products) => {
 
         if (!catalogProductGrid) return;
