@@ -551,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
         productsTableBody.innerHTML = `
             <tr>
                 <td colspan="11" class="text-center py-4 text-muted">
-                    No flowers currently listed. Add a variety.
+                   No products currently listed. Add a product.
                 </td>
             </tr>
         `;
@@ -652,7 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 prodImage.value = '';
                 if (prodImagePreview) prodImagePreview.src = '';
                 if (imagePreviewBox) imagePreviewBox.style.display = 'none';
-                productModalTitle.innerText = 'Add Sourced Flower Variety';
+                productModalTitle.innerText = 'Add Product';
                 document.querySelectorAll('.modal-card .form-group').forEach(grp => grp.classList.remove('error'));
                 productModal.classList.add('active');
             });
@@ -715,7 +715,7 @@ const openProductEditModal = async (pId) => {
         prodImagePreview.style.display = matched.image ? 'block' : 'none';
     }
 
-    productModalTitle.innerText = 'Edit Flower Variety';
+    productModalTitle.innerText = 'Edit Product';
     productModal.classList.add('active');
 };
 
