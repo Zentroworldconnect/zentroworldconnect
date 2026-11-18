@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const { data, error } = await supabaseClient
                 .from('products')
-                .select('id, name, item_code, category, price_inr, price_usd, price_unit, grade, availability, isSignature')
+                .select('id, name, item_code, category, subcategory, price_inr, price_usd, price_unit, grade, availability, isSignature')
                 .order('id');
 
             if (!error && data) {
