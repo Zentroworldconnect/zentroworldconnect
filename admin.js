@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentProds.length === 0) {
         productsTableBody.innerHTML = `
             <tr>
-                <td colspan="10" class="text-center py-4 text-muted">
+                <td colspan="11" class="text-center py-4 text-muted">
                     No flowers currently listed. Add a variety.
                 </td>
             </tr>
