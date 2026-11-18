@@ -741,7 +741,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         phone:
                             phoneInput.value.trim(),
 
-                        flower:
+                        product_name:
                             flowerSelect
                                 .options[
                                     flowerSelect.selectedIndex
