@@ -51,6 +51,40 @@ const subcategoryOptions = {
 };
 
 
+const prodCategorySelect = document.getElementById('prodCategory');
+const prodSubcategorySelect = document.getElementById('prodSubcategory');
+
+function updateSubcategoryOptions(selectedSubcategory = '') {
+    if (!prodCategorySelect || !prodSubcategorySelect) return;
+
+    const category = prodCategorySelect.value;
+    const options = subcategoryOptions[category] || [];
+
+    prodSubcategorySelect.innerHTML =
+        '<option value="" disabled selected>Select subcategory</option>';
+
+    options.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option.value;
+        optionElement.textContent = option.label;
+
+        if (option.value === selectedSubcategory) {
+            optionElement.selected = true;
+        }
+
+        prodSubcategorySelect.appendChild(optionElement);
+    });
+
+    prodSubcategorySelect.disabled = options.length === 0;
+}
+
+if (prodCategorySelect && prodSubcategorySelect) {
+    prodCategorySelect.addEventListener('change', () => {
+        updateSubcategoryOptions();
+    });
+}
+
+
 let supabaseClient = null;
 if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     if (window.supabase) {
