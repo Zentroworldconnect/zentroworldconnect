@@ -535,13 +535,16 @@ const loadQuoteProducts = () => {
        START DATABASE LOADING IN BACKGROUND
        ========================================================= */
 
-    loadProductsFromDB().then(() => {
+   loadProductsFromDB().then(() => {
 
     /* Re-apply the selected category after products load */
     filterProducts();
 
     /* Render signature products */
     renderSignatureProducts(currentProducts);
+
+    /* Load products into Get a Quote dropdown */
+    loadQuoteProducts();
 
 });
 
