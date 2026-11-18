@@ -681,6 +681,7 @@ const openProductEditModal = async (pId) => {
     document.getElementById('prodName').value = matched.name || '';
     document.getElementById('prodItemCode').value = matched.item_code || '';
     document.getElementById('prodCategory').value = matched.category || '';
+    updateSubcategoryOptions(matched.subcategory || '');
     document.getElementById('prodGrade').value = matched.grade || '';
     document.getElementById('prodBudLife').value = matched.budLife || '';
     document.getElementById('prodAvailability').value = matched.availability || '';
@@ -790,7 +791,7 @@ const openProductEditModal = async (pId) => {
                 e.preventDefault();
                 let isFormValid = true;
 
-                const fields = ['prodName', 'prodItemCode', 'prodCategory', 'prodGrade', 'prodDescription'];
+                const fields = ['prodName', 'prodItemCode', 'prodCategory', 'prodSubcategory', 'prodGrade', 'prodDescription'];
                 fields.forEach(fId => {
                     const input = document.getElementById(fId);
                     if (input.value.trim() === '') {
@@ -819,6 +820,7 @@ const openProductEditModal = async (pId) => {
     name: document.getElementById('prodName').value.trim(),
     item_code: document.getElementById('prodItemCode').value.trim(),                       
     category: document.getElementById('prodCategory').value,
+    subcategory: document.getElementById('prodSubcategory').value,                   
 
     price_inr: parseFloat(document.getElementById('prodPriceINR').value),
     price_usd: parseFloat(document.getElementById('prodPriceUSD').value),
