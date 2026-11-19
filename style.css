@@ -360,12 +360,12 @@ ul {
 }
 
 .heritage-visuals {
-    display: block;
-    width: 100%;
+    display: flex;
+    gap: 16px;
 }
 
-.heritage-img-1 {
-    width: 100%;
+.heritage-img-1, .heritage-img-2 {
+    width: 50%;
     height: 500px;
     object-fit: cover;
     border-radius: var(--radius-md);

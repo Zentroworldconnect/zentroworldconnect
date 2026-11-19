@@ -560,6 +560,9 @@ document.addEventListener('DOMContentLoaded', async () => {
        START DATABASE LOADING IN BACKGROUND
        ========================================================= */
 
+    /* Settings first: they carry the slideshow */
+    loadSettingsFromDB();
+
    loadProductsFromDB().then(() => {
 
     /* Re-apply the selected category after products load */
@@ -570,8 +573,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
-    /* Load settings without blocking navigation */
-    loadSettingsFromDB();
 
 
     /* =========================================================

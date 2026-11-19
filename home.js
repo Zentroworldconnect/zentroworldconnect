@@ -21,18 +21,41 @@
     }
 
     /* slides: array of image URLs / data URIs */
+    var CACHE_KEY = 'zentro_home_cache_v1', slidesKey = '';
+    function readCache() { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || {}; } catch (e) { return {}; } }
+    function writeCache(patch) {
+        try { var c = readCache(); for (var k in patch) c[k] = patch[k]; localStorage.setItem(CACHE_KEY, JSON.stringify(c)); } catch (e) { /* quota or private mode: ignore */ }
+    }
+
     window.renderHeroSlides = function (slides) {
         var wrap = document.getElementById('heroSlides');
         var dots = document.getElementById('heroDots');
         if (!wrap) return;
         slides = (slides && slides.length) ? slides : DEFAULT_SLIDES;
+        var key = JSON.stringify(slides);
+        if (heroShown && key === slidesKey) return; /* same slides already showing: no flicker */
+        slidesKey = key;
         heroShown = true;
         count = slides.length;
-        wrap.innerHTML = slides.map(function (u) { return '<div class="hz-slide" style="background-image:' + cssUrl(u) + '"></div>'; }).join('');
+        /* only the first image is requested immediately; the rest load once it is ready */
+        wrap.innerHTML = slides.map(function () { return '<div class="hz-slide"></div>'; }).join('');
+        var els = wrap.children;
+        function setBg(i) { if (els[i]) els[i].style.backgroundImage = cssUrl(slides[i]); }
+        var started = false;
+        function start() {
+            if (started || key !== slidesKey) return;
+            started = true;
+            show(0); play();
+            for (var i = 1; i < slides.length; i++) setBg(i);
+        }
+        setBg(0);
+        var probe = new Image();
+        probe.onload = probe.onerror = start;
+        probe.src = slides[0];
+        setTimeout(start, 3000);
         dots.innerHTML = slides.map(function (_, n) { return '<button type="button" aria-label="Go to slide ' + (n + 1) + '"></button>'; }).join('');
         dots.style.display = count > 1 ? '' : 'none';
         document.getElementById('heroPrev').style.display = document.getElementById('heroNext').style.display = count > 1 ? '' : 'none';
-        show(0); play();
     };
 
     /* Read slides from settings (array, JSON string, or single heroImage) */
@@ -40,6 +63,7 @@
         var list = sets && sets.heroSlides;
         if (typeof list === 'string') { try { list = JSON.parse(list); } catch (e) { list = null; } }
         if (!Array.isArray(list) || !list.length) list = (sets && sets.heroImage) ? [sets.heroImage] : null;
+        writeCache({ slides: list });
         window.renderHeroSlides(list);
     };
 
@@ -58,6 +82,7 @@
         var m = sets && sets.categoryImages;
         if (typeof m === 'string') { try { m = JSON.parse(m); } catch (e) { m = null; } }
         catImages = (m && typeof m === 'object') ? m : {};
+        writeCache({ cats: catImages });
         renderCategories();
     };
 
@@ -179,7 +204,10 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         /* wait briefly for saved slides (avoids a flash of default images); fall back to defaults */
-        setTimeout(function () { if (!heroShown) window.renderHeroSlides(null); }, 1200);
+        var cached = readCache();
+        if (cached.cats && typeof cached.cats === 'object') { catImages = cached.cats; renderCategories(); }
+        if (cached.slides && cached.slides.length) window.renderHeroSlides(cached.slides); /* instant on repeat visits */
+        else setTimeout(function () { if (!heroShown) window.renderHeroSlides(null); }, 1500);
         renderCategories();
         initReveal();
 
