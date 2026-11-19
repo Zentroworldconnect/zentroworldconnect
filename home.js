@@ -218,8 +218,7 @@
             var b = e.target.closest('button'); if (!b) return;
             show(Array.prototype.indexOf.call(b.parentNode.children, b)); play();
         });
-        hero.addEventListener('mouseenter', function () { clearInterval(timer); });
-        hero.addEventListener('mouseleave', play);
+        
         var x0 = null;
         hero.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
         hero.addEventListener('touchend', function (e) {
