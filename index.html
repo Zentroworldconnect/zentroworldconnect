@@ -23,7 +23,8 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.2">
+    <script>document.documentElement.classList.add("hz-js");</script>
 </head>
 <body>
 
@@ -62,8 +63,8 @@
                 <div class="container hz-hero-inner">
                     <div class="hz-hero-content">
                         <span class="hz-eyebrow"><i class="fa-solid fa-earth-asia"></i> Exporters from Tamil Nadu, India</span>
-                        <h1 id="heroTitle">Cultivating Pure Elegance <br>Exporting to the World</h1>
-                        <p id="heroDescription" class="hero-description">Zentro World Connect delivers premium flowers, rice, edible oils, spices, millets and grains to importers across the globe with an unbroken cold chain and complete export documentation.</p>
+                        <h1 id="heroTitle">Premium Indian Exports, <br>Delivered to the World</h1>
+                        <p id="heroDescription" class="hero-description">Fresh flowers &amp; garlands, rice, edible oils, whole spices, millets, grains and oilseeds from Tamil Nadu to importers worldwide. Quality-graded, export-packed and shipped with complete documentation.</p>
                         <div class="hero-actions">
                             <button class="btn btn-primary open-quote-modal">Get a Quote</button>
                             <a href="products.html" class="btn btn-secondary">Explore Products</a>
@@ -113,8 +114,12 @@
                         <a href="products.html" class="view-all-link">View Entire Catalog &rarr;</a>
                     </div>
                 </div>
-                <div class="hz-marquee" id="sigMarquee">
-                    <div class="hz-track" id="signatureProductsGrid"></div>
+                <div class="hz-marquee-wrap">
+                    <button class="hz-sig-arrow hz-sig-prev" id="sigPrev" aria-label="Previous products"><i class="fa-solid fa-chevron-left"></i></button>
+                    <div class="hz-marquee" id="sigMarquee">
+                        <div class="hz-track" id="signatureProductsGrid"></div>
+                    </div>
+                    <button class="hz-sig-arrow hz-sig-next" id="sigNext" aria-label="Next products"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 <div class="container">
                     <div class="hz-inline-cta">
@@ -134,8 +139,8 @@
                         </div>
                         <div class="heritage-content">
                             <span class="badge-tag">OUR HERITAGE</span>
-                            <h2 id="aboutTitle">A reliable partner focused on <span class="text-red">freshness</span> and quality.</h2>
-                            <p id="aboutDescription">At <strong>Zentro World Connect</strong>, we bridge the gap between Indian farms and global markets. Our logistics framework is built for perishables and bulk commodities alike, so every shipment arrives exactly as it left our hands.</p>
+                            <h2 id="aboutTitle">Connecting India's Finest <span class="text-red">Produce</span> to Global Markets</h2>
+                            <p id="aboutDescription">At <strong>Zentro World Connect</strong>, we bridge the gap between Indian farms and global markets, from fresh flowers and traditional garlands to rice, edible oils, spices, millets, grains and oilseeds. Every product is sourced directly, quality-checked and export-packed, so it reaches your port exactly as it left ours.</p>
                             <div class="heritage-stats">
                                 <div class="stat-block"><span class="stat-num">10+</span><span class="stat-label">EXPORT COUNTRIES</span></div>
                                 <div class="stat-block"><span class="stat-num">24h</span><span class="stat-label">FARM TO FREIGHT</span></div>
@@ -340,7 +345,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Main Script -->
     <script src="catalog-data.js?v=1.0"></script>
-    <script src="home.js?v=1.1"></script>
+    <script src="home.js?v=1.2"></script>
     <script src="script.js?v=7.2"></script>
 </body>
 </html>

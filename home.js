@@ -75,6 +75,43 @@
     }
 
     var rzT = null, lastSig = null;
+    var sigPos = 0, sigSet = 0, sigStep = 312, sigUser = false, sigHover = false, sigTween = null, sigRaf = null, sigUserT = null;
+
+    function sigLoop() {
+        var wrap = document.getElementById('sigMarquee');
+        if (wrap && sigSet) {
+            if (sigUser) {
+                sigPos = wrap.scrollLeft;
+            } else {
+                if (sigTween) {
+                    var t = Math.min(1, (performance.now() - sigTween.t0) / 450);
+                    sigPos = sigTween.from + (sigTween.to - sigTween.from) * (1 - Math.pow(1 - t, 3));
+                    if (t >= 1) sigTween = null;
+                } else if (!sigHover) {
+                    sigPos += 0.6;
+                }
+                wrap.scrollLeft = sigPos;
+            }
+            /* keep position inside the middle copy so it loops seamlessly */
+            var shift = 0;
+            if (sigPos >= 2 * sigSet) shift = -sigSet;
+            else if (sigPos < sigSet) shift = sigSet;
+            if (shift) {
+                sigPos += shift;
+                if (sigTween) { sigTween.from += shift; sigTween.to += shift; }
+                wrap.scrollLeft = sigPos;
+            }
+        }
+        sigRaf = requestAnimationFrame(sigLoop);
+    }
+    function sigMove(dir) {
+        sigTween = { from: sigPos, to: sigPos + dir * sigStep, t0: performance.now() };
+    }
+    function sigTouch(on) {
+        clearTimeout(sigUserT);
+        if (on) { sigUser = true; sigTween = null; }
+        else sigUserT = setTimeout(function () { sigUser = false; }, 1500);
+    }
 
     var DEFAULT_SIG = [
         { name: 'Premium Roses – Hosur', image: 'assets/roses-export.jpg', category: 'fresh-flowers-garlands', tag: 'Fresh Flowers', description: 'Export-grade Hosur roses with strong stems and long vase life.' },
@@ -99,21 +136,43 @@
                 (p.item_code ? '<p class="item-code">Item Code: ' + esc(p.item_code) + '</p>' : '') +
                 '<p>' + esc(p.description || '') + '</p><div class="sig-actions"><button class="btn btn-sm btn-primary open-quote-modal" data-product="' + esc(p.name) + '" data-category="' + esc(p.category || '') + '">Enquire</button></div></div></div>';
         }).join('');
-        track.style.animation = 'none';
         track.innerHTML = set;
-        var setW = track.scrollWidth + 22; /* one set incl. gap */
-        var copies = Math.max(2, Math.ceil(wrap.clientWidth / setW) + 1);
+        var gap = parseFloat(getComputedStyle(track).columnGap) || 22;
+        sigStep = (track.firstElementChild ? track.firstElementChild.offsetWidth : 290) + gap;
+        sigSet = track.scrollWidth + gap; /* width of one full set */
+        var copies = Math.ceil(wrap.clientWidth / sigSet) + 2;
         track.innerHTML = new Array(copies + 1).join(set);
-        track.style.setProperty('--hz-shift', '-' + setW + 'px');
-        track.style.setProperty('--hz-dur', Math.max(18, items.length * 7) + 's');
-        void track.offsetWidth;
-        track.style.animation = '';
+        sigPos = sigSet; sigTween = null;
+        wrap.scrollLeft = sigPos;
+        if (!sigRaf) sigRaf = requestAnimationFrame(sigLoop);
     };
+
+    function initReveal() {
+        var sel = '.hz-head, .hz-strip-grid > div, .hz-cat-card, .hz-inline-cta, .section-header-flex, .heritage-visuals, .heritage-content, .section-title-centered, .standard-card, .section-header-dark, .process-card, .connectivity-content, .connectivity-map, .red-cta-box';
+        var els = Array.prototype.slice.call(document.querySelectorAll(sel));
+        if (!('IntersectionObserver' in window)) return;
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (!en.isIntersecting) return;
+                var el = en.target;
+                io.unobserve(el);
+                el.classList.add('in');
+                setTimeout(function () { el.classList.remove('hz-reveal', 'in'); el.style.removeProperty('--d'); }, 1000);
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        els.forEach(function (el) {
+            var idx = Array.prototype.indexOf.call(el.parentNode.children, el);
+            el.style.setProperty('--d', ((idx % 4) * 0.09) + 's');
+            el.classList.add('hz-reveal');
+            io.observe(el);
+        });
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         /* wait briefly for saved slides (avoids a flash of default images); fall back to defaults */
         setTimeout(function () { if (!heroShown) window.renderHeroSlides(null); }, 1200);
         renderCategories();
+        initReveal();
 
         var hero = document.getElementById('heroSlider');
         document.getElementById('heroPrev').addEventListener('click', function () { show(idx - 1); play(); });
@@ -133,6 +192,14 @@
             x0 = null;
         });
 
+        var sm = document.getElementById('sigMarquee');
+        document.getElementById('sigPrev').addEventListener('click', function () { sigMove(-1); });
+        document.getElementById('sigNext').addEventListener('click', function () { sigMove(1); });
+        sm.addEventListener('mouseenter', function () { sigHover = true; });
+        sm.addEventListener('mouseleave', function () { sigHover = false; });
+        sm.addEventListener('touchstart', function () { sigTouch(true); }, { passive: true });
+        sm.addEventListener('touchend', function () { sigTouch(false); });
+        sm.addEventListener('touchcancel', function () { sigTouch(false); });
         window.homeSignature(null); /* defaults now; admin products replace them when loaded */
         window.addEventListener('resize', function () { clearTimeout(rzT); rzT = setTimeout(function () { window.homeSignature(lastSig); }, 250); });
     });
