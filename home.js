@@ -53,6 +53,14 @@
         'edible-seeds-oilseeds': { icon: 'fa-leaf', blurb: 'Sesame, groundnut, flaxseed and oilseeds.' }
     };
 
+    var catImages = {};
+    window.applyCategoryImages = function (sets) {
+        var m = sets && sets.categoryImages;
+        if (typeof m === 'string') { try { m = JSON.parse(m); } catch (e) { m = null; } }
+        catImages = (m && typeof m === 'object') ? m : {};
+        renderCategories();
+    };
+
     function renderCategories() {
         var grid = document.getElementById('homeCategoryGrid');
         var cat = window.ZENTRO_CATALOG || [];
@@ -60,8 +68,9 @@
         grid.innerHTML = cat.map(function (c) {
             var v = CAT_VISUALS[c.slug] || { icon: 'fa-box-open', blurb: '' };
             var total = c.subcategories.reduce(function (n, s) { return n + s.products.length; }, 0);
-            var media = v.img
-                ? '<img src="' + esc(v.img) + '" alt="' + esc(c.name) + '" loading="lazy">'
+            var photo = catImages[c.slug] || v.img;
+            var media = photo
+                ? '<img src="' + esc(photo) + '" alt="' + esc(c.name) + '" loading="lazy">'
                 : '<div class="hz-cat-icon"><i class="fa-solid ' + v.icon + '"></i></div>';
             var subs = c.subcategories.length > 1 ? c.subcategories.map(function (s) {
                 return '<a href="products.html?cat=' + esc(c.slug) + '&sub=' + esc(s.slug) + '">' + esc(s.name) + '</a>';

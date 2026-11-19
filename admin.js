@@ -1474,6 +1474,62 @@ renderProductsTable();
         }
         renderSlidesAdmin();
 
+        /* --- HOME CATEGORY IMAGES MANAGER --- */
+        let catImagesState = {};
+
+        function renderCatImagesAdmin() {
+            const box = document.getElementById('catImagesAdminList');
+            if (!box || typeof ZENTRO_CATALOG === 'undefined') return;
+            box.innerHTML = ZENTRO_CATALOG.map(c => {
+                const src = catImagesState[c.slug];
+                return `
+                <div style="border:1px solid #ddd; border-radius:8px; overflow:hidden; background:#fff;">
+                    <div style="height:110px; background:#f3f3f3; display:flex; align-items:center; justify-content:center; color:#999; font-size:.8rem;">
+                        ${src ? `<img src="${String(src).replace(/"/g, '&quot;')}" alt="${c.name}" style="width:100%; height:100%; object-fit:cover;">` : 'Default icon tile'}
+                    </div>
+                    <div style="padding:8px;">
+                        <strong style="font-size:.85rem; display:block; margin-bottom:6px;">${c.name}</strong>
+                        <input type="file" accept="image/*" data-cat-file="${c.slug}" style="width:100%; font-size:.75rem;">
+                        ${src ? `<button type="button" data-cat-del="${c.slug}" style="margin-top:6px; color:#C50000; font-size:.8rem;"><i class="fa-solid fa-trash"></i> Remove</button>` : ''}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        const catImagesEl = document.getElementById('catImagesAdminList');
+        if (catImagesEl) {
+            catImagesEl.addEventListener('click', (e) => {
+                const del = e.target.closest('button[data-cat-del]');
+                if (!del) return;
+                delete catImagesState[del.dataset.catDel];
+                renderCatImagesAdmin();
+            });
+            catImagesEl.addEventListener('change', (e) => {
+                const input = e.target.closest('input[data-cat-file]');
+                if (!input || !input.files[0]) return;
+                const slug = input.dataset.catFile;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const W = 800, H = 512;
+                        const canvas = document.createElement('canvas');
+                        canvas.width = W; canvas.height = H;
+                        const scale = Math.max(W / img.width, H / img.height);
+                        const w = img.width * scale, h = img.height * scale;
+                        canvas.getContext('2d').drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+                        uploadImageToStorage(canvas.toDataURL('image/jpeg', 0.75), 'categories').then(url => {
+                            catImagesState[slug] = url;
+                            renderCatImagesAdmin();
+                        });
+                    };
+                    img.src = ev.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            });
+        }
+        renderCatImagesAdmin();
+
         const loadSettingsForm = async () => {
             const sets = await getSettings();
             
@@ -1532,6 +1588,11 @@ renderProductsTable();
             if (typeof savedSlides === 'string') { try { savedSlides = JSON.parse(savedSlides); } catch (e) { savedSlides = []; } }
             heroSlidesState = Array.isArray(savedSlides) ? savedSlides.slice(0, MAX_SLIDES) : [];
             renderSlidesAdmin();
+            // Category images
+            let savedCats = sets.categoryImages;
+            if (typeof savedCats === 'string') { try { savedCats = JSON.parse(savedCats); } catch (e) { savedCats = {}; } }
+            catImagesState = (savedCats && typeof savedCats === 'object') ? savedCats : {};
+            renderCatImagesAdmin();
             // About Us info
             if (sets.aboutTitle) document.getElementById('setAboutTitle').value = sets.aboutTitle;
             if (sets.aboutDescription) document.getElementById('setAboutDescription').value = sets.aboutDescription;
@@ -1614,6 +1675,7 @@ renderProductsTable();
                         heroDescription: document.getElementById('setHeroDescription').value.trim(),
                         heroImage: document.getElementById('setHeroImage').value,
                         heroSlides: JSON.stringify(heroSlidesState),
+                        categoryImages: JSON.stringify(catImagesState),
 
                         aboutTitle: document.getElementById('setAboutTitle').value.trim(),
                         aboutDescription: document.getElementById('setAboutDescription').value.trim(),
@@ -1634,7 +1696,7 @@ renderProductsTable();
                                 return;
                             }
                             console.error("Supabase settings upsert error:", error);
-                            alert("Failed to save to Supabase cloud, saving locally as fallback. Error: " + error.message + (String(error.message).includes('heroSlides') ? "\n\nOne-time fix: in Supabase SQL Editor run:\nalter table settings add column if not exists \"heroSlides\" text;" : ""));
+                            alert("Failed to save to Supabase cloud, saving locally as fallback. Error: " + error.message + (/heroSlides|categoryImages/.test(String(error.message)) ? "\n\nOne-time fix: in Supabase SQL Editor run:\nalter table settings add column if not exists \"heroSlides\" text;\nalter table settings add column if not exists \"categoryImages\" text;" : ""));
                         } catch (e) {
                             console.error("Supabase exception:", e);
                         }
