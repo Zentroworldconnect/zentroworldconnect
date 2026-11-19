@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zentro World Connect | Delivering Freshness Across Borders</title>
-    <meta name="description" content="Zentro World Connect - Premium flower and garland exports from Sivagangai, Tamil Nadu with global reach and unbroken cold-chain logistics.">
+    <meta name="description" content="Zentro World Connect - Export of flowers, rice, edible oils, spices, millets and grains from Sivagangai, Tamil Nadu to importers worldwide.">
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <!-- Google Fonts -->
@@ -55,199 +55,184 @@
     <main>
         <div class="page-view active">
 
-            
-            <!-- Hero Section -->
-            <section class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.60)), url('assets/Hero banner.png');">
-                <div class="container hero-container">
-                    <div class="hero-content">
+            <!-- HERO SLIDESHOW (images managed from Admin > Site Settings) -->
+            <section class="hz-hero" id="heroSlider">
+                <div class="hz-slides" id="heroSlides"></div>
+                <div class="hz-hero-overlay"></div>
+                <div class="container hz-hero-inner">
+                    <div class="hz-hero-content">
+                        <span class="hz-eyebrow"><i class="fa-solid fa-earth-asia"></i> Exporters from Tamil Nadu, India</span>
                         <h1 id="heroTitle">Cultivating Pure Elegance <br>Exporting to the World</h1>
-                        <p id="heroDescription" class="hero-description">Zentro World Connect delivers the finest hand-harvested fresh s with an unbroken cold chain. From the fertile soil of Southern India directly to global markets.</p>
+                        <p id="heroDescription" class="hero-description">Zentro World Connect delivers premium flowers, rice, edible oils, spices, millets and grains to importers across the globe with an unbroken cold chain and complete export documentation.</p>
                         <div class="hero-actions">
                             <button class="btn btn-primary open-quote-modal">Get a Quote</button>
                             <a href="products.html" class="btn btn-secondary">Explore Products</a>
+                            <a href="https://wa.me/919597209593?text=Hello,%20I%20am%20interested%20in%20importing%20from%20Zentro%20World%20Connect." target="_blank" rel="noopener noreferrer" class="hz-wa-link"><i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp</a>
                         </div>
                     </div>
                 </div>
+                <button class="hz-arrow hz-prev" id="heroPrev" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="hz-arrow hz-next" id="heroNext" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="hz-dots" id="heroDots"></div>
             </section>
 
-            <!-- Our Heritage Section -->
-            <section class="heritage-section">
+            <!-- TRUST STRIP -->
+            <section class="hz-strip">
+                <div class="container hz-strip-grid">
+                    <div><i class="fa-solid fa-globe"></i><strong>10+ Countries</strong><span>Exported worldwide</span></div>
+                    <div><i class="fa-solid fa-snowflake"></i><strong>Cold Chain</strong><span>Farm to freight in 24h</span></div>
+                    <div><i class="fa-solid fa-file-circle-check"></i><strong>Export Documentation</strong><span>Handled end-to-end</span></div>
+                    <div><i class="fa-solid fa-ship"></i><strong>Air &amp; Sea Freight</strong><span>Flexible shipping options</span></div>
+                </div>
+            </section>
+
+            <!-- PRODUCT CATEGORIES -->
+            <section class="hz-section">
                 <div class="container">
-                    <div class="heritage-grid">
-                        <div class="heritage-visuals">
-                            <img src="assets/Heritage 1.png" alt=" Sourcing" class="heritage-img-1">
-                            <img src="assets/Heritage 2.png" alt="Fresh s Packaging" class="heritage-img-2">
-                        </div>
-                        <div class="heritage-content">
-                            <span class="badge-tag">OUR HERITAGE</span>
-                            <h2 id="aboutTitle">A reliable partner focused on <span class="text-red">freshness</span> and quality.</h2>
-                            <p id="aboutDescription">At <strong>Zentro World Connect</strong>, we bridge the gap between world-class floral cultivation and global markets. Our logistics framework is designed specifically for the delicate nature of perishables, ensuring that the vibrancy of our traditional garlands and the scent of our fresh s arrive exactly as intended.</p>
-                            
-                            <div class="heritage-stats">
-                                <div class="stat-block">
-                                    <span class="stat-num">10+</span>
-                                    <span class="stat-label">EXPORT COUNTRIES</span>
-                                </div>
-                                <div class="stat-block">
-                                    <span class="stat-num">24h</span>
-                                    <span class="stat-label">FARM TO FREIGHT</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="hz-head">
+                        <span class="badge-tag">OUR PRODUCT RANGE</span>
+                        <h2>Everything You Import, <span class="text-red">From One Trusted Source</span></h2>
+                        <p>Seven export categories, carefully sourced and packed to international standards.</p>
+                    </div>
+                    <div class="hz-cat-grid" id="homeCategoryGrid"></div>
+                    <div class="hz-inline-cta">
+                        <p><strong>Can't find what you need?</strong> We source custom products on request.</p>
+                        <button class="btn btn-primary open-quote-modal">Request a Custom Quote</button>
                     </div>
                 </div>
             </section>
 
-            <!-- Our Specialized Exports Section -->
-            <section class="specialized-section">
+            <!-- FLOWERS & GARLANDS SPOTLIGHT -->
+            <section class="hz-section hz-grey">
                 <div class="container">
                     <div class="section-header-flex">
                         <div>
-                            <h2>Our Specialized Exports</h2>
-                            <p>Curated selections of premium blooms and culturally significant floral arrangements.</p>
+                            <h2>Our Signature Floral Exports</h2>
+                            <p>Where Zentro began: premium blooms and hand-woven garlands, shipped fresh.</p>
                         </div>
-                        <a href="products.html" class="view-all-link">View Entire Catalog &rarr;</a>
+                        <a href="products.html?cat=fresh-flowers-garlands" class="view-all-link">View All Flowers &rarr;</a>
                     </div>
-
                     <div class="specialized-grid">
                         <div class="spec-card">
                             <div class="spec-img-wrapper">
-                                <img src="assets/Harvested Fresh.png" alt="Fresh s">
+                                <img src="assets/Harvested Fresh.png" alt="Fresh cut flowers" loading="lazy">
                                 <span class="card-badge">PREMIUM</span>
                             </div>
                             <div class="spec-body">
-                                <h3>Fresh Flowers</h3>
-                                <p>Sourced from high-altitude farms, our flowers are selected for their stem strength, vibrant color, and extended vase life.</p>
+                                <h3>Fresh Cut Flowers</h3>
+                                <p>Hosur roses, Madurai jasmine, marigold, chrysanthemum and more, selected for stem strength, colour and vase life.</p>
                                 <a href="products.html?cat=fresh-flowers-garlands&sub=fresh-cut-flowers" class="btn btn-sm btn-outline">View Details</a>
+                                <button class="btn btn-sm btn-primary open-quote-modal" data-product="Premium Roses – Hosur" data-category="fresh-flowers-garlands">Enquire</button>
                             </div>
                         </div>
-
                         <div class="spec-card">
                             <div class="spec-img-wrapper">
-                                <img src="assets/Traditional Garlands.png" alt="Traditional Garlands">
+                                <img src="assets/Traditional Garlands.png" alt="Traditional flower garlands" loading="lazy">
                                 <span class="card-badge">CULTURAL</span>
                             </div>
                             <div class="spec-body">
                                 <h3>Traditional Garlands</h3>
-                                <p>Exquisitely hand-woven garlands using traditional techniques, preserved through advanced humidity-controlled shipping.</p>
+                                <p>Hand-woven jasmine, rose and marigold garlands for weddings and temples, shipped in humidity-controlled packs.</p>
                                 <a href="products.html?cat=fresh-flowers-garlands&sub=flower-garlands" class="btn btn-sm btn-outline">View Details</a>
+                                <button class="btn btn-sm btn-primary open-quote-modal" data-product="Madurai Jasmine Garland" data-category="fresh-flowers-garlands">Enquire</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- The Zentro Standard Section -->
-            <section class="standard-section">
-                <div class="container text-center">
-                    <h2 class="section-title-centered">The Zentro Standard</h2>
-                    <div class="red-line"></div>
+            <!-- FEATURED PRODUCTS FROM ADMIN (shown only when products exist) -->
+            <section class="hz-section" id="featuredSection" hidden>
+                <div class="container">
+                    <div class="section-header-flex">
+                        <div>
+                            <h2>Featured Products</h2>
+                            <p>Ready-to-ship lines with current pricing.</p>
+                        </div>
+                        <a href="products.html" class="view-all-link">View Entire Catalog &rarr;</a>
+                    </div>
+                    <div class="signature-grid" id="signatureProductsGrid"></div>
+                </div>
+            </section>
 
-                    <div class="standard-grid">
-                        <div class="standard-card">
-                            <div class="icon-circle"><i class="fa-solid fa-globe"></i></div>
-                            <h4>Global Shipping Network</h4>
-                            <p>Direct routes to major hubs in Europe, Asia, and the Americas ensuring minimal handling.</p>
+            <!-- HERITAGE -->
+            <section class="heritage-section">
+                <div class="container">
+                    <div class="heritage-grid">
+                        <div class="heritage-visuals">
+                            <img src="assets/Heritage 1.png" alt="Sourcing from farms" class="heritage-img-1" loading="lazy">
+                            <img src="assets/Heritage 2.png" alt="Export packaging" class="heritage-img-2" loading="lazy">
                         </div>
-                        <div class="standard-card">
-                            <div class="icon-circle"><i class="fa-solid fa-temperature-arrow-down"></i></div>
-                            <h4>Freshness Guaranteed</h4>
-                            <p>Cold-chain technology that maintains precise temperature from harvest to delivery.</p>
-                        </div>
-                        <div class="standard-card">
-                            <div class="icon-circle"><i class="fa-solid fa-gauge-high"></i></div>
-                            <h4>Fast Delivery</h4>
-                            <p>Express clearance and priority air freight to get blooms across the world in 48 hours.</p>
-                        </div>
-                        <div class="standard-card">
-                            <div class="icon-circle"><i class="fa-solid fa-box"></i></div>
-                            <h4>Quality Packaging</h4>
-                            <p>Bespoke corrugated containers designed for air circulation and impact protection.</p>
-                        </div>
-                        <div class="standard-card">
-                            <div class="icon-circle"><i class="fa-solid fa-shield-halved"></i></div>
-                            <h4>Trusted by Clients</h4>
-                            <p>Preferred logistics partner for luxury florists and international wedding planners.</p>
-                        </div>
-                        <div class="standard-card">
-                            <div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div>
-                            <h4>Real-time Tracking</h4>
-                            <p>Visibility at every waypoint with our advanced shipment monitoring system.</p>
+                        <div class="heritage-content">
+                            <span class="badge-tag">OUR HERITAGE</span>
+                            <h2 id="aboutTitle">A reliable partner focused on <span class="text-red">freshness</span> and quality.</h2>
+                            <p id="aboutDescription">At <strong>Zentro World Connect</strong>, we bridge the gap between Indian farms and global markets. Our logistics framework is built for perishables and bulk commodities alike, so every shipment arrives exactly as it left our hands.</p>
+                            <div class="heritage-stats">
+                                <div class="stat-block"><span class="stat-num">10+</span><span class="stat-label">EXPORT COUNTRIES</span></div>
+                                <div class="stat-block"><span class="stat-num">24h</span><span class="stat-label">FARM TO FREIGHT</span></div>
+                            </div>
+                            <a href="about.html" class="btn btn-primary">Know More About Us</a>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Our Seamless Process Section (Dark `#111111`) -->
+            <!-- WHY ZENTRO -->
+            <section class="hz-section hz-grey">
+                <div class="container text-center">
+                    <h2 class="section-title-centered">Why Importers Choose Zentro</h2>
+                    <div class="red-line"></div>
+                    <div class="standard-grid">
+                        <div class="standard-card"><div class="icon-circle"><i class="fa-solid fa-globe"></i></div><h4>Global Shipping Network</h4><p>Direct routes to major hubs in Europe, Asia, the Middle East and the Americas.</p></div>
+                        <div class="standard-card"><div class="icon-circle"><i class="fa-solid fa-temperature-arrow-down"></i></div><h4>Freshness Guaranteed</h4><p>Temperature-controlled handling from harvest to delivery.</p></div>
+                        <div class="standard-card"><div class="icon-circle"><i class="fa-solid fa-certificate"></i></div><h4>Quality Assured</h4><p>Every lot is graded and inspected before it leaves our facility.</p></div>
+                        <div class="standard-card"><div class="icon-circle"><i class="fa-solid fa-box"></i></div><h4>Export-Grade Packaging</h4><p>Custom packing built for air circulation and impact protection.</p></div>
+                        <div class="standard-card"><div class="icon-circle"><i class="fa-solid fa-file-contract"></i></div><h4>Complete Paperwork</h4><p>Phytosanitary, certificate of origin, invoices and customs support.</p></div>
+                        <div class="standard-card"><div class="icon-circle"><i class="fa-solid fa-chart-line"></i></div><h4>Shipment Tracking</h4><p>Visibility at every waypoint until it reaches your door.</p></div>
+                    </div>
+                    <div class="hz-inline-cta hz-center"><button class="btn btn-primary open-quote-modal">Start Your Import Today</button></div>
+                </div>
+            </section>
+
+            <!-- PROCESS -->
             <section class="process-section">
                 <div class="container">
                     <div class="section-header-dark">
-                        <h2>Our Seamless Process</h2>
-                        <p>Precision in every step from the soil to the doorstep.</p>
+                        <h2>How It Works</h2>
+                        <p>From your enquiry to your warehouse, in four clear steps.</p>
                     </div>
-
                     <div class="process-grid">
-                        <div class="process-card">
-                            <span class="step-badge">01</span>
-                            <h4>Sourcing</h4>
-                            <p>Direct partnership with premium floral estates.</p>
-                        </div>
-                        <div class="process-card">
-                            <span class="step-badge">02</span>
-                            <h4>Quality Check</h4>
-                            <p>Rigorous inspection of petal health and stem length.</p>
-                        </div>
-                        <div class="process-card">
-                            <span class="step-badge">03</span>
-                            <h4>Packaging</h4>
-                            <p>Controlled atmosphere sealing for longevity.</p>
-                        </div>
-                        <div class="process-card">
-                            <span class="step-badge">04</span>
-                            <h4>Export & Delivery</h4>
-                            <p>Swift global transit with door-to-door tracking.</p>
-                        </div>
+                        <div class="process-card"><span class="step-badge">01</span><h4>Send Enquiry</h4><p>Tell us the product, volume and destination.</p></div>
+                        <div class="process-card"><span class="step-badge">02</span><h4>Get Your Quote</h4><p>Receive pricing and terms quickly on WhatsApp or email.</p></div>
+                        <div class="process-card"><span class="step-badge">03</span><h4>Pack &amp; Inspect</h4><p>Quality check, grading and export-grade packing.</p></div>
+                        <div class="process-card"><span class="step-badge">04</span><h4>Ship &amp; Deliver</h4><p>Documentation, freight and tracking to your port.</p></div>
                     </div>
+                    <div class="hz-inline-cta hz-center"><button class="btn btn-light open-quote-modal">Get a Quote Now</button></div>
                 </div>
             </section>
 
-            <!-- Global Connectivity Section -->
+            <!-- GLOBAL REACH -->
             <section class="connectivity-section">
                 <div class="container">
                     <div class="connectivity-grid">
                         <div class="connectivity-content">
-                            <h2>Global Connectivity</h2>
-                            <p>With strategic partnerships across six continents, we ensure that borders are never a barrier to freshness. From the farms of Tamilnadu and India to the boutique shops in Singapore and Malaysia.</p>
-                            
+                            <h2>Delivering Across Borders</h2>
+                            <p>From our base in Sivagangai, Tamil Nadu, we serve importers, wholesalers and event businesses around the world.</p>
                             <ul class="red-dot-list">
-                                <li><span class="red-dot"></span> Asia-Pacific Hub</li>
-                                <li><span class="red-dot"></span> European Logistics Center</li>
-                                <li><span class="red-dot"></span> North American Distribution</li>
+                                <li><span class="red-dot"></span> Asia-Pacific: Singapore, Malaysia, Sri Lanka</li>
+                                <li><span class="red-dot"></span> Middle East: UAE, Qatar, Oman, Saudi Arabia</li>
+                                <li><span class="red-dot"></span> Europe &amp; North America</li>
                             </ul>
+                            <a href="about.html#contact" class="btn btn-primary">Talk to Our Export Team</a>
                         </div>
                         <div class="connectivity-map">
                             <div class="map-card-wrapper">
-                                <!-- Live Embedded Google Map for Sivagangai, Tamil Nadu, India — 630561 -->
                                 <div class="google-map-container" style="position: relative; width: 100%; height: 350px;">
-                                    <iframe 
-                                        src="https://maps.google.com/maps?q=Railway%20Station%20Road,Sivagangai,Tamil%20Nadu,India,630561&t=&z=13&ie=UTF8&iwloc=&output=embed" 
-                                        width="100%" 
-                                        height="100%" 
-                                        style="border:0;" 
-                                        allowfullscreen="" 
-                                        loading="lazy" 
-                                        referrerpolicy="no-referrer-when-downgrade"
-                                        title="Zentro World Connect Headquarters - Railway Station Road, Sivagangai, Tamil Nadu, India - 630561">
-                                    </iframe>
+                                    <iframe src="https://maps.google.com/maps?q=Railway%20Station%20Road,Sivagangai,Tamil%20Nadu,India,630561&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Zentro World Connect, Sivagangai, Tamil Nadu"></iframe>
                                 </div>
-
                                 <div class="map-footer-bar">
-                                    <div class="location-badge">
-                                        <i class="fa-solid fa-location-dot text-red"></i> <strong>Railway Station Road, Sivagangai, Tamil Nadu, India — 630561</strong>
-                                    </div>
-                                    <a href="https://maps.google.com/?q=Railway+Station+Road,Sivagangai,Tamil+Nadu,India,630561" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
-                                        <i class="fa-solid fa-diamond-turn-right"></i> Get Directions <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                    </a>
+                                    <div class="location-badge"><i class="fa-solid fa-location-dot text-red"></i> <strong>Railway Station Road, Sivagangai, Tamil Nadu, India — 630561</strong></div>
+                                    <a href="https://maps.google.com/?q=Railway+Station+Road,Sivagangai,Tamil+Nadu,India,630561" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary"><i class="fa-solid fa-diamond-turn-right"></i> Get Directions</a>
                                 </div>
                             </div>
                         </div>
@@ -255,46 +240,15 @@
                 </div>
             </section>
 
-            <!-- Testimonials Section -->
-            <section class="testimonials-section">
-                <div class="container">
-                    <div class="testimonials-grid">
-                        <div class="testimonial-card">
-                            <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <p>"Zentro's ability to maintain the cool chain for our high-end wedding garlands was a game-changer for our business in Dubai."</p>
-                            <div class="client-info">
-                                <strong>Elena Vasili</strong>
-                                <span>Director, Vasili Events</span>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <p>"Reliability is paramount in floral logistics. Zentro has never missed a delivery window in three years of partnership."</p>
-                            <div class="client-info">
-                                <strong>James Thorne</strong>
-                                <span>Global Sourcing, BloomDirect</span>
-                            </div>
-                        </div>
-                        <div class="testimonial-card">
-                            <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <p>"The transparency and real-time tracking provided us peace of mind when exporting traditional garlands for our major festivals."</p>
-                            <div class="client-info">
-                                <strong>Priya Sharma</strong>
-                                <span>Cultural Heritage Experts</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Red CTA Container ("Ready to Export Freshness?") -->
+            <!-- FINAL CTA -->
             <section class="red-cta-section">
                 <div class="container">
                     <div class="red-cta-box text-center">
-                        <h2>Ready to Export Freshness?</h2>
-                        <p>Partner with Zentro for professional, reliable, and high-quality floral logistics.</p>
+                        <h2>Ready to Import from India?</h2>
+                        <p>Share your requirement and our export team will get back to you with pricing and shipping options.</p>
                         <div class="cta-actions">
                             <button class="btn btn-light open-quote-modal">Get a Quote</button>
+                            <a href="https://wa.me/919597209593?text=Hello,%20I%20am%20interested%20in%20importing%20from%20Zentro%20World%20Connect." target="_blank" rel="noopener noreferrer" class="btn btn-outline-light"><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>
                             <a href="about.html#contact" class="btn btn-outline-light">Contact Sales</a>
                         </div>
                     </div>
@@ -302,6 +256,7 @@
             </section>
         </div>
     </main>
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -416,6 +371,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Main Script -->
     <script src="catalog-data.js?v=1.0"></script>
-    <script src="script.js?v=7.0"></script>
+    <script src="home.js?v=1.0"></script>
+    <script src="script.js?v=7.1"></script>
 </body>
 </html>

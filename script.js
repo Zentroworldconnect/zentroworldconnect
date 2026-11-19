@@ -146,6 +146,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
 
+            /* --- Hero slideshow --- */
+            if (window.applyHeroSettings && document.getElementById('heroSlides')) {
+                window.applyHeroSettings(sets);
+            }
+
             /* --- Hero Title --- */
             if (sets.heroTitle) {
 

@@ -1393,6 +1393,86 @@ renderProductsTable();
             });
         }
 
+        /* --- HOME SLIDESHOW MANAGER --- */
+        let heroSlidesState = [];
+        const MAX_SLIDES = 6;
+
+        function renderSlidesAdmin() {
+            const box = document.getElementById('slidesAdminList');
+            if (!box) return;
+            if (!heroSlidesState.length) {
+                box.innerHTML = '<p style="color:#888;">No custom slides yet. Default images will be used.</p>';
+                return;
+            }
+            box.innerHTML = heroSlidesState.map((src, i) => `
+                <div style="width:150px; border:1px solid #ddd; border-radius:8px; overflow:hidden; background:#fff;">
+                    <img src="${String(src).replace(/"/g, '&quot;')}" alt="Slide ${i + 1}" style="width:100%; height:90px; object-fit:cover; display:block;">
+                    <div style="display:flex; justify-content:space-between; padding:6px; font-size:.8rem;">
+                        <button type="button" data-slide-act="left" data-i="${i}" ${i === 0 ? 'disabled' : ''} title="Move earlier"><i class="fa-solid fa-arrow-left"></i></button>
+                        <strong>${i + 1}</strong>
+                        <button type="button" data-slide-act="right" data-i="${i}" ${i === heroSlidesState.length - 1 ? 'disabled' : ''} title="Move later"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button type="button" data-slide-act="del" data-i="${i}" title="Remove" style="color:#C50000;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function addSlide(src) {
+            if (heroSlidesState.length >= MAX_SLIDES) {
+                alert('You can add up to ' + MAX_SLIDES + ' slides. Remove one first.');
+                return false;
+            }
+            heroSlidesState.push(src);
+            renderSlidesAdmin();
+            return true;
+        }
+
+        const slidesListEl = document.getElementById('slidesAdminList');
+        if (slidesListEl) {
+            slidesListEl.addEventListener('click', (e) => {
+                const btn = e.target.closest('button[data-slide-act]');
+                if (!btn) return;
+                const i = Number(btn.dataset.i);
+                const act = btn.dataset.slideAct;
+                if (act === 'del') heroSlidesState.splice(i, 1);
+                if (act === 'left' && i > 0) [heroSlidesState[i - 1], heroSlidesState[i]] = [heroSlidesState[i], heroSlidesState[i - 1]];
+                if (act === 'right' && i < heroSlidesState.length - 1) [heroSlidesState[i + 1], heroSlidesState[i]] = [heroSlidesState[i], heroSlidesState[i + 1]];
+                renderSlidesAdmin();
+            });
+        }
+
+        const slidePreset = document.getElementById('slidePresetSelect');
+        if (slidePreset) {
+            slidePreset.addEventListener('change', () => {
+                if (slidePreset.value) addSlide(slidePreset.value);
+                slidePreset.value = '';
+            });
+        }
+
+        const slideFiles = document.getElementById('slideFiles');
+        if (slideFiles) {
+            slideFiles.addEventListener('change', () => {
+                Array.from(slideFiles.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const maxW = 1400;
+                            const scale = Math.min(1, maxW / img.width);
+                            const canvas = document.createElement('canvas');
+                            canvas.width = Math.round(img.width * scale);
+                            canvas.height = Math.round(img.height * scale);
+                            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                            addSlide(canvas.toDataURL('image/jpeg', 0.6));
+                        };
+                        img.src = ev.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+                slideFiles.value = '';
+            });
+        }
+        renderSlidesAdmin();
+
         const loadSettingsForm = async () => {
             const sets = await getSettings();
             
@@ -1446,6 +1526,11 @@ renderProductsTable();
                     }
                 }
             }
+            // Slideshow
+            let savedSlides = sets.heroSlides;
+            if (typeof savedSlides === 'string') { try { savedSlides = JSON.parse(savedSlides); } catch (e) { savedSlides = []; } }
+            heroSlidesState = Array.isArray(savedSlides) ? savedSlides.slice(0, MAX_SLIDES) : [];
+            renderSlidesAdmin();
             // About Us info
             if (sets.aboutTitle) document.getElementById('setAboutTitle').value = sets.aboutTitle;
             if (sets.aboutDescription) document.getElementById('setAboutDescription').value = sets.aboutDescription;
@@ -1527,6 +1612,7 @@ renderProductsTable();
                         heroTitle: document.getElementById('setHeroTitle').value.trim(),
                         heroDescription: document.getElementById('setHeroDescription').value.trim(),
                         heroImage: document.getElementById('setHeroImage').value,
+                        heroSlides: JSON.stringify(heroSlidesState),
 
                         aboutTitle: document.getElementById('setAboutTitle').value.trim(),
                         aboutDescription: document.getElementById('setAboutDescription').value.trim(),
@@ -1547,7 +1633,7 @@ renderProductsTable();
                                 return;
                             }
                             console.error("Supabase settings upsert error:", error);
-                            alert("Failed to save to Supabase cloud, saving locally as fallback. Error: " + error.message);
+                            alert("Failed to save to Supabase cloud, saving locally as fallback. Error: " + error.message + (String(error.message).includes('heroSlides') ? "\n\nOne-time fix: in Supabase SQL Editor run:\nalter table settings add column if not exists \"heroSlides\" text;" : ""));
                         } catch (e) {
                             console.error("Supabase exception:", e);
                         }

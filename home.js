@@ -1,0 +1,101 @@
+/* Home page: hero slideshow + category cards + featured section */
+(function () {
+    var DEFAULT_SLIDES = ['assets/Hero banner.png', 'assets/roses_export.png', 'assets/marigolds.png', 'assets/Global Reach.png'];
+    var timer = null, idx = 0, count = 0;
+
+    function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+    function cssUrl(u) { return "url('" + String(u).replace(/'/g, '%27').replace(/ /g, '%20') + "')"; }
+
+    function show(i) {
+        var slides = document.querySelectorAll('#heroSlides .hz-slide');
+        var dots = document.querySelectorAll('#heroDots button');
+        if (!slides.length) return;
+        idx = (i + slides.length) % slides.length;
+        slides.forEach(function (s, n) { s.classList.toggle('active', n === idx); });
+        dots.forEach(function (d, n) { d.classList.toggle('active', n === idx); });
+    }
+    function play() {
+        clearInterval(timer);
+        if (count > 1) timer = setInterval(function () { show(idx + 1); }, 5500);
+    }
+
+    /* slides: array of image URLs / data URIs */
+    window.renderHeroSlides = function (slides) {
+        var wrap = document.getElementById('heroSlides');
+        var dots = document.getElementById('heroDots');
+        if (!wrap) return;
+        slides = (slides && slides.length) ? slides : DEFAULT_SLIDES;
+        count = slides.length;
+        wrap.innerHTML = slides.map(function (u) { return '<div class="hz-slide" style="background-image:' + cssUrl(u) + '"></div>'; }).join('');
+        dots.innerHTML = slides.map(function (_, n) { return '<button type="button" aria-label="Go to slide ' + (n + 1) + '"></button>'; }).join('');
+        dots.style.display = count > 1 ? '' : 'none';
+        document.getElementById('heroPrev').style.display = document.getElementById('heroNext').style.display = count > 1 ? '' : 'none';
+        show(0); play();
+    };
+
+    /* Read slides from settings (array, JSON string, or single heroImage) */
+    window.applyHeroSettings = function (sets) {
+        var list = sets && sets.heroSlides;
+        if (typeof list === 'string') { try { list = JSON.parse(list); } catch (e) { list = null; } }
+        if (!Array.isArray(list) || !list.length) list = (sets && sets.heroImage) ? [sets.heroImage] : null;
+        window.renderHeroSlides(list);
+    };
+
+    var CAT_VISUALS = {
+        'fresh-flowers-garlands': { img: 'assets/Harvested Fresh.png', icon: 'fa-spa', blurb: 'Fresh cut flowers and hand-woven garlands.' },
+        'rice': { icon: 'fa-bowl-rice', blurb: 'Basmati and non-basmati rice in export grades.' },
+        'edible-oils': { icon: 'fa-droplet', blurb: 'Vegetable, coconut, palm and specialty oils.' },
+        'spices-seasonings': { icon: 'fa-pepper-hot', blurb: 'Premium whole spices from India.' },
+        'millets': { icon: 'fa-wheat-awn', blurb: 'Ragi, bajra, foxtail and other nutrient-rich millets.' },
+        'other-grains-cereals': { icon: 'fa-seedling', blurb: 'Wheat, maize, barley, oats and more.' },
+        'edible-seeds-oilseeds': { icon: 'fa-leaf', blurb: 'Sesame, groundnut, flaxseed and oilseeds.' }
+    };
+
+    function renderCategories() {
+        var grid = document.getElementById('homeCategoryGrid');
+        var cat = window.ZENTRO_CATALOG || [];
+        if (!grid) return;
+        grid.innerHTML = cat.map(function (c) {
+            var v = CAT_VISUALS[c.slug] || { icon: 'fa-box-open', blurb: '' };
+            var total = c.subcategories.reduce(function (n, s) { return n + s.products.length; }, 0);
+            var media = v.img
+                ? '<img src="' + esc(v.img) + '" alt="' + esc(c.name) + '" loading="lazy">'
+                : '<div class="hz-cat-icon"><i class="fa-solid ' + v.icon + '"></i></div>';
+            var subs = c.subcategories.length > 1 ? c.subcategories.map(function (s) {
+                return '<a href="products.html?cat=' + esc(c.slug) + '&sub=' + esc(s.slug) + '">' + esc(s.name) + '</a>';
+            }).join('') : '';
+            return '<article class="hz-cat-card"><a href="products.html?cat=' + esc(c.slug) + '" class="hz-cat-media">' + media + '</a>' +
+                '<div class="hz-cat-body"><h3>' + esc(c.name) + '</h3><p>' + esc(v.blurb) + '</p>' +
+                '<span class="hz-cat-count">' + total + ' products</span>' +
+                (subs ? '<div class="hz-cat-subs">' + subs + '</div>' : '') +
+                '<a href="products.html?cat=' + esc(c.slug) + '" class="hz-cat-link">Explore ' + esc(c.name) + ' &rarr;</a></div></article>';
+        }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        window.renderHeroSlides(null); /* defaults first; saved settings replace them */
+        renderCategories();
+
+        var hero = document.getElementById('heroSlider');
+        document.getElementById('heroPrev').addEventListener('click', function () { show(idx - 1); play(); });
+        document.getElementById('heroNext').addEventListener('click', function () { show(idx + 1); play(); });
+        document.getElementById('heroDots').addEventListener('click', function (e) {
+            var b = e.target.closest('button'); if (!b) return;
+            show(Array.prototype.indexOf.call(b.parentNode.children, b)); play();
+        });
+        hero.addEventListener('mouseenter', function () { clearInterval(timer); });
+        hero.addEventListener('mouseleave', play);
+        var x0 = null;
+        hero.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+        hero.addEventListener('touchend', function (e) {
+            if (x0 === null) return;
+            var dx = e.changedTouches[0].clientX - x0;
+            if (Math.abs(dx) > 50) { show(idx + (dx < 0 ? 1 : -1)); play(); }
+            x0 = null;
+        });
+
+        /* reveal Featured Products only when the grid has cards */
+        var grid = document.getElementById('signatureProductsGrid'), sec = document.getElementById('featuredSection');
+        if (grid && sec) new MutationObserver(function () { sec.hidden = !grid.children.length; }).observe(grid, { childList: true });
+    });
+})();
