@@ -378,6 +378,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!signatureGrid) return;
 
+        /* Home page: moving carousel handled by home.js */
+        if (window.homeSignature) {
+            window.homeSignature(products.filter(p => p.isSignature === true || p.isSignature === 'true'));
+            return;
+        }
+
         signatureGrid.innerHTML = '';
 
         let sigList = products.filter(

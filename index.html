@@ -102,56 +102,25 @@
                 </div>
             </section>
 
-            <!-- FLOWERS & GARLANDS SPOTLIGHT -->
+            <!-- OUR SIGNATURE PRODUCTS (moving cards; managed from Admin > Products > "Signature product") -->
             <section class="hz-section hz-grey">
                 <div class="container">
                     <div class="section-header-flex">
                         <div>
-                            <h2>Our Signature Floral Exports</h2>
-                            <p>Where Zentro began: premium blooms and hand-woven garlands, shipped fresh.</p>
-                        </div>
-                        <a href="products.html?cat=fresh-flowers-garlands" class="view-all-link">View All Flowers &rarr;</a>
-                    </div>
-                    <div class="specialized-grid">
-                        <div class="spec-card">
-                            <div class="spec-img-wrapper">
-                                <img src="assets/Harvested Fresh.png" alt="Fresh cut flowers" loading="lazy">
-                                <span class="card-badge">PREMIUM</span>
-                            </div>
-                            <div class="spec-body">
-                                <h3>Fresh Cut Flowers</h3>
-                                <p>Hosur roses, Madurai jasmine, marigold, chrysanthemum and more, selected for stem strength, colour and vase life.</p>
-                                <a href="products.html?cat=fresh-flowers-garlands&sub=fresh-cut-flowers" class="btn btn-sm btn-outline">View Details</a>
-                                <button class="btn btn-sm btn-primary open-quote-modal" data-product="Premium Roses – Hosur" data-category="fresh-flowers-garlands">Enquire</button>
-                            </div>
-                        </div>
-                        <div class="spec-card">
-                            <div class="spec-img-wrapper">
-                                <img src="assets/Traditional Garlands.png" alt="Traditional flower garlands" loading="lazy">
-                                <span class="card-badge">CULTURAL</span>
-                            </div>
-                            <div class="spec-body">
-                                <h3>Traditional Garlands</h3>
-                                <p>Hand-woven jasmine, rose and marigold garlands for weddings and temples, shipped in humidity-controlled packs.</p>
-                                <a href="products.html?cat=fresh-flowers-garlands&sub=flower-garlands" class="btn btn-sm btn-outline">View Details</a>
-                                <button class="btn btn-sm btn-primary open-quote-modal" data-product="Madurai Jasmine Garland" data-category="fresh-flowers-garlands">Enquire</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FEATURED PRODUCTS FROM ADMIN (shown only when products exist) -->
-            <section class="hz-section" id="featuredSection" hidden>
-                <div class="container">
-                    <div class="section-header-flex">
-                        <div>
-                            <h2>Featured Products</h2>
-                            <p>Ready-to-ship lines with current pricing.</p>
+                            <h2>Our Signature Products</h2>
+                            <p>Our best-selling export lines, ready to ship worldwide.</p>
                         </div>
                         <a href="products.html" class="view-all-link">View Entire Catalog &rarr;</a>
                     </div>
-                    <div class="signature-grid" id="signatureProductsGrid"></div>
+                </div>
+                <div class="hz-marquee" id="sigMarquee">
+                    <div class="hz-track" id="signatureProductsGrid"></div>
+                </div>
+                <div class="container">
+                    <div class="hz-inline-cta">
+                        <p><strong>Looking for bulk pricing?</strong> Tell us your product, volume and destination.</p>
+                        <button class="btn btn-primary open-quote-modal">Get a Quote</button>
+                    </div>
                 </div>
             </section>
 
@@ -160,8 +129,8 @@
                 <div class="container">
                     <div class="heritage-grid">
                         <div class="heritage-visuals">
-                            <img src="assets/Heritage 1.png" alt="Sourcing from farms" class="heritage-img-1" loading="lazy">
-                            <img src="assets/Heritage 2.png" alt="Export packaging" class="heritage-img-2" loading="lazy">
+                            <img src="assets/heritage-1.jpg" alt="Sourcing from farms" class="heritage-img-1" loading="lazy">
+                            <img src="assets/heritage-2.jpg" alt="Export packaging" class="heritage-img-2" loading="lazy">
                         </div>
                         <div class="heritage-content">
                             <span class="badge-tag">OUR HERITAGE</span>
@@ -371,7 +340,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Main Script -->
     <script src="catalog-data.js?v=1.0"></script>
-    <script src="home.js?v=1.0"></script>
-    <script src="script.js?v=7.1"></script>
+    <script src="home.js?v=1.1"></script>
+    <script src="script.js?v=7.2"></script>
 </body>
 </html>

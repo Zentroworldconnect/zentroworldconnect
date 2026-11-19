@@ -1,6 +1,7 @@
 /* Home page: hero slideshow + category cards + featured section */
 (function () {
-    var DEFAULT_SLIDES = ['assets/Hero banner.png', 'assets/roses_export.png', 'assets/marigolds.png', 'assets/Global Reach.png'];
+    var DEFAULT_SLIDES = ['assets/slide-1.jpg', 'assets/slide-2.jpg', 'assets/slide-3.jpg', 'assets/slide-4.jpg'];
+    var heroShown = false;
     var timer = null, idx = 0, count = 0;
 
     function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
@@ -16,7 +17,7 @@
     }
     function play() {
         clearInterval(timer);
-        if (count > 1) timer = setInterval(function () { show(idx + 1); }, 5500);
+        if (count > 1) timer = setInterval(function () { show(idx + 1); }, 3500);
     }
 
     /* slides: array of image URLs / data URIs */
@@ -25,6 +26,7 @@
         var dots = document.getElementById('heroDots');
         if (!wrap) return;
         slides = (slides && slides.length) ? slides : DEFAULT_SLIDES;
+        heroShown = true;
         count = slides.length;
         wrap.innerHTML = slides.map(function (u) { return '<div class="hz-slide" style="background-image:' + cssUrl(u) + '"></div>'; }).join('');
         dots.innerHTML = slides.map(function (_, n) { return '<button type="button" aria-label="Go to slide ' + (n + 1) + '"></button>'; }).join('');
@@ -42,7 +44,7 @@
     };
 
     var CAT_VISUALS = {
-        'fresh-flowers-garlands': { img: 'assets/Harvested Fresh.png', icon: 'fa-spa', blurb: 'Fresh cut flowers and hand-woven garlands.' },
+        'fresh-flowers-garlands': { img: 'assets/harvested-fresh.jpg', icon: 'fa-spa', blurb: 'Fresh cut flowers and hand-woven garlands.' },
         'rice': { icon: 'fa-bowl-rice', blurb: 'Basmati and non-basmati rice in export grades.' },
         'edible-oils': { icon: 'fa-droplet', blurb: 'Vegetable, coconut, palm and specialty oils.' },
         'spices-seasonings': { icon: 'fa-pepper-hot', blurb: 'Premium whole spices from India.' },
@@ -72,8 +74,45 @@
         }).join('');
     }
 
+    var rzT = null, lastSig = null;
+
+    var DEFAULT_SIG = [
+        { name: 'Premium Roses – Hosur', image: 'assets/roses-export.jpg', category: 'fresh-flowers-garlands', tag: 'Fresh Flowers', description: 'Export-grade Hosur roses with strong stems and long vase life.' },
+        { name: 'Madurai Jasmine (Malli)', image: 'assets/jasmine-buds.jpg', category: 'fresh-flowers-garlands', tag: 'Fresh Flowers', description: 'World-famous fragrant jasmine buds, packed fresh for export.' },
+        { name: 'Marigold – Orange', image: 'assets/marigolds.jpg', category: 'fresh-flowers-garlands', tag: 'Fresh Flowers', description: 'Vibrant marigolds for festivals, events and decoration.' },
+        { name: 'Madurai Jasmine Garland', image: 'assets/traditional-garlands.jpg', category: 'fresh-flowers-garlands', tag: 'Garlands', description: 'Hand-woven traditional garlands in humidity-controlled packs.' },
+        { name: 'Fresh Cut Flowers', image: 'assets/harvested-fresh.jpg', category: 'fresh-flowers-garlands', tag: 'Fresh Flowers', description: 'Assorted premium cut flowers selected for colour and freshness.' }
+    ];
+
+    /* list = admin products marked as Signature; empty/null = default cards */
+    window.homeSignature = function (list) {
+        var track = document.getElementById('signatureProductsGrid');
+        var wrap = document.getElementById('sigMarquee');
+        if (!track || !wrap) return;
+        lastSig = list;
+        var items = (list && list.length) ? list : DEFAULT_SIG;
+        var cat = window.ZENTRO_CATALOG || [];
+        var set = items.map(function (p) {
+            var c = cat.filter(function (x) { return x.slug === p.category; })[0];
+            var tag = p.tag || (c ? c.name : 'Products');
+            return '<div class="sig-card"><img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" loading="lazy"><div class="sig-card-body"><span class="tag-label">' + esc(String(tag).toUpperCase()) + '</span><h3>' + esc(p.name) + '</h3>' +
+                (p.item_code ? '<p class="item-code">Item Code: ' + esc(p.item_code) + '</p>' : '') +
+                '<p>' + esc(p.description || '') + '</p><div class="sig-actions"><button class="btn btn-sm btn-primary open-quote-modal" data-product="' + esc(p.name) + '" data-category="' + esc(p.category || '') + '">Enquire</button></div></div></div>';
+        }).join('');
+        track.style.animation = 'none';
+        track.innerHTML = set;
+        var setW = track.scrollWidth + 22; /* one set incl. gap */
+        var copies = Math.max(2, Math.ceil(wrap.clientWidth / setW) + 1);
+        track.innerHTML = new Array(copies + 1).join(set);
+        track.style.setProperty('--hz-shift', '-' + setW + 'px');
+        track.style.setProperty('--hz-dur', Math.max(18, items.length * 7) + 's');
+        void track.offsetWidth;
+        track.style.animation = '';
+    };
+
     document.addEventListener('DOMContentLoaded', function () {
-        window.renderHeroSlides(null); /* defaults first; saved settings replace them */
+        /* wait briefly for saved slides (avoids a flash of default images); fall back to defaults */
+        setTimeout(function () { if (!heroShown) window.renderHeroSlides(null); }, 1200);
         renderCategories();
 
         var hero = document.getElementById('heroSlider');
@@ -94,8 +133,7 @@
             x0 = null;
         });
 
-        /* reveal Featured Products only when the grid has cards */
-        var grid = document.getElementById('signatureProductsGrid'), sec = document.getElementById('featuredSection');
-        if (grid && sec) new MutationObserver(function () { sec.hidden = !grid.children.length; }).observe(grid, { childList: true });
+        window.homeSignature(null); /* defaults now; admin products replace them when loaded */
+        window.addEventListener('resize', function () { clearTimeout(rzT); rzT = setTimeout(function () { window.homeSignature(lastSig); }, 250); });
     });
 })();

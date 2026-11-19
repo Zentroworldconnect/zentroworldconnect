@@ -480,8 +480,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.drawImage(img, 0, 0, width, height);
 
                         // Compress to JPEG with 70% quality
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.9);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
                         prodImage.value = compressedBase64;
+                        uploadImageToStorage(compressedBase64, 'products').then(url => { prodImage.value = url; });
                         
                         if (prodImagePreview) prodImagePreview.src = compressedBase64;
                         if (imagePreviewBox) imagePreviewBox.style.display = 'block';
@@ -1456,13 +1457,13 @@ renderProductsTable();
                     reader.onload = (ev) => {
                         const img = new Image();
                         img.onload = () => {
-                            const maxW = 1400;
+                            const maxW = 1600;
                             const scale = Math.min(1, maxW / img.width);
                             const canvas = document.createElement('canvas');
                             canvas.width = Math.round(img.width * scale);
                             canvas.height = Math.round(img.height * scale);
                             canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                            addSlide(canvas.toDataURL('image/jpeg', 0.6));
+                            uploadImageToStorage(canvas.toDataURL('image/jpeg', 0.72), 'slides').then(addSlide);
                         };
                         img.src = ev.target.result;
                     };
@@ -1653,6 +1654,22 @@ renderProductsTable();
     }
 
     // Helper functions
+    // Uploads a data-URL image to Supabase Storage (bucket "site-images") and returns its public URL.
+    // If storage is not set up or fails, returns the original data-URL so nothing is lost.
+    async function uploadImageToStorage(dataUrl, folder) {
+        if (!supabaseClient || !String(dataUrl).startsWith('data:')) return dataUrl;
+        try {
+            const blob = await (await fetch(dataUrl)).blob();
+            const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+            const { error } = await supabaseClient.storage.from('site-images').upload(path, blob, { contentType: 'image/jpeg', cacheControl: '31536000' });
+            if (error) throw error;
+            return supabaseClient.storage.from('site-images').getPublicUrl(path).data.publicUrl;
+        } catch (err) {
+            console.warn('Storage upload failed, keeping embedded image:', err);
+            return dataUrl;
+        }
+    }
+
     function cleanPhone(phone) {
         if (!phone) return "";
         return String(phone).replace(/[^+\d]/g, '');
