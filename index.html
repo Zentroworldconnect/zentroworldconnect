@@ -30,16 +30,15 @@
     <!-- Header & Navigation Bar -->
     <header class="header">
         <div class="container header-container">
-            <a href="#" class="logo-wrapper" data-view="home">
+            <a href="index.html" class="logo-wrapper">
                 <img src="assets/logo new.png" alt="Zentro World Connect Logo" class="site-logo">
-                
             </a>
-            
+
             <nav class="nav-menu" id="navMenu">
-                <a href="#" class="nav-link active" data-view="home">Home</a>
-                <a href="#" class="nav-link" data-view="catalog">Products</a>
-                <a href="#" class="nav-link" data-view="about">About</a>
-                <a href="#" class="nav-link" data-view="about" data-section="contact">Contact</a>
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="products.html" class="nav-link">Products</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="about.html#contact" class="nav-link">Contact</a>
             </nav>
 
             <div class="header-actions">
@@ -54,10 +53,8 @@
     </header>
 
     <main>
-        <!-- ==========================================
-             VIEW 1: HOME PAGE (Matching Model Image 1)
-             ========================================== -->
-        <div id="view-home" class="page-view active">
+        <div class="page-view active">
+
             
             <!-- Hero Section -->
             <section class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.60)), url('assets/Hero banner.png');">
@@ -67,7 +64,7 @@
                         <p id="heroDescription" class="hero-description">Zentro World Connect delivers the finest hand-harvested fresh s with an unbroken cold chain. From the fertile soil of Southern India directly to global markets.</p>
                         <div class="hero-actions">
                             <button class="btn btn-primary open-quote-modal">Get a Quote</button>
-                            <button class="btn btn-secondary nav-to-catalog">Explore Products</button>
+                            <a href="products.html" class="btn btn-secondary">Explore Products</a>
                         </div>
                     </div>
                 </div>
@@ -109,7 +106,7 @@
                             <h2>Our Specialized Exports</h2>
                             <p>Curated selections of premium blooms and culturally significant floral arrangements.</p>
                         </div>
-                        <a href="#products" class="view-all-link nav-to-catalog">View Entire Catalog &rarr;</a>
+                        <a href="products.html" class="view-all-link">View Entire Catalog &rarr;</a>
                     </div>
 
                     <div class="specialized-grid">
@@ -121,9 +118,7 @@
                             <div class="spec-body">
                                 <h3>Fresh Flowers</h3>
                                 <p>Sourced from high-altitude farms, our flowers are selected for their stem strength, vibrant color, and extended vase life.</p>
-                                <button class="btn btn-sm btn-outline nav-to-catalog" data-cat="flowers">
-    View Details
-</button>
+                                <a href="products.html?cat=flowers" class="btn btn-sm btn-outline">View Details</a>
                             </div>
                         </div>
 
@@ -135,7 +130,7 @@
                             <div class="spec-body">
                                 <h3>Traditional Garlands</h3>
                                 <p>Exquisitely hand-woven garlands using traditional techniques, preserved through advanced humidity-controlled shipping.</p>
-                                <button class="btn btn-sm btn-outline nav-to-catalog" data-cat="garlands">View Details</button>
+                                <a href="products.html?cat=garlands" class="btn btn-sm btn-outline">View Details</a>
                             </div>
                         </div>
                     </div>
@@ -300,688 +295,19 @@
                         <p>Partner with Zentro for professional, reliable, and high-quality floral logistics.</p>
                         <div class="cta-actions">
                             <button class="btn btn-light open-quote-modal">Get a Quote</button>
-                            <a href="#" class="btn btn-outline-light" data-view="about" data-section="contact">Contact Sales</a>
+                            <a href="about.html#contact" class="btn btn-outline-light">Contact Sales</a>
                         </div>
                     </div>
                 </div>
             </section>
-
-        </div>
-
-        <!-- ==========================================
-             VIEW 2: OUR FLOWER CATALOG (Matching Model Image 2)
-             ========================================== -->
-        <div id="view-catalog" class="page-view">
-            
-            <div class="container catalog-page-container">
-                <div class="breadcrumb">Home &gt; Catalog</div>
-                <h1 class="catalog-title">Our Flower Catalog</h1>
-                <p class="catalog-subtitle">Explore our wide range of fresh flowers and traditional garlands ready for export. Cultivated with care, delivered with precision.</p>
-
-                <!-- Search & Filter Bar -->
-                <div class="catalog-toolbar">
-                    <div class="search-box">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="catalogSearchInput" placeholder="Search flowers...">
-                    </div>
-                    <div class="filter-pills">
-                        <button class="pill-btn active" data-cat="all">All</button>
-                        <button class="pill-btn" data-cat="flowers">Flowers</button>
-                        <button class="pill-btn" data-cat="garlands">Garlands</button>
-                        <button class="pill-btn" data-cat="bouquets">Bouquets</button>
-                        
-                    </div>
-                    <div class="sort-box">
-                        <label>SORT BY:</label>
-                        <select id="catalogSortSelect">
-                            <option value="popular">Popular</option>
-                            <option value="name">Name (A-Z)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Custom Sourcing Notice Bar -->
-                <div class="notice-card">
-                    <div class="notice-icon"><i class="fa-solid fa-circle-info"></i></div>
-                    <div class="notice-text">
-                        <strong>Can't find a specific variety?</strong>
-                        <p>We source, collect, and deliver flowers within these categories, but we can also get flowers that aren't in these categories. Our global network makes it possible for you to get rare and seasonal flowers that meet your exact needs.</p>
-                    </div>
-                    <button class="btn btn-sm btn-outline open-quote-modal">Contact Us for Sourcing</button>
-                </div>
-
-                <!-- 8 Product Cards Grid (4 columns x 2 rows) -->
-                <div class="catalog-grid" id="catalogProductGrid">
-                    <!-- Loaded dynamically via script.js -->
-                </div>
-
-                <!-- Harvested Fresh, Shipped Faster Banner -->
-                <div class="harvest-banner" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('assets/hero_banner.png');">
-                    <span class="badge-tag red-badge">SEASONAL BESTSELLERS</span>
-                    <h2>Harvested Fresh. <br>Shipped Faster.</h2>
-                    <button type="button" class="btn btn-light" data-view="home">
-    Explore Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
-</button>
-                </div>
-
-                <!-- Signature Products Section (Controlled via Admin Panel) -->
-                <div class="signature-section">
-                    <h2>Signature Products</h2>
-                    <p class="section-desc">Our most sought-after varieties ready for immediate quote.</p>
-
-                    <div class="signature-grid" id="signatureProductsGrid">
-                        <!-- Loaded dynamically via script.js from Admin Panel -->
-                    </div>
-                </div>
-
-                <!-- Red Custom Orders Banner -->
-                <div class="red-custom-banner">
-                    <h2>Need Bulk Orders or Custom Requests?</h2>
-                    <p>We specialize in tailored export solutions for retailers, events, and wedding planners globally. Get a personalized quote within 24 hours.</p>
-                    <button class="btn btn-light open-quote-modal">Get a Quote</button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ==========================================
-             VIEW 3: ABOUT PAGE (Matching Model Image 3)
-             ========================================== -->
-        <div id="view-about" class="page-view">
-            
-            <div class="container about-page-container">
-                <!-- Header Section -->
-                <div class="about-hero-grid">
-                    <div class="about-hero-visual">
-                        <img src="assets/Global Reach.png" alt="Port Maritime Hub" class="about-port-img">
-                        <div class="overlay-card">
-                            <span class="number">01.</span>
-                            <strong>Strategic Network Growth</strong>
-                        </div>
-                    </div>
-                    <div class="about-hero-content">
-                        <h1>From Local Strength to <span class="text-red">Global Reach</span></h1>
-                        <p class="lead-text">We are growing step by step into international markets like Singapore & Gulf countries, bringing the finest products from our heritage directly to the world stage.</p>
-                        
-                        <div class="global-vision-box">
-                            <div class="icon-red"><i class="fa-solid fa-earth-americas"></i></div>
-                            <div>
-                                <strong>Global Vision</strong>
-                                <p>Expanding footprint across key maritime hubs.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Core Principles: The Zentro Standard -->
-                <div class="principles-section">
-                    <div class="text-center">
-                        <span class="badge-tag">CORE PRINCIPLES</span>
-                        <h2>The Zentro Standard</h2>
-                    </div>
-
-                    <div class="principles-grid">
-                        <div class="principle-card">
-                            <div class="icon-red"><i class="fa-solid fa-handshake"></i></div>
-                            <h3>Strong Partnerships</h3>
-                            <p>Collaborating with local farmers and global distributors to ensure a seamless value chain based on mutual trust.</p>
-                        </div>
-
-                        <div class="principle-card red-card">
-                            <div class="icon-white"><i class="fa-solid fa-bullseye"></i></div>
-                            <h3>Quality Commitment</h3>
-                            <p>Every bloom and every cargo is inspected under rigorous standards to maintain our reputation for premium export quality.</p>
-                        </div>
-
-                        <div class="principle-card">
-                            <div class="icon-red"><i class="fa-solid fa-rocket"></i></div>
-                            <h3>Global Vision</h3>
-                            <p>Pioneering logistics solutions that connect Indian craftsmanship with the dynamic markets of the East and West.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Why Choose Zentro? Dark Charcoal Section -->
-                <div class="why-dark-section">
-                    <div class="why-grid">
-                        <div class="why-content">
-                            <h2>Why Choose Zentro?</h2>
-                            <p class="why-sub">Our dedication to logistics excellence is built on three pillars of performance.</p>
-
-                            <div class="why-pillar">
-                                <span class="red-bullet"></span>
-                                <div>
-                                    <strong>Unwavering Reliability</strong>
-                                    <p>On-time delivery schedules maintained through proprietary tracking and local expertise in Tamil Nadu.</p>
-                                </div>
-                            </div>
-                            <div class="why-pillar">
-                                <span class="red-bullet"></span>
-                                <div>
-                                    <strong>Export Quality</strong>
-                                    <p>Premium selection process ensuring only the most resilient and vibrant products reach international shores.</p>
-                                </div>
-                            </div>
-                            <div class="why-pillar">
-                                <span class="red-bullet"></span>
-                                <div>
-                                    <strong>International Growth</strong>
-                                    <p>Actively expanding our presence in Singapore and Gulf regions with specialized cargo handling for florals.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="why-visual">
-                            <img src="assets/Why Zentro.png" alt="Tracked by Intelligence" class="why-img">
-                            <div class="intel-card">
-                                <i class="fa-solid fa-chart-line"></i>
-                                <strong>Tracked by Intelligence.</strong>
-                                <span>Full visibility from harvest to handover.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Red Contact Section ("Let's build business together.") -->
-                <div id="contact" class="red-contact-container">
-                    <div class="red-contact-grid">
-                        <div class="red-contact-left">
-                            <h2>Let's build business together.</h2>
-                            <p class="sub">Connect with our export specialists to discuss your bulk enquiries and global logistics needs.</p>
-
-                            <div class="contact-info-cards">
-                                <div class="c-info-card">
-                                    <span class="c-label">WHATSAPP</span>
-                                    <a href="tel:+919597209593" class="c-val">+91 95972 09593</a>
-                                </div>
-                                <div class="c-info-card">
-                                    <span class="c-label">EMAIL</span>
-                                    <a href="mailto:info@zentroworldconnect.in" class="c-val">info@zentroworldconnect.in</a>
-                                </div>
-                            </div>
-
-                            <div class="contact-btns">
-                                
-                                <button class="btn btn-outline-light open-quote-modal">Send Enquiry</button>
-                                <a href="https://wa.me/919597209593" target="_blank" class="chat-link">Chat on WhatsApp &rarr;</a>
-                            </div>
-
-                            <div class="sivagangai-trust-box">
-                                <p>Rooted in Sivagangai, Tamil Nadu, India 🇮🇳, we are building a reliable export network focused on trust, consistency, and long-term partnerships.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
         </div>
     </main>
-
-    <div id="view-privacy" class="page-view">
-
-    <div class="container">
-       
-    
-    <h2>ZENTRO WORLD CONNECT</h2>
-    <h2>PRIVACY POLICY</h2>
-        <br>
-        <p><strong>Nachiappan KR</strong> (Managing Director)
-    <p><strong>Website:</strong> www.zentroworldconnect.in</p>
-    <p><strong></strong>   
-    <p><strong>Email:</strong> info@zentroworldconnect.in</p>
-    <p><strong>Phone:</strong> +91 9597209593</p>
-
-    <p>
-        <strong>Address:</strong><br>
-        37/1, Railway Station Road,<br>
-        Sivagangai, Tamil Nadu – 630561, India
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">1. INTRODUCTION</h2>
-
-    <p>
-        ZENTRO WORLD CONNECT (“we”, “us”, “our”) respects your privacy and is
-        committed to protecting the personal information shared through our website.
-        This Privacy Policy explains how we collect, use, store, and protect
-        information when you visit www.zentroworldconnect.in or contact us through
-        our enquiry forms.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">2. INFORMATION WE COLLECT</h2>
-
-    <p>We may collect the following information when you submit an enquiry:</p>
-
-    <ul>
-        <li>Name</li>
-        <li>Email address</li>
-        <li>Phone number</li>
-        <li>Message or enquiry details</li>
-        <li>
-            Product requirements, destination, quantity, and other information
-            voluntarily provided by you
-        </li>
-    </ul>
-
-    <p>
-        We may also collect limited technical information, such as browser type,
-        device information, IP address, and website usage data, where enabled
-        through hosting, analytics, or security services.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">3. HOW WE USE YOUR INFORMATION</h2>
-
-    <p>We may use collected information to:</p>
-
-    <ul>
-        <li>Respond to enquiries and requests for quotations</li>
-        <li>Understand your flower, bouquet, or garland requirements</li>
-        <li>
-            Communicate regarding products, availability, pricing, and export
-            arrangements
-        </li>
-        <li>Improve our website, services, and customer experience</li>
-        <li>Maintain website security and prevent misuse</li>
-        <li>Comply with applicable legal and regulatory requirements</li>
-    </ul>
-        <br>
-
-    <h2 style="font-size: 15px;">4. SHARING OF INFORMATION</h2>
-
-    <p>
-        We do not sell or rent your personal information. We may share information
-        only when reasonably necessary with:
-    </p>
-
-    <ul>
-        <li>
-            Service providers supporting website hosting, email, communication,
-            or security
-        </li>
-        <li>
-            Logistics, freight, or business partners where required to respond
-            to your request and with appropriate business justification
-        </li>
-        <li>
-            Government, regulatory, or law-enforcement authorities when legally
-            required
-        </li>
-    </ul>
-        <br>
-
-    <h2 style="font-size: 15px;">5. DATA SECURITY</h2>
-
-    <p>
-        We take reasonable administrative, technical, and organizational measures
-        to protect personal information against unauthorized access, misuse,
-        alteration, disclosure, or destruction. However, no internet transmission
-        or storage system can be guaranteed to be completely secure.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">6. DATA RETENTION</h2>
-
-    <p>
-        We retain personal information only for as long as reasonably necessary
-        to respond to enquiries, maintain business records, comply with legal
-        obligations, resolve disputes, and enforce agreements.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">7. COOKIES AND THIRD-PARTY SERVICES</h2>
-
-    <p>
-        Our website may use cookies or similar technologies for essential
-        functionality, security, analytics, or improving user experience.
-        Third-party services may have their own privacy policies and terms.
-        You should review those policies where applicable.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">8. YOUR RIGHTS AND CHOICES</h2>
-
-    <p>Subject to applicable law, you may contact us to:</p>
-
-    <ul>
-        <li>Request information about personal data we hold about you</li>
-        <li>Request correction of inaccurate information</li>
-        <li>
-            Ask us to delete information where retention is not legally required
-        </li>
-        <li>Withdraw consent for non-essential communications</li>
-    </ul>
-
-    <p>
-        To submit a request, contact us at
-        <a href="mailto:info.zentroworldconnect@gmail.com">
-            info.zentroworldconnect@gmail.com
-        </a>.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">9. CHILDREN’S PRIVACY</h2>
-
-    <p>
-        Our website is not intentionally directed toward children. We do not
-        knowingly collect personal information from children without appropriate
-        legal authorization.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">10. EXTERNAL LINKS</h2>
-
-    <p>
-        Our website may contain links to third-party websites. We are not
-        responsible for the privacy practices, content, or security of external
-        websites.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">11. POLICY UPDATES</h2>
-
-    <p>
-        We may update this Privacy Policy from time to time. The revised version
-        will be posted on this page with an updated effective date.
-    </p>
-        <br>
-
-    <h2 style="font-size: 15px;">12. CONTACT US</h2>
-
-    <p>For privacy-related questions or requests, please contact:</p>
-
-    <p>
-        <strong>ZENTRO WORLD CONNECT</strong><br>
-        37/1, Railway Station Road,<br>
-        Sivagangai, Tamil Nadu – 630561, India<br><br>
-
-        <strong>Email:</strong>
-        <a href="mailto:info.zentroworldconnect@gmail.com">
-            info.zentroworldconnect@gmail.com
-        </a><br>
-
-        <strong>Phone:</strong>
-        <a href="tel:+919597209593">
-            +91 9597209593
-        </a>
-    </p>
-
-   </div>
-
-</div>
-
-    <!-- Terms and Conditions -->
-<div id="view-terms" class="page-view">
-
-    <div class="container">
-
-        <h2>ZENTRO WORLD CONNECT</h2>
-        <h2>TERMS AND CONDITIONS</h2>
-        <br>
-        <p><strong>Nachiappan KR</strong> (Managing Director)
-
-        <p><strong>Website:</strong> www.zentroworldconnect.in</p>
-        <p><strong>Email:</strong> info@zentroworldconnect.in</p>
-        <p><strong>Phone:</strong> +91 9597209593</p>
-        <p>
-            <strong>Address:</strong><br>
-            37/1, Railway Station Road,<br>
-            Sivagangai, Tamil Nadu – 630561, India
-        </p>
-        <br>
-
-        <h3 style="font-size: 15px;">1. ACCEPTANCE OF TERMS</h3>
-
-        <p>
-            Welcome to ZENTRO WORLD CONNECT. By accessing or using
-            www.zentroworldconnect.in, you agree to comply with these Terms and
-            Conditions. If you do not agree with these terms, please do not use
-            the website.
-        </p>
-        <br>
-
-
-        <h3 style="font-size: 15px;">2. ABOUT OUR SERVICES</h3>
-
-        <p>
-            ZENTRO WORLD CONNECT is engaged in sourcing and exporting fresh
-            flowers, garlands, bouquets, and related floral products to customers
-            and international buyers. Our website is primarily intended to
-            provide business information and receive enquiries. It does not
-            currently provide direct online payment or automatic online order
-            confirmation.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">3. PRODUCT INFORMATION</h3>
-
-        <p>
-            We make reasonable efforts to provide accurate descriptions and
-            images of our products. However:
-        </p>
-
-        <ul>
-            <li>
-                Flower colour, size, shape, fragrance, freshness, and availability
-                may vary due to natural and seasonal conditions.
-            </li>
-            <li>
-                Product availability depends on sourcing conditions, seasonality,
-                quality, and destination requirements.
-            </li>
-            <li>
-                Images are for illustrative purposes unless specifically stated
-                otherwise.
-            </li>
-        </ul>
-            <br>
-
-
-        <h3 style="font-size: 15px;">4. ENQUIRIES AND QUOTATIONS</h3>
-
-        <p>
-            Submitting an enquiry does not create a binding contract or guarantee
-            product availability. Quotations are subject to confirmation of
-            product specifications, quantity, quality, packaging, destination,
-            shipping conditions, applicable taxes, and payment terms.
-        </p>
-
-        <p>
-            A quotation may have a validity period, which will be stated where
-            applicable. Final commercial terms will be confirmed in writing
-            through an accepted quotation, proforma invoice, purchase order, or
-            other agreed business document.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">5. INTERNATIONAL EXPORTS AND SHIPPING</h3>
-
-        <p>
-            For international orders, shipping arrangements, delivery schedules,
-            export documentation, customs clearance, freight charges, insurance,
-            duties, and other responsibilities will depend on the agreed
-            Incoterms and written commercial documents.
-        </p>
-
-        <p>
-            The buyer is responsible for providing accurate consignee,
-            destination, import, and regulatory information and for meeting
-            applicable requirements in the destination country, unless otherwise
-            agreed in writing.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">6. PRICING AND PAYMENT</h3>
-
-        <p>
-            Prices may vary based on flower variety, season, quantity, quality,
-            packaging, logistics, exchange rates, taxes, and destination.
-        </p>
-
-        <p>
-            Our website does not currently accept direct online payments.
-            Payment terms, advance requirements, balance payments, bank details,
-            and other financial conditions will be specified in the relevant
-            quotation or proforma invoice.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">7. ORDER CONFIRMATION, CANCELLATION, AND REFUNDS</h3>
-
-        <p>
-            An order is considered confirmed only after written confirmation and
-            satisfaction of the applicable commercial conditions, including
-            payment requirements where applicable.
-        </p>
-
-        <p>
-            Due to the perishable and customized nature of fresh flowers,
-            <strong>no refund will be provided after order confirmation</strong>,
-            except where ZENTRO WORLD CONNECT expressly agrees otherwise in
-            writing or where a refund is required under applicable law.
-        </p>
-
-        <p>
-            Any cancellation request must be submitted promptly and will be
-            considered subject to the status of sourcing, preparation, packaging,
-            shipment, and the agreed commercial terms.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">8. BUYER RESPONSIBILITIES</h3>
-
-        <p>Buyers agree to:</p>
-
-        <ul>
-            <li>Provide accurate contact, delivery, and product requirement details.</li>
-            <li>Confirm specifications and quantities before order confirmation.</li>
-            <li>Provide required import permits or documentation where applicable.</li>
-            <li>Comply with laws and regulations in the destination country.</li>
-            <li>Make payments according to agreed written terms.</li>
-        </ul>
-            <br>
-
-
-        <h3 style="font-size: 15px;">9. WEBSITE USE</h3>
-
-        <p>You agree not to:</p>
-
-        <ul>
-            <li>Use the website for unlawful or fraudulent purposes.</li>
-            <li>Submit false, misleading, or unauthorized information.</li>
-            <li>Attempt to interfere with website security or operation.</li>
-            <li>Copy, reproduce, or misuse website content without written permission.</li>
-            <li>Introduce malicious code or attempt unauthorized access.</li>
-        </ul>
-            <br>
-
-
-        <h3 style="font-size: 15px;">10. INTELLECTUAL PROPERTY</h3>
-
-        <p>
-            Unless otherwise stated, website content including text, logos,
-            photographs, graphics, branding, and design belongs to or is used
-            lawfully by ZENTRO WORLD CONNECT. No content may be reproduced,
-            modified, distributed, or commercially used without prior written
-            permission.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">11. THIRD-PARTY LINKS</h3>
-
-        <p>
-            The website may contain links to third-party websites or services.
-            We do not control and are not responsible for their content,
-            availability, policies, or practices.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">12. DISCLAIMER</h3>
-
-        <p>
-            To the extent permitted by law, the website and its information are
-            provided for general business and informational purposes. We do not
-            guarantee uninterrupted website availability, error-free content,
-            or that every product will be available at all times.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">13. LIMITATION OF LIABILITY</h3>
-
-        <p>
-            To the extent permitted by applicable law, ZENTRO WORLD CONNECT will
-            not be liable for indirect, incidental, special, or consequential
-            losses arising from website use or reliance on information provided
-            through the website. Specific order-related liability, if any, will
-            be governed by the applicable written commercial agreement.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">14. GOVERNING LAW AND JURISDICTION</h3>
-
-        <p>
-            These Terms and Conditions shall be governed by the laws of India.
-            Subject to applicable law and any written dispute-resolution
-            agreement, courts having appropriate jurisdiction in Tamil Nadu,
-            India, shall have jurisdiction.
-        </p>
-            <br>
-
-
-        <h3 style="font-size: 15px;">15. CHANGES TO THESE TERMS</h3>
-
-        <p>
-            We may revise these Terms and Conditions from time to time. Updated
-            terms will be posted on this page with a revised effective date.
-            Continued use of the website after changes are posted constitutes
-            acceptance of the updated terms.
-        </p>
-            <br>
-
-       <h3 style="font-size: 15px;">16. CONTACT US</h3>
-
-        <p>
-            For questions regarding these Terms and Conditions, please contact:
-        </p>
-
-        <p>
-            <strong>ZENTRO WORLD CONNECT</strong><br><br>
-
-            37/1, Railway Station Road,<br>
-            Sivagangai, Tamil Nadu – 630561, India<br><br>
-
-            <strong>Email:</strong>
-            <a href="mailto:info.zentroworldconnect@gmail.com">
-                info.zentroworldconnect@gmail.com
-            </a><br>
-
-            <strong>Phone:</strong>
-            <a href="tel:+919597209593">
-                +91 9597209593
-            </a>
-        </p>
-
-    </div>
-
-</div>
-
-
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-brand">
-                <a href="#" class="logo-wrapper" data-view="home">
+                <a href="index.html" class="logo-wrapper">
                     <img src="assets/logo new.png" alt="Zentro World Connect Logo" class="site-logo">
                 </a>
                 <p><strong>Nachiappan KR</strong> (Managing Director)
@@ -996,10 +322,10 @@
             <div class="footer-links">
                 <h4>QUICK LINKS</h4>
                 <ul>
-                    <li><a href="#" data-view="home">Home</a></li>
-                    <li><a href="#" data-view="catalog">Products</a></li>
-                    <li><a href="#" data-view="about">About</a></li>
-                    <li><a href="#" data-view="about" data-section="contact">Contact</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="about.html#contact">Contact</a></li>
                 </ul>
             </div>
 
@@ -1015,8 +341,8 @@
             <div class="container footer-bottom-content">
                 <p>&copy; 2026 Zentro Exports. Excellence in Floral Export. | <a href="admin.html" style="color: var(--primary); font-weight: 600;"><i class="fa-solid fa-lock"></i> Admin Panel</a></p>
                 <div class="bottom-links">
-                    <a href="#" data-view="privacy">Privacy Policy</a>
-                    <a href="#" data-view="terms">Terms of Service</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
                 </div>
             </div>
         </div>
@@ -1089,6 +415,6 @@
     <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Main Script -->
-    <script src="script.js?v=5.0"></script>
+    <script src="script.js?v=6.0"></script>
 </body>
 </html>

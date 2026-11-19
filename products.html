@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3DQ4KWGLX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3DQ4KWGLX4');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Flower Catalog | Zentro World Connect</title>
+    <meta name="description" content="Browse fresh flowers, traditional garlands and bouquets ready for export from Zentro World Connect, Sivagangai, Tamil Nadu.">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo-wrapper">
+                <img src="assets/logo new.png" alt="Zentro World Connect Logo" class="site-logo">
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="products.html" class="nav-link active">Products</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="about.html#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="btn btn-primary open-quote-modal">Get a Quote</button>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-view active">
+
+            
+            <div class="container catalog-page-container">
+                <div class="breadcrumb">Home &gt; Catalog</div>
+                <h1 class="catalog-title">Our Flower Catalog</h1>
+                <p class="catalog-subtitle">Explore our wide range of fresh flowers and traditional garlands ready for export. Cultivated with care, delivered with precision.</p>
+
+                <!-- Search & Filter Bar -->
+                <div class="catalog-toolbar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="catalogSearchInput" placeholder="Search flowers...">
+                    </div>
+                    <div class="filter-pills">
+                        <button class="pill-btn active" data-cat="all">All</button>
+                        <button class="pill-btn" data-cat="flowers">Flowers</button>
+                        <button class="pill-btn" data-cat="garlands">Garlands</button>
+                        <button class="pill-btn" data-cat="bouquets">Bouquets</button>
+                        
+                    </div>
+                    <div class="sort-box">
+                        <label>SORT BY:</label>
+                        <select id="catalogSortSelect">
+                            <option value="popular">Popular</option>
+                            <option value="name">Name (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Custom Sourcing Notice Bar -->
+                <div class="notice-card">
+                    <div class="notice-icon"><i class="fa-solid fa-circle-info"></i></div>
+                    <div class="notice-text">
+                        <strong>Can't find a specific variety?</strong>
+                        <p>We source, collect, and deliver flowers within these categories, but we can also get flowers that aren't in these categories. Our global network makes it possible for you to get rare and seasonal flowers that meet your exact needs.</p>
+                    </div>
+                    <button class="btn btn-sm btn-outline open-quote-modal">Contact Us for Sourcing</button>
+                </div>
+
+                <!-- 8 Product Cards Grid (4 columns x 2 rows) -->
+                <div class="catalog-grid" id="catalogProductGrid">
+                    <!-- Loaded dynamically via script.js -->
+                </div>
+
+                <!-- Harvested Fresh, Shipped Faster Banner -->
+                <div class="harvest-banner" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('assets/hero_banner.png');">
+                    <span class="badge-tag red-badge">SEASONAL BESTSELLERS</span>
+                    <h2>Harvested Fresh. <br>Shipped Faster.</h2>
+                    <a href="index.html" class="btn btn-light">Explore Now <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+
+                <!-- Signature Products Section (Controlled via Admin Panel) -->
+                <div class="signature-section">
+                    <h2>Signature Products</h2>
+                    <p class="section-desc">Our most sought-after varieties ready for immediate quote.</p>
+
+                    <div class="signature-grid" id="signatureProductsGrid">
+                        <!-- Loaded dynamically via script.js from Admin Panel -->
+                    </div>
+                </div>
+
+                <!-- Red Custom Orders Banner -->
+                <div class="red-custom-banner">
+                    <h2>Need Bulk Orders or Custom Requests?</h2>
+                    <p>We specialize in tailored export solutions for retailers, events, and wedding planners globally. Get a personalized quote within 24 hours.</p>
+                    <button class="btn btn-light open-quote-modal">Get a Quote</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo-wrapper">
+                    <img src="assets/logo new.png" alt="Zentro World Connect Logo" class="site-logo">
+                </a>
+                <p><strong>Nachiappan KR</strong> (Managing Director)
+                <p class="footer-about">Premium logistics for the world's most delicate exports. From harvest to doorstep with unmatched precision.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>QUICK LINKS</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="about.html#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h4>CONTACT US</h4>
+                <p><i class="fa-solid fa-envelope"></i> info@zentroworldconnect.in</p>
+                <p><i class="fa-solid fa-phone"></i> +91 95972 09593</p>
+                <p><i class="fa-solid fa-location-dot"></i> Sivagangai, Tamil Nadu, India</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container footer-bottom-content">
+                <p>&copy; 2026 Zentro Exports. Excellence in Floral Export. | <a href="admin.html" style="color: var(--primary); font-weight: 600;"><i class="fa-solid fa-lock"></i> Admin Panel</a></p>
+                <div class="bottom-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Universal Quote Request Modal -->
+    <div class="modal-overlay" id="quoteModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Get an Export Quote</h3>
+                <button class="modal-close" id="closeQuoteModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="modalQuoteForm" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mClientName">Your Name *</label>
+                        <input type="text" id="mClientName" required placeholder="e.g. John Doe">
+                        <span class="error-msg">Name is required</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="mCompanyName">Company / Import Firm</label>
+                        <input type="text" id="mCompanyName" placeholder="e.g. Flora Imports Ltd">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mClientEmail">Email Address *</label>
+                        <input type="email" id="mClientEmail" required placeholder="e.g. john@company.com">
+                        <span class="error-msg">Valid email is required</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="mClientPhone">Phone / WhatsApp *</label>
+                        <input type="tel" id="mClientPhone" required placeholder="e.g. +91 95972 09593">
+                        <span class="error-msg">Phone number is required</span>
+                    </div>
+                </div>
+                <div class="form-group">
+    <label for="mTargetFlower">Product Required *</label>
+    <select id="mTargetFlower" required>
+        <option value="" disabled selected>Select a product</option>
+    </select>
+    <span class="error-msg">Please select a product</span>
+</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mCargoVolume">Expected Volume *</label>
+                        <input type="text" id="mCargoVolume" required placeholder="e.g. 500 kg, 10,000 stems">
+                        <span class="error-msg">Volume is required</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="mDestinationAirport">Destination Airport / Country *</label>
+                        <input type="text" id="mDestinationAirport" required placeholder="e.g. Heathrow (LHR), London">
+                        <span class="error-msg">Destination is required</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mAdditionalNotes">Additional Specifications</label>
+                    <textarea id="mAdditionalNotes" rows="3" placeholder="Stem length, packing details..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block"><i class="fa-brands fa-whatsapp"></i> Send Quote Request via WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/919597209593?text=Hello,%20I%20am%20interested%20in%20importing%20flowers%20from%20Zentro%20World%20Connect." class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Main Script -->
+    <script src="script.js?v=6.0"></script>
+</body>
+</html>

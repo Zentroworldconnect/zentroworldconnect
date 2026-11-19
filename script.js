@@ -169,83 +169,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
 
-    /* --- SPA VIEW SWITCHER --- */
-    const pageViews = document.querySelectorAll('.page-view');
-    const navLinks = document.querySelectorAll('.nav-link, [data-view]');
-
-    const showView = (viewName, sectionId = null) => {
-
-        pageViews.forEach(view => {
-
-            view.classList.remove('active');
-
-            if (view.id === `view-${viewName}`) {
-                view.classList.add('active');
-            }
-
-        });
-
-        navLinks.forEach(link => {
-
-            if (link.getAttribute('data-view') === viewName) {
-                link.classList.add('active');
-
-            } else if (link.getAttribute('data-view')) {
-                link.classList.remove('active');
-            }
-
-        });
-
-        if (sectionId) {
-
-            setTimeout(() => {
-
-                document
-                    .getElementById(sectionId)
-                    ?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-
-            }, 100);
-
-        } else {
-
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-    };
-
-
-    /* --- NAVIGATION CLICK HANDLER --- */
-    navLinks.forEach(link => {
-
-        link.addEventListener('click', (e) => {
-
-            const targetView = link.getAttribute('data-view');
-
-            if (targetView) {
-
-                e.preventDefault();
-
-                showView(
-                    targetView,
-                    link.getAttribute('data-section')
-                );
-
-                /* Close mobile menu after selecting a page */
-                const navMenu = document.getElementById('navMenu');
-
-                if (navMenu) {
-                    navMenu.classList.remove('active');
-                }
-            }
-        });
-    });
-
-
     /* =========================================================
        CATALOG PRODUCT GRID
        ========================================================= */
@@ -493,42 +416,22 @@ const loadQuoteProducts = () => {
 
 
     /* =========================================================
-       HOME CATEGORY BUTTONS
+       CATEGORY FROM URL  (products.html?cat=flowers)
        ========================================================= */
 
-    document
-        .querySelectorAll('.nav-to-catalog')
-        .forEach(btn => {
+    const urlCategory = new URLSearchParams(window.location.search).get('cat');
 
-            btn.addEventListener('click', (e) => {
+    if (urlCategory && filterPills.length) {
 
-                e.preventDefault();
+        currentCategory = urlCategory;
 
-                const category =
-                    btn.getAttribute('data-cat');
-
-                showView('catalog');
-
-                if (category) {
-
-                    currentCategory = category;
-
-                    filterPills.forEach(pill => {
-
-                        pill.classList.remove('active');
-
-                        if (
-                            pill.getAttribute('data-cat') ===
-                            category
-                        ) {
-                            pill.classList.add('active');
-                        }
-                    });
-
-                    filterProducts();
-                }
-            });
+        filterPills.forEach(pill => {
+            pill.classList.toggle(
+                'active',
+                pill.getAttribute('data-cat') === urlCategory
+            );
         });
+    }
 
 
     /* =========================================================
@@ -615,9 +518,7 @@ const loadQuoteProducts = () => {
     document.addEventListener('click', (e) => {
 
         const trigger =
-            e.target.closest(
-                '.open-quote-modal, [href="#contact"], [data-view="contact"]'
-            );
+            e.target.closest('.open-quote-modal');
 
         if (trigger) {
 
@@ -628,16 +529,6 @@ const loadQuoteProducts = () => {
 
             openQuoteModal(prodName);
 
-            if (trigger.classList.contains('nav-link')) {
-
-                document
-                    .querySelectorAll('.nav-link')
-                    .forEach(nl => {
-                        nl.classList.remove('active');
-                    });
-
-                trigger.classList.add('active');
-            }
         }
     });
 
@@ -887,6 +778,41 @@ I would like to request an Export Quote:
             navMenu.classList.toggle('active');
 
         });
+    }
+
+
+    /* =========================================================
+       CONTACT LINK: highlight + smooth scroll on about.html#contact
+       ========================================================= */
+
+    const highlightContact = () => {
+
+        const onContact = window.location.hash === '#contact';
+
+        document.querySelectorAll('.nav-link').forEach(l => {
+
+            const href = l.getAttribute('href') || '';
+
+            if (href === 'about.html') {
+                l.classList.toggle('active', !onContact);
+            }
+
+            if (href === 'about.html#contact') {
+                l.classList.toggle('active', onContact);
+            }
+        });
+
+        if (onContact) {
+            setTimeout(() => {
+                document.getElementById('contact')
+                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    };
+
+    if (document.body.contains(document.getElementById('contact'))) {
+        highlightContact();
+        window.addEventListener('hashchange', highlightContact);
     }
 
 });
