@@ -11,44 +11,41 @@ const SUPABASE_URL = "https://fvzqxddabdgybvozrlvs.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_iGDj_0kt5smIENeT6EqvJQ_vGxDZ8FD";
 
 
-const categoryLabels = {
-    'fresh-flowers-garlands': 'Fresh Flowers & Garlands',
-    rice: 'Rice',
-    'edible-oils': 'Edible Oils',
-    'spices-seasonings': 'Spices & Seasonings',
-    millets: 'Millets',
-    'other-grains-cereals': 'Other Grains & Cereals',
-    'edible-seeds-oilseeds': 'Edible Seeds & Oilseeds'
-};
+/* Categories come from catalog-data.js (shared with the website) */
+const ZENTRO_CATALOG = window.ZENTRO_CATALOG || [];
 
-const subcategoryOptions = {
-    'fresh-flowers-garlands': [
-        { value: 'fresh-cut-flowers', label: 'Fresh Cut Flowers' },
-        { value: 'flower-garlands', label: 'Flower Garlands' }
-    ],
-    rice: [
-        { value: 'basmati', label: 'Basmati' },
-        { value: 'non-basmati', label: 'Non-Basmati' }
-    ],
-    'edible-oils': [
-        { value: 'vegetable-seed-based', label: 'Vegetable & Seed-Based' },
-        { value: 'coconut-palm-based', label: 'Coconut & Palm-Based' },
-        { value: 'specialty', label: 'Specialty' }
-    ],
-    'spices-seasonings': [
-        { value: 'whole-spices', label: 'Whole Spices' }
-    ],
-    millets: [
-        { value: 'millets', label: 'Millets' }
-    ],
-    'other-grains-cereals': [
-        { value: 'other-grains-cereals', label: 'Other Grains & Cereals' }
-    ],
-    'edible-seeds-oilseeds': [
-        { value: 'edible-seeds', label: 'Edible Seeds' },
-        { value: 'oilseeds', label: 'Oilseeds' }
-    ]
-};
+const categoryLabels = Object.fromEntries(
+    ZENTRO_CATALOG.map(c => [c.slug, c.name])
+);
+
+const subcategoryOptions = Object.fromEntries(
+    ZENTRO_CATALOG.map(c => [
+        c.slug,
+        c.subcategories.map(s => ({ value: s.slug, label: s.name }))
+    ])
+);
+
+/* Standard product names, offered as suggestions in the "Product Name" box */
+function updateProductNameSuggestions() {
+
+    const list = document.getElementById('prodNameList');
+    if (!list) return;
+
+    const cat = ZENTRO_CATALOG.find(c => c.slug === prodCategorySelect?.value);
+    const sub = cat?.subcategories.find(s => s.slug === prodSubcategorySelect?.value);
+
+    const names = sub
+        ? sub.products
+        : (cat ? cat.subcategories.flatMap(s => s.products) : []);
+
+    list.innerHTML = '';
+
+    names.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        list.appendChild(opt);
+    });
+}
 
 
 const prodCategorySelect = document.getElementById('prodCategory');
@@ -76,12 +73,16 @@ function updateSubcategoryOptions(selectedSubcategory = '') {
     });
 
     prodSubcategorySelect.disabled = options.length === 0;
+
+    updateProductNameSuggestions();
 }
 
 if (prodCategorySelect && prodSubcategorySelect) {
     prodCategorySelect.addEventListener('change', () => {
         updateSubcategoryOptions();
     });
+
+    prodSubcategorySelect.addEventListener('change', updateProductNameSuggestions);
 }
 
 
@@ -479,8 +480,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.drawImage(img, 0, 0, width, height);
 
                         // Compress to JPEG with 70% quality
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.9);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
                         prodImage.value = compressedBase64;
+                        uploadImageToStorage(compressedBase64, 'products').then(url => { prodImage.value = url; });
                         
                         if (prodImagePreview) prodImagePreview.src = compressedBase64;
                         if (imagePreviewBox) imagePreviewBox.style.display = 'block';
@@ -1392,6 +1394,142 @@ renderProductsTable();
             });
         }
 
+        /* --- HOME SLIDESHOW MANAGER --- */
+        let heroSlidesState = [];
+        const MAX_SLIDES = 6;
+
+        function renderSlidesAdmin() {
+            const box = document.getElementById('slidesAdminList');
+            if (!box) return;
+            if (!heroSlidesState.length) {
+                box.innerHTML = '<p style="color:#888;">No custom slides yet. Default images will be used.</p>';
+                return;
+            }
+            box.innerHTML = heroSlidesState.map((src, i) => `
+                <div style="width:150px; border:1px solid #ddd; border-radius:8px; overflow:hidden; background:#fff;">
+                    <img src="${String(src).replace(/"/g, '&quot;')}" alt="Slide ${i + 1}" style="width:100%; height:90px; object-fit:cover; display:block;">
+                    <div style="display:flex; justify-content:space-between; padding:6px; font-size:.8rem;">
+                        <button type="button" data-slide-act="left" data-i="${i}" ${i === 0 ? 'disabled' : ''} title="Move earlier"><i class="fa-solid fa-arrow-left"></i></button>
+                        <strong>${i + 1}</strong>
+                        <button type="button" data-slide-act="right" data-i="${i}" ${i === heroSlidesState.length - 1 ? 'disabled' : ''} title="Move later"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button type="button" data-slide-act="del" data-i="${i}" title="Remove" style="color:#C50000;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function addSlide(src) {
+            if (heroSlidesState.length >= MAX_SLIDES) {
+                alert('You can add up to ' + MAX_SLIDES + ' slides. Remove one first.');
+                return false;
+            }
+            heroSlidesState.push(src);
+            renderSlidesAdmin();
+            return true;
+        }
+
+        const slidesListEl = document.getElementById('slidesAdminList');
+        if (slidesListEl) {
+            slidesListEl.addEventListener('click', (e) => {
+                const btn = e.target.closest('button[data-slide-act]');
+                if (!btn) return;
+                const i = Number(btn.dataset.i);
+                const act = btn.dataset.slideAct;
+                if (act === 'del') heroSlidesState.splice(i, 1);
+                if (act === 'left' && i > 0) [heroSlidesState[i - 1], heroSlidesState[i]] = [heroSlidesState[i], heroSlidesState[i - 1]];
+                if (act === 'right' && i < heroSlidesState.length - 1) [heroSlidesState[i + 1], heroSlidesState[i]] = [heroSlidesState[i], heroSlidesState[i + 1]];
+                renderSlidesAdmin();
+            });
+        }
+
+        const slidePreset = document.getElementById('slidePresetSelect');
+        if (slidePreset) {
+            slidePreset.addEventListener('change', () => {
+                if (slidePreset.value) addSlide(slidePreset.value);
+                slidePreset.value = '';
+            });
+        }
+
+        const slideFiles = document.getElementById('slideFiles');
+        if (slideFiles) {
+            slideFiles.addEventListener('change', () => {
+                Array.from(slideFiles.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const maxW = 1600;
+                            const scale = Math.min(1, maxW / img.width);
+                            const canvas = document.createElement('canvas');
+                            canvas.width = Math.round(img.width * scale);
+                            canvas.height = Math.round(img.height * scale);
+                            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                            uploadImageToStorage(canvas.toDataURL('image/jpeg', 0.72), 'slides').then(addSlide);
+                        };
+                        img.src = ev.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+                slideFiles.value = '';
+            });
+        }
+        renderSlidesAdmin();
+
+        /* --- HOME CATEGORY IMAGES MANAGER --- */
+        let catImagesState = {};
+
+        function renderCatImagesAdmin() {
+            const box = document.getElementById('catImagesAdminList');
+            if (!box || typeof ZENTRO_CATALOG === 'undefined') return;
+            box.innerHTML = ZENTRO_CATALOG.map(c => {
+                const src = catImagesState[c.slug];
+                return `
+                <div style="border:1px solid #ddd; border-radius:8px; overflow:hidden; background:#fff;">
+                    <div style="height:110px; background:#f3f3f3; display:flex; align-items:center; justify-content:center; color:#999; font-size:.8rem;">
+                        ${src ? `<img src="${String(src).replace(/"/g, '&quot;')}" alt="${c.name}" style="width:100%; height:100%; object-fit:cover;">` : 'Default icon tile'}
+                    </div>
+                    <div style="padding:8px;">
+                        <strong style="font-size:.85rem; display:block; margin-bottom:6px;">${c.name}</strong>
+                        <input type="file" accept="image/*" data-cat-file="${c.slug}" style="width:100%; font-size:.75rem;">
+                        ${src ? `<button type="button" data-cat-del="${c.slug}" style="margin-top:6px; color:#C50000; font-size:.8rem;"><i class="fa-solid fa-trash"></i> Remove</button>` : ''}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        const catImagesEl = document.getElementById('catImagesAdminList');
+        if (catImagesEl) {
+            catImagesEl.addEventListener('click', (e) => {
+                const del = e.target.closest('button[data-cat-del]');
+                if (!del) return;
+                delete catImagesState[del.dataset.catDel];
+                renderCatImagesAdmin();
+            });
+            catImagesEl.addEventListener('change', (e) => {
+                const input = e.target.closest('input[data-cat-file]');
+                if (!input || !input.files[0]) return;
+                const slug = input.dataset.catFile;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const W = 800, H = 512;
+                        const canvas = document.createElement('canvas');
+                        canvas.width = W; canvas.height = H;
+                        const scale = Math.max(W / img.width, H / img.height);
+                        const w = img.width * scale, h = img.height * scale;
+                        canvas.getContext('2d').drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+                        uploadImageToStorage(canvas.toDataURL('image/jpeg', 0.75), 'categories').then(url => {
+                            catImagesState[slug] = url;
+                            renderCatImagesAdmin();
+                        });
+                    };
+                    img.src = ev.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            });
+        }
+        renderCatImagesAdmin();
+
         const loadSettingsForm = async () => {
             const sets = await getSettings();
             
@@ -1445,6 +1583,16 @@ renderProductsTable();
                     }
                 }
             }
+            // Slideshow
+            let savedSlides = sets.heroSlides;
+            if (typeof savedSlides === 'string') { try { savedSlides = JSON.parse(savedSlides); } catch (e) { savedSlides = []; } }
+            heroSlidesState = Array.isArray(savedSlides) ? savedSlides.slice(0, MAX_SLIDES) : [];
+            renderSlidesAdmin();
+            // Category images
+            let savedCats = sets.categoryImages;
+            if (typeof savedCats === 'string') { try { savedCats = JSON.parse(savedCats); } catch (e) { savedCats = {}; } }
+            catImagesState = (savedCats && typeof savedCats === 'object') ? savedCats : {};
+            renderCatImagesAdmin();
             // About Us info
             if (sets.aboutTitle) document.getElementById('setAboutTitle').value = sets.aboutTitle;
             if (sets.aboutDescription) document.getElementById('setAboutDescription').value = sets.aboutDescription;
@@ -1526,6 +1674,8 @@ renderProductsTable();
                         heroTitle: document.getElementById('setHeroTitle').value.trim(),
                         heroDescription: document.getElementById('setHeroDescription').value.trim(),
                         heroImage: document.getElementById('setHeroImage').value,
+                        heroSlides: JSON.stringify(heroSlidesState),
+                        categoryImages: JSON.stringify(catImagesState),
 
                         aboutTitle: document.getElementById('setAboutTitle').value.trim(),
                         aboutDescription: document.getElementById('setAboutDescription').value.trim(),
@@ -1546,7 +1696,7 @@ renderProductsTable();
                                 return;
                             }
                             console.error("Supabase settings upsert error:", error);
-                            alert("Failed to save to Supabase cloud, saving locally as fallback. Error: " + error.message);
+                            alert("Failed to save to Supabase cloud, saving locally as fallback. Error: " + error.message + (/heroSlides|categoryImages/.test(String(error.message)) ? "\n\nOne-time fix: in Supabase SQL Editor run:\nalter table settings add column if not exists \"heroSlides\" text;\nalter table settings add column if not exists \"categoryImages\" text;" : ""));
                         } catch (e) {
                             console.error("Supabase exception:", e);
                         }
@@ -1566,6 +1716,22 @@ renderProductsTable();
     }
 
     // Helper functions
+    // Uploads a data-URL image to Supabase Storage (bucket "site-images") and returns its public URL.
+    // If storage is not set up or fails, returns the original data-URL so nothing is lost.
+    async function uploadImageToStorage(dataUrl, folder) {
+        if (!supabaseClient || !String(dataUrl).startsWith('data:')) return dataUrl;
+        try {
+            const blob = await (await fetch(dataUrl)).blob();
+            const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+            const { error } = await supabaseClient.storage.from('site-images').upload(path, blob, { contentType: 'image/jpeg', cacheControl: '31536000' });
+            if (error) throw error;
+            return supabaseClient.storage.from('site-images').getPublicUrl(path).data.publicUrl;
+        } catch (err) {
+            console.warn('Storage upload failed, keeping embedded image:', err);
+            return dataUrl;
+        }
+    }
+
     function cleanPhone(phone) {
         if (!phone) return "";
         return String(phone).replace(/[^+\d]/g, '');

@@ -24,6 +24,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentProducts = defaultCatalogProducts;
 
+    /* --- CATEGORY MASTER LIST (from catalog-data.js) --- */
+    const catalog = window.ZENTRO_CATALOG || [];
+
+    const esc = (v) => String(v ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+
+    /* Old products saved with the earlier flower-only categories keep working */
+    const LEGACY_CATEGORIES = {
+        flowers:   { category: 'fresh-flowers-garlands', subcategory: 'fresh-cut-flowers' },
+        garlands:  { category: 'fresh-flowers-garlands', subcategory: 'flower-garlands' },
+        bouquets:  { category: 'fresh-flowers-garlands', subcategory: '' }
+    };
+
+    const normalizeProduct = (p) => {
+        const legacy = LEGACY_CATEGORIES[p.category];
+        return legacy
+            ? { ...p, category: legacy.category, subcategory: p.subcategory || legacy.subcategory }
+            : p;
+    };
+
+    const findCategory = (slug) => catalog.find(c => c.slug === slug);
+
     /* --- HYBRID DATABASE FETCH (SUPABASE / LOCALSTORAGE) --- */
     const loadProductsFromDB = async () => {
     if (!supabaseClient) {
@@ -35,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const { data, error } = await supabaseClient
             .from('products')
-            .select('id, name, item_code, category, price_inr, price_usd, price_unit, grade, availability, isSignature, image, budLife, package, description')
+            .select('id, name, item_code, category, subcategory, price_inr, price_usd, price_unit, grade, availability, isSignature, image, budLife, package, description')
             .order('id');
 
         if (error) {
@@ -44,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        currentProducts = Array.isArray(data) ? data : [];
+        currentProducts = Array.isArray(data) ? data.map(normalizeProduct) : [];
 
     } catch (e) {
         console.error("Unexpected Supabase product error:", e);
@@ -123,6 +146,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
 
+            if (window.applyCategoryImages) window.applyCategoryImages(sets);
+
+            /* --- Hero slideshow --- */
+            if (window.applyHeroSettings && document.getElementById('heroSlides')) {
+                window.applyHeroSettings(sets);
+            }
+
             /* --- Hero Title --- */
             if (sets.heroTitle) {
 
@@ -169,83 +199,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
 
-    /* --- SPA VIEW SWITCHER --- */
-    const pageViews = document.querySelectorAll('.page-view');
-    const navLinks = document.querySelectorAll('.nav-link, [data-view]');
-
-    const showView = (viewName, sectionId = null) => {
-
-        pageViews.forEach(view => {
-
-            view.classList.remove('active');
-
-            if (view.id === `view-${viewName}`) {
-                view.classList.add('active');
-            }
-
-        });
-
-        navLinks.forEach(link => {
-
-            if (link.getAttribute('data-view') === viewName) {
-                link.classList.add('active');
-
-            } else if (link.getAttribute('data-view')) {
-                link.classList.remove('active');
-            }
-
-        });
-
-        if (sectionId) {
-
-            setTimeout(() => {
-
-                document
-                    .getElementById(sectionId)
-                    ?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-
-            }, 100);
-
-        } else {
-
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-    };
-
-
-    /* --- NAVIGATION CLICK HANDLER --- */
-    navLinks.forEach(link => {
-
-        link.addEventListener('click', (e) => {
-
-            const targetView = link.getAttribute('data-view');
-
-            if (targetView) {
-
-                e.preventDefault();
-
-                showView(
-                    targetView,
-                    link.getAttribute('data-section')
-                );
-
-                /* Close mobile menu after selecting a page */
-                const navMenu = document.getElementById('navMenu');
-
-                if (navMenu) {
-                    navMenu.classList.remove('active');
-                }
-            }
-        });
-    });
-
-
     /* =========================================================
        CATALOG PRODUCT GRID
        ========================================================= */
@@ -253,93 +206,167 @@ document.addEventListener('DOMContentLoaded', async () => {
     const catalogProductGrid =
         document.getElementById('catalogProductGrid');
 
-   /* --- LOAD PRODUCTS INTO QUOTE DROPDOWN --- */
-const loadQuoteProducts = () => {
+    /* --- QUOTE DROPDOWN: MAIN CATEGORIES ONLY --- */
+    const loadQuoteProducts = () => {
 
-    const productSelect =
-        document.getElementById('mTargetFlower');
+        const productSelect = document.getElementById('mTargetFlower');
 
-    if (!productSelect) return;
+        if (!productSelect) return;
 
-    productSelect.innerHTML =
-        '<option value="" disabled selected>Select a product</option>';
+        productSelect.innerHTML =
+            '<option value="" disabled selected>Select a product category</option>';
 
-    currentProducts.forEach(prod => {
+        catalog.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.slug;
+            option.textContent = cat.name;
+            productSelect.appendChild(option);
+        });
 
-        const option = document.createElement('option');
+        const otherOption = document.createElement('option');
+        otherOption.value = 'other';
+        otherOption.textContent = 'Other / Custom Sourcing';
+        productSelect.appendChild(otherOption);
+    };
 
-        option.value = prod.name;
-        option.textContent = prod.name;
+    /* Fill the dropdown straight away so the quote form works on every page */
+    loadQuoteProducts();
 
-        productSelect.appendChild(option);
-    });
+    let currentCategory = 'all';
+    let currentSub = 'all';
+    let currentSort = 'popular';
 
-    const otherOption = document.createElement('option');
+    const catalogSearchInput = document.getElementById('catalogSearchInput');
+    const catalogSortSelect = document.getElementById('catalogSortSelect');
+    const categoryFilterEl = document.getElementById('categoryFilter');
+    const subcategoryFilterEl = document.getElementById('subcategoryFilter');
 
-    otherOption.value = 'other';
-    otherOption.textContent = 'Other / Custom Sourcing';
+    const productCardHTML = (prod) => `
+        <div class="catalog-card">
+            <img src="${esc(prod.image)}" alt="${esc(prod.name)}" class="catalog-card-img">
+            <div class="catalog-card-body">
+                <h3>${esc(prod.name)}</h3>
+                <p class="item-code">Item Code: ${esc(prod.item_code || '-')}</p>
+                <p>${esc(prod.description || '')}</p>
+                <p class="product-price">
+                    ₹${Number(prod.price_inr || 0).toFixed(2)} / ${esc(prod.price_unit || '')}
+                    &nbsp; | &nbsp;
+                    $${Number(prod.price_usd || 0).toFixed(2)} / ${esc(prod.price_unit || '')}
+                </p>
+                <span class="view-link open-quote-modal"
+                      data-product="${esc(prod.name)}"
+                      data-category="${esc(prod.category || '')}">
+                    Get a Quote &rarr;
+                </span>
+            </div>
+        </div>`;
 
-    productSelect.appendChild(otherOption);
-};
+    /* Which subcategory does a product belong to? */
+    const resolveSub = (prod, cat) => {
+        if (cat.subcategories.some(s => s.slug === prod.subcategory)) return prod.subcategory;
+        if (cat.subcategories.length === 1) return cat.subcategories[0].slug;
+        return '__other';
+    };
 
     const renderCatalog = (products) => {
 
         if (!catalogProductGrid) return;
 
-        catalogProductGrid.innerHTML = '';
+        const query = catalogSearchInput ? catalogSearchInput.value.trim() : '';
+        const searching = query !== '';
+        let html = '';
 
-        if (!products || products.length === 0) {
+        const knownSlugs = new Set(catalog.map(c => c.slug));
 
-            catalogProductGrid.innerHTML = `
-                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
-                    No flowers found matching your search.
-                </div>
-            `;
+        catalog.forEach(cat => {
 
-            return;
+            if (currentCategory !== 'all' && currentCategory !== cat.slug) return;
+
+            const inCat = products.filter(p => p.category === cat.slug);
+            const totalVarieties = cat.subcategories.reduce((n, s) => n + s.products.length, 0);
+            let catHtml = '';
+            let subShown = 0;
+
+            cat.subcategories.forEach(sub => {
+
+                if (currentSub !== 'all' && currentSub !== sub.slug) return;
+
+                const list = inCat.filter(p => resolveSub(p, cat) === sub.slug);
+
+                /* while searching, hide sections with no match */
+                if (searching && list.length === 0) return;
+
+                subShown++;
+
+                const chips = sub.products.map(name => `
+                    <button type="button" class="range-chip open-quote-modal"
+                            data-product="${esc(name)}" data-category="${esc(cat.slug)}">
+                        ${esc(name)}
+                    </button>`).join('');
+
+                catHtml += `
+                    <div class="catalog-sub" id="sub-${esc(sub.slug)}">
+                        <div class="sub-head">
+                            <h4>${esc(sub.name)}</h4>
+                            <span class="sub-count">${sub.products.length} Products</span>
+                        </div>
+                        ${sub.note ? `<p class="sub-note">${esc(sub.note)}</p>` : ''}
+                        ${list.length
+                            ? `<div class="catalog-grid">${list.map(productCardHTML).join('')}</div>`
+                            : `<p class="empty-note">Detailed listings for this range are being updated. Browse the varieties below and request a quote.</p>`}
+                        ${searching ? '' : `
+                        <details class="range-details">
+                            <summary>View all ${sub.products.length} varieties</summary>
+                            <div class="range-chips">${chips}</div>
+                        </details>`}
+                    </div>`;
+            });
+
+            /* products of this category whose subcategory is missing/unknown */
+            if (currentSub === 'all') {
+                const stray = inCat.filter(p => resolveSub(p, cat) === '__other');
+                if (stray.length) {
+                    subShown++;
+                    catHtml += `
+                        <div class="catalog-sub">
+                            <div class="sub-head"><h4>Other ${esc(cat.name)}</h4></div>
+                            <div class="catalog-grid">${stray.map(productCardHTML).join('')}</div>
+                        </div>`;
+                }
+            }
+
+            if (subShown === 0) return;
+
+            html += `
+                <section class="catalog-group" id="cat-${esc(cat.slug)}">
+                    <div class="group-head">
+                        <h3>${esc(cat.name)}</h3>
+                        <p>${cat.subcategories.length} Subcategor${cat.subcategories.length === 1 ? 'y' : 'ies'} &bull; ${totalVarieties} Products</p>
+                    </div>
+                    ${catHtml}
+                </section>`;
+        });
+
+        /* products whose category is not in the master list */
+        if (currentCategory === 'all') {
+            const unknown = products.filter(p => !knownSlugs.has(p.category));
+            if (unknown.length) {
+                html += `
+                    <section class="catalog-group">
+                        <div class="group-head"><h3>Other Products</h3></div>
+                        <div class="catalog-sub"><div class="catalog-grid">${unknown.map(productCardHTML).join('')}</div></div>
+                    </section>`;
+            }
         }
 
-        products.forEach(prod => {
+        if (!html) {
+            html = `
+                <div class="empty-note" style="text-align:center; padding: 40px;">
+                    No products found matching your search.
+                </div>`;
+        }
 
-            const card = document.createElement('div');
-
-            card.className = 'catalog-card';
-
-            card.innerHTML = `
-                <img 
-                    src="${prod.image}" 
-                    alt="${prod.name}" 
-                    class="catalog-card-img"
-                >
-
-                <div class="catalog-card-body">
-
-                    <h3>${prod.name}</h3>
-
-                    <p class="item-code">
-                        Item Code: ${prod.item_code || '-'}
-                    </p>
-
-                    <p>${prod.description || ''}</p>
-
-                    <p class="product-price">
-                        ₹${Number(prod.price_inr || 0).toFixed(2)} / ${prod.price_unit || ''}
-                        &nbsp; | &nbsp;
-                        $${Number(prod.price_usd || 0).toFixed(2)} / ${prod.price_unit || ''}
-                    </p>
-
-                    <span 
-                        class="view-link open-quote-modal" 
-                        data-product="${prod.name}"
-                    >
-                        Get a Quote &rarr;
-                    </span>
-
-                </div>
-            `;
-
-            catalogProductGrid.appendChild(card);
-        });
+        catalogProductGrid.innerHTML = html;
     };
 
 
@@ -349,21 +376,22 @@ const loadQuoteProducts = () => {
 
     const renderSignatureProducts = (products) => {
 
-        const signatureGrid =
-            document.getElementById('signatureProductsGrid');
+        const signatureGrid = document.getElementById('signatureProductsGrid');
 
         if (!signatureGrid) return;
 
+        /* Home page: moving carousel handled by home.js */
+        if (window.homeSignature) {
+            window.homeSignature(products.filter(p => p.isSignature === true || p.isSignature === 'true'));
+            return;
+        }
+
         signatureGrid.innerHTML = '';
 
-        /* Filter products marked as signature */
         let sigList = products.filter(
-            p =>
-                p.isSignature === true ||
-                p.isSignature === 'true'
+            p => p.isSignature === true || p.isSignature === 'true'
         );
 
-        /* Fallback to first 6 products */
         if (sigList.length === 0) {
             sigList = products.slice(0, 6);
         }
@@ -371,51 +399,25 @@ const loadQuoteProducts = () => {
         sigList.forEach(prod => {
 
             const card = document.createElement('div');
-
             card.className = 'sig-card';
 
-            const tagLabel =
-                prod.category === 'garlands'
-                    ? 'GARLANDS'
-                    : (
-                        prod.category === 'bouquets'
-                            ? 'BOUQUETS'
-                            : 'FLOWERS'
-                    );
+            const tagLabel = (findCategory(prod.category)?.name || 'PRODUCTS').toUpperCase();
 
             card.innerHTML = `
-                <img 
-                    src="${prod.image}" 
-                    alt="${prod.name}"
-                >
-
+                <img src="${esc(prod.image)}" alt="${esc(prod.name)}">
                 <div class="sig-card-body">
-
-                    <span class="tag-label">
-                        ${tagLabel}
-                    </span>
-
-                    <h3>${prod.name}</h3>
-
-                    <p class="item-code">
-                        Item Code: ${prod.item_code || '-'}
-                    </p>
-
-                    <p>${prod.description || ''}</p>
-
+                    <span class="tag-label">${esc(tagLabel)}</span>
+                    <h3>${esc(prod.name)}</h3>
+                    <p class="item-code">Item Code: ${esc(prod.item_code || '-')}</p>
+                    <p>${esc(prod.description || '')}</p>
                     <div class="sig-actions">
-
-                        <button 
-                            class="btn btn-sm btn-primary open-quote-modal" 
-                            data-product="${prod.name}"
-                        >
+                        <button class="btn btn-sm btn-primary open-quote-modal"
+                                data-product="${esc(prod.name)}"
+                                data-category="${esc(prod.category || '')}">
                             Enquire
                         </button>
-
                     </div>
-
-                </div>
-            `;
+                </div>`;
 
             signatureGrid.appendChild(card);
         });
@@ -423,112 +425,135 @@ const loadQuoteProducts = () => {
 
 
     /* =========================================================
-       SEARCH & FILTER LOGIC
+       SEARCH, CATEGORY FILTERS & SORT
        ========================================================= */
-
-    const catalogSearchInput =
-        document.getElementById('catalogSearchInput');
-
-    const filterPills =
-        document.querySelectorAll('.pill-btn');
-
-    let currentCategory = 'all';
-
 
     const filterProducts = () => {
 
-        const query =
-            catalogSearchInput
-                ? catalogSearchInput.value.toLowerCase().trim()
-                : '';
+        const query = catalogSearchInput
+            ? catalogSearchInput.value.toLowerCase().trim()
+            : '';
 
-        const filtered = currentProducts.filter(p => {
+        let filtered = currentProducts.filter(p => {
 
-            const matchesCat =
-                (currentCategory === 'all') ||
-                (p.category === currentCategory);
+            const cat = findCategory(p.category);
+            const sub = cat?.subcategories.find(s => s.slug === p.subcategory);
 
-            const productName =
-                (p.name || '').toLowerCase();
+            const haystack = [
+                p.name, p.description, p.item_code,
+                cat?.name, sub?.name
+            ].join(' ').toLowerCase();
 
-            const productDescription =
-                (p.description || '').toLowerCase();
-
-            const matchesQuery =
-                productName.includes(query) ||
-                productDescription.includes(query);
-
-            return matchesCat && matchesQuery;
+            return haystack.includes(query);
         });
+
+        if (currentSort === 'name') {
+            filtered = [...filtered].sort((a, b) =>
+                (a.name || '').localeCompare(b.name || ''));
+        }
 
         renderCatalog(filtered);
     };
 
+    const renderSubcategoryPills = () => {
+
+        if (!subcategoryFilterEl) return;
+
+        const cat = findCategory(currentCategory);
+
+        if (!cat || cat.subcategories.length < 2) {
+            subcategoryFilterEl.innerHTML = '';
+            return;
+        }
+
+        const pills = [{ slug: 'all', name: 'All ' + cat.name }, ...cat.subcategories];
+
+        subcategoryFilterEl.innerHTML = pills.map(s => `
+            <button type="button"
+                    class="pill-btn pill-sm ${s.slug === currentSub ? 'active' : ''}"
+                    data-sub="${esc(s.slug)}">${esc(s.name)}</button>`).join('');
+    };
+
+    const renderCategoryPills = () => {
+
+        if (!categoryFilterEl) return;
+
+        const pills = [{ slug: 'all', name: 'All Products' }, ...catalog];
+
+        categoryFilterEl.innerHTML = pills.map(c => `
+            <button type="button"
+                    class="pill-btn ${c.slug === currentCategory ? 'active' : ''}"
+                    data-cat="${esc(c.slug)}">${esc(c.name)}</button>`).join('');
+    };
+
+    if (categoryFilterEl) {
+
+        categoryFilterEl.addEventListener('click', (e) => {
+
+            const btn = e.target.closest('[data-cat]');
+            if (!btn) return;
+
+            currentCategory = btn.getAttribute('data-cat');
+            currentSub = 'all';
+
+            renderCategoryPills();
+            renderSubcategoryPills();
+            filterProducts();
+        });
+    }
+
+    if (subcategoryFilterEl) {
+
+        subcategoryFilterEl.addEventListener('click', (e) => {
+
+            const btn = e.target.closest('[data-sub]');
+            if (!btn) return;
+
+            currentSub = btn.getAttribute('data-sub');
+
+            renderSubcategoryPills();
+            filterProducts();
+        });
+    }
 
     if (catalogSearchInput) {
+        catalogSearchInput.addEventListener('input', filterProducts);
+    }
 
-        catalogSearchInput.addEventListener(
-            'input',
-            filterProducts
-        );
+    if (catalogSortSelect) {
+        catalogSortSelect.addEventListener('change', () => {
+            currentSort = catalogSortSelect.value;
+            filterProducts();
+        });
     }
 
 
-    filterPills.forEach(pill => {
-
-        pill.addEventListener('click', () => {
-
-            filterPills.forEach(p => {
-                p.classList.remove('active');
-            });
-
-            pill.classList.add('active');
-
-            currentCategory =
-                pill.getAttribute('data-cat');
-
-            filterProducts();
-        });
-    });
-
-
     /* =========================================================
-       HOME CATEGORY BUTTONS
+       CATEGORY FROM URL  (products.html?cat=rice&sub=basmati)
        ========================================================= */
 
-    document
-        .querySelectorAll('.nav-to-catalog')
-        .forEach(btn => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlCat = urlParams.get('cat');
+    const urlSub = urlParams.get('sub');
 
-            btn.addEventListener('click', (e) => {
+    if (urlCat) {
+        const legacy = LEGACY_CATEGORIES[urlCat];
+        currentCategory = legacy ? legacy.category : urlCat;
+        currentSub = urlSub || (legacy ? legacy.subcategory : '') || 'all';
 
-                e.preventDefault();
+        if (!findCategory(currentCategory)) {
+            currentCategory = 'all';
+            currentSub = 'all';
+        }
+    }
 
-                const category =
-                    btn.getAttribute('data-cat');
+    renderCategoryPills();
+    renderSubcategoryPills();
 
-                showView('catalog');
-
-                if (category) {
-
-                    currentCategory = category;
-
-                    filterPills.forEach(pill => {
-
-                        pill.classList.remove('active');
-
-                        if (
-                            pill.getAttribute('data-cat') ===
-                            category
-                        ) {
-                            pill.classList.add('active');
-                        }
-                    });
-
-                    filterProducts();
-                }
-            });
-        });
+    /* Show the full category structure immediately (before products arrive) */
+    if (catalogProductGrid) {
+        filterProducts();
+    }
 
 
     /* =========================================================
@@ -542,9 +567,6 @@ const loadQuoteProducts = () => {
 
     /* Render signature products */
     renderSignatureProducts(currentProducts);
-
-    /* Load products into Get a Quote dropdown */
-    loadQuoteProducts();
 
 });
 
@@ -569,22 +591,22 @@ const loadQuoteProducts = () => {
         document.getElementById('mTargetFlower');
 
 
-    const openQuoteModal = (productName = null) => {
+    let selectedProductName = '';
 
-        if (productName && mTargetFlower) {
+    const openQuoteModal = (productName = null, categorySlug = null) => {
 
-            for (
-                let i = 0;
-                i < mTargetFlower.options.length;
-                i++
-            ) {
+        selectedProductName = productName || '';
 
-                if (
-                    mTargetFlower.options[i].text
-                        .toLowerCase()
-                        .includes(productName.toLowerCase())
-                ) {
+        if (!categorySlug && productName) {
+            categorySlug = currentProducts.find(p => p.name === productName)?.category;
+        }
 
+        if (categorySlug && mTargetFlower) {
+
+            const wanted = LEGACY_CATEGORIES[categorySlug]?.category || categorySlug;
+
+            for (let i = 0; i < mTargetFlower.options.length; i++) {
+                if (mTargetFlower.options[i].value === wanted) {
                     mTargetFlower.selectedIndex = i;
                     break;
                 }
@@ -598,6 +620,13 @@ const loadQuoteProducts = () => {
             document.body.style.overflow = 'hidden';
         }
     };
+
+    /* If the visitor picks a category by hand, forget the product they clicked earlier */
+    if (mTargetFlower) {
+        mTargetFlower.addEventListener('change', () => {
+            selectedProductName = '';
+        });
+    }
 
 
     const closeQuoteModalFunc = () => {
@@ -615,29 +644,17 @@ const loadQuoteProducts = () => {
     document.addEventListener('click', (e) => {
 
         const trigger =
-            e.target.closest(
-                '.open-quote-modal, [href="#contact"], [data-view="contact"]'
-            );
+            e.target.closest('.open-quote-modal');
 
         if (trigger) {
 
             e.preventDefault();
 
-            const prodName =
-                trigger.getAttribute('data-product');
+            openQuoteModal(
+                trigger.getAttribute('data-product'),
+                trigger.getAttribute('data-category')
+            );
 
-            openQuoteModal(prodName);
-
-            if (trigger.classList.contains('nav-link')) {
-
-                document
-                    .querySelectorAll('.nav-link')
-                    .forEach(nl => {
-                        nl.classList.remove('active');
-                    });
-
-                trigger.classList.add('active');
-            }
         }
     });
 
@@ -774,11 +791,9 @@ const loadQuoteProducts = () => {
                             phoneInput.value.trim(),
 
                         product_name:
-                            flowerSelect
-                                .options[
-                                    flowerSelect.selectedIndex
-                                ]
-                                .text,
+                            selectedProductName
+                                ? `${flowerSelect.options[flowerSelect.selectedIndex].text} – ${selectedProductName}`
+                                : flowerSelect.options[flowerSelect.selectedIndex].text,
 
                         volume:
                             volumeInput.value.trim(),
@@ -843,7 +858,7 @@ I would like to request an Export Quote:
 🏢 Company: ${newInquiry.company}
 📧 Email: ${newInquiry.email}
 📞 Phone: ${newInquiry.phone}
-🌺 Product Name: ${newInquiry.product_name}
+🌺 Product: ${newInquiry.product_name}
 📦 Expected Volume: ${newInquiry.volume}
 ✈️ Destination Airport: ${newInquiry.destination}
 📝 Notes: ${newInquiry.notes}`;
@@ -854,6 +869,8 @@ I would like to request an Export Quote:
 
 
                     modalQuoteForm.reset();
+
+                    selectedProductName = '';
 
                     closeQuoteModalFunc();
 
@@ -887,6 +904,41 @@ I would like to request an Export Quote:
             navMenu.classList.toggle('active');
 
         });
+    }
+
+
+    /* =========================================================
+       CONTACT LINK: highlight + smooth scroll on about.html#contact
+       ========================================================= */
+
+    const highlightContact = () => {
+
+        const onContact = window.location.hash === '#contact';
+
+        document.querySelectorAll('.nav-link').forEach(l => {
+
+            const href = l.getAttribute('href') || '';
+
+            if (href === 'about.html') {
+                l.classList.toggle('active', !onContact);
+            }
+
+            if (href === 'about.html#contact') {
+                l.classList.toggle('active', onContact);
+            }
+        });
+
+        if (onContact) {
+            setTimeout(() => {
+                document.getElementById('contact')
+                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    };
+
+    if (document.body.contains(document.getElementById('contact'))) {
+        highlightContact();
+        window.addEventListener('hashchange', highlightContact);
     }
 
 });
