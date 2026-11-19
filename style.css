@@ -1777,3 +1777,145 @@ img {
 
 }
    
+
+
+/* ==========================================
+   PRODUCT CATALOG: CATEGORIES & SUBCATEGORIES
+   ========================================== */
+.category-filter,
+.subcategory-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.category-filter {
+    margin-bottom: 14px;
+}
+
+.subcategory-filter {
+    margin-bottom: 24px;
+}
+
+.subcategory-filter:empty {
+    display: none;
+}
+
+.pill-btn.pill-sm {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    background-color: var(--bg-cream);
+}
+
+.catalog-groups {
+    margin: 36px 0 20px;
+}
+
+.catalog-group {
+    margin-bottom: 56px;
+    scroll-margin-top: 100px;
+}
+
+.group-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 12px;
+    margin-bottom: 22px;
+    border-bottom: 2px solid var(--primary);
+}
+
+.group-head h3 {
+    font-size: 1.7rem;
+    margin: 0;
+}
+
+.group-head p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.catalog-sub {
+    margin-bottom: 34px;
+    scroll-margin-top: 100px;
+}
+
+.sub-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.sub-head h4 {
+    font-size: 1.15rem;
+    margin: 0;
+}
+
+.sub-count {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--primary);
+    background-color: var(--bg-cream);
+    padding: 4px 12px;
+    border-radius: 50px;
+}
+
+.sub-note {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--text-muted);
+    margin: -6px 0 14px;
+}
+
+.empty-note {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    padding: 16px 20px;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 14px;
+}
+
+.range-details {
+    margin-top: 16px;
+}
+
+.range-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+.range-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.range-chip {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-white);
+    color: var(--text-main, #222);
+    cursor: pointer;
+}
+
+.range-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .group-head h3 { font-size: 1.35rem; }
+}

@@ -12,8 +12,8 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Flower Catalog | Zentro World Connect</title>
-    <meta name="description" content="Browse fresh flowers, traditional garlands and bouquets ready for export from Zentro World Connect, Sivagangai, Tamil Nadu.">
+    <title>Our Product Catalog | Zentro World Connect</title>
+    <meta name="description" content="Browse fresh flowers, garlands, rice, edible oils, spices, millets, grains and seeds ready for export from Zentro World Connect, Sivagangai, Tamil Nadu.">
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <!-- Google Fonts -->
@@ -58,21 +58,14 @@
             
             <div class="container catalog-page-container">
                 <div class="breadcrumb">Home &gt; Catalog</div>
-                <h1 class="catalog-title">Our Flower Catalog</h1>
-                <p class="catalog-subtitle">Explore our wide range of fresh flowers and traditional garlands ready for export. Cultivated with care, delivered with precision.</p>
+                <h1 class="catalog-title">Our Product Catalog</h1>
+                <p class="catalog-subtitle">Explore our range of fresh flowers, traditional garlands, rice, edible oils, spices, millets, grains and seeds ready for export. Sourced with care, delivered with precision.</p>
 
                 <!-- Search & Filter Bar -->
                 <div class="catalog-toolbar">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="catalogSearchInput" placeholder="Search flowers...">
-                    </div>
-                    <div class="filter-pills">
-                        <button class="pill-btn active" data-cat="all">All</button>
-                        <button class="pill-btn" data-cat="flowers">Flowers</button>
-                        <button class="pill-btn" data-cat="garlands">Garlands</button>
-                        <button class="pill-btn" data-cat="bouquets">Bouquets</button>
-                        
+                        <input type="text" id="catalogSearchInput" placeholder="Search products...">
                     </div>
                     <div class="sort-box">
                         <label>SORT BY:</label>
@@ -83,20 +76,22 @@
                     </div>
                 </div>
 
+                <!-- Category & Subcategory Filters (built from catalog-data.js) -->
+                <div class="category-filter" id="categoryFilter"></div>
+                <div class="subcategory-filter" id="subcategoryFilter"></div>
+
                 <!-- Custom Sourcing Notice Bar -->
                 <div class="notice-card">
                     <div class="notice-icon"><i class="fa-solid fa-circle-info"></i></div>
                     <div class="notice-text">
                         <strong>Can't find a specific variety?</strong>
-                        <p>We source, collect, and deliver flowers within these categories, but we can also get flowers that aren't in these categories. Our global network makes it possible for you to get rare and seasonal flowers that meet your exact needs.</p>
+                        <p>We source, collect, and deliver products within these categories, and we can also arrange varieties that aren't listed here. Our network makes it possible for you to get rare and seasonal products that meet your exact needs.</p>
                     </div>
                     <button class="btn btn-sm btn-outline open-quote-modal">Contact Us for Sourcing</button>
                 </div>
 
-                <!-- 8 Product Cards Grid (4 columns x 2 rows) -->
-                <div class="catalog-grid" id="catalogProductGrid">
-                    <!-- Loaded dynamically via script.js -->
-                </div>
+                <!-- Products grouped by category and subcategory (rendered by script.js) -->
+                <div class="catalog-groups" id="catalogProductGrid"></div>
 
                 <!-- Harvested Fresh, Shipped Faster Banner -->
                 <div class="harvest-banner" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('assets/hero_banner.png');">
@@ -205,7 +200,7 @@
                 <div class="form-group">
     <label for="mTargetFlower">Product Required *</label>
     <select id="mTargetFlower" required>
-        <option value="" disabled selected>Select a product</option>
+        <option value="" disabled selected>Select a product category</option>
     </select>
     <span class="error-msg">Please select a product</span>
 </div>
@@ -238,6 +233,7 @@
     <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Main Script -->
-    <script src="script.js?v=6.0"></script>
+    <script src="catalog-data.js?v=1.0"></script>
+    <script src="script.js?v=7.0"></script>
 </body>
 </html>

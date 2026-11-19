@@ -456,7 +456,8 @@
                 
                 <div class="form-group">
                     <label for="prodName">Product Name *</label>
-                    <input type="text" id="prodName" required placeholder="e.g. Carnation Rose">
+                    <input type="text" id="prodName" required list="prodNameList" autocomplete="off" placeholder="Select category first, then pick or type a name">
+                    <datalist id="prodNameList"></datalist>
                     <span class="error-msg">Product name is required</span>
                 </div>
                 
@@ -613,6 +614,7 @@
     <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Script file -->
-    <script src="admin.js?v=3.0"></script>
+    <script src="catalog-data.js?v=1.0"></script>
+    <script src="admin.js?v=4.0"></script>
 </body>
 </html>

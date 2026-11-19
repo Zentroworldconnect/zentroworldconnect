@@ -11,44 +11,41 @@ const SUPABASE_URL = "https://fvzqxddabdgybvozrlvs.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_iGDj_0kt5smIENeT6EqvJQ_vGxDZ8FD";
 
 
-const categoryLabels = {
-    'fresh-flowers-garlands': 'Fresh Flowers & Garlands',
-    rice: 'Rice',
-    'edible-oils': 'Edible Oils',
-    'spices-seasonings': 'Spices & Seasonings',
-    millets: 'Millets',
-    'other-grains-cereals': 'Other Grains & Cereals',
-    'edible-seeds-oilseeds': 'Edible Seeds & Oilseeds'
-};
+/* Categories come from catalog-data.js (shared with the website) */
+const ZENTRO_CATALOG = window.ZENTRO_CATALOG || [];
 
-const subcategoryOptions = {
-    'fresh-flowers-garlands': [
-        { value: 'fresh-cut-flowers', label: 'Fresh Cut Flowers' },
-        { value: 'flower-garlands', label: 'Flower Garlands' }
-    ],
-    rice: [
-        { value: 'basmati', label: 'Basmati' },
-        { value: 'non-basmati', label: 'Non-Basmati' }
-    ],
-    'edible-oils': [
-        { value: 'vegetable-seed-based', label: 'Vegetable & Seed-Based' },
-        { value: 'coconut-palm-based', label: 'Coconut & Palm-Based' },
-        { value: 'specialty', label: 'Specialty' }
-    ],
-    'spices-seasonings': [
-        { value: 'whole-spices', label: 'Whole Spices' }
-    ],
-    millets: [
-        { value: 'millets', label: 'Millets' }
-    ],
-    'other-grains-cereals': [
-        { value: 'other-grains-cereals', label: 'Other Grains & Cereals' }
-    ],
-    'edible-seeds-oilseeds': [
-        { value: 'edible-seeds', label: 'Edible Seeds' },
-        { value: 'oilseeds', label: 'Oilseeds' }
-    ]
-};
+const categoryLabels = Object.fromEntries(
+    ZENTRO_CATALOG.map(c => [c.slug, c.name])
+);
+
+const subcategoryOptions = Object.fromEntries(
+    ZENTRO_CATALOG.map(c => [
+        c.slug,
+        c.subcategories.map(s => ({ value: s.slug, label: s.name }))
+    ])
+);
+
+/* Standard product names, offered as suggestions in the "Product Name" box */
+function updateProductNameSuggestions() {
+
+    const list = document.getElementById('prodNameList');
+    if (!list) return;
+
+    const cat = ZENTRO_CATALOG.find(c => c.slug === prodCategorySelect?.value);
+    const sub = cat?.subcategories.find(s => s.slug === prodSubcategorySelect?.value);
+
+    const names = sub
+        ? sub.products
+        : (cat ? cat.subcategories.flatMap(s => s.products) : []);
+
+    list.innerHTML = '';
+
+    names.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        list.appendChild(opt);
+    });
+}
 
 
 const prodCategorySelect = document.getElementById('prodCategory');
@@ -76,12 +73,16 @@ function updateSubcategoryOptions(selectedSubcategory = '') {
     });
 
     prodSubcategorySelect.disabled = options.length === 0;
+
+    updateProductNameSuggestions();
 }
 
 if (prodCategorySelect && prodSubcategorySelect) {
     prodCategorySelect.addEventListener('change', () => {
         updateSubcategoryOptions();
     });
+
+    prodSubcategorySelect.addEventListener('change', updateProductNameSuggestions);
 }
 
 
