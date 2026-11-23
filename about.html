@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us | Zentro World Connect</title>
-    <meta name="description" content="Learn about Zentro World Connect - from local strength in Sivagangai, Tamil Nadu to global reach in floral exports. Contact our export team.">
+    <meta name="description" content="Learn about Zentro World Connect - from local strength in Sivagangai, Tamil Nadu to global reach in exports of flowers, rice, edible oils, spices, millets and grains. Contact our export team.">
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <!-- Google Fonts -->
@@ -23,7 +23,8 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.4">
+    <script>document.documentElement.classList.add("hz-js");</script>
 </head>
 <body>
 
@@ -55,132 +56,230 @@
     <main>
         <div class="page-view active">
 
-            
+            <!-- HERO -->
             <div class="container about-page-container">
-                <!-- Header Section -->
                 <div class="about-hero-grid">
                     <div class="about-hero-visual">
-                        <img src="assets/Global Reach.png" alt="Port Maritime Hub" class="about-port-img">
+                        <img src="assets/slide-4.jpg" alt="Global shipping port" class="about-port-img">
                         <div class="overlay-card">
                             <span class="number">01.</span>
                             <strong>Strategic Network Growth</strong>
                         </div>
                     </div>
                     <div class="about-hero-content">
+                        <span class="badge-tag">ABOUT ZENTRO WORLD CONNECT</span>
                         <h1>From Local Strength to <span class="text-red">Global Reach</span></h1>
-                        <p class="lead-text">We are growing step by step into international markets like Singapore & Gulf countries, bringing the finest products from our heritage directly to the world stage.</p>
-                        
-                        <div class="global-vision-box">
-                            <div class="icon-red"><i class="fa-solid fa-earth-americas"></i></div>
-                            <div>
-                                <strong>Global Vision</strong>
-                                <p>Expanding footprint across key maritime hubs.</p>
-                            </div>
+                        <p class="lead-text">From Sivagangai, Tamil Nadu, we export fresh flowers and garlands, rice, edible oils, spices, millets, grains and oilseeds to importers in Singapore, the Gulf and beyond, with quality checks and complete documentation on every shipment.</p>
+                        <div class="ab-actions">
+                            <button class="btn btn-primary open-quote-modal">Get a Quote</button>
+                            <a href="products.html" class="btn btn-outline">Explore Products</a>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Core Principles: The Zentro Standard -->
+            <!-- OUR STORY -->
+            <section class="hz-section">
+                <div class="container ab-story">
+                    <div>
+                        <span class="badge-tag">OUR STORY</span>
+                        <h2 class="ab-h2">Rooted in Tamil Nadu, <span class="text-red">Built for the World</span></h2>
+                        <p>Zentro World Connect began with fresh flower and garland exports, carrying the fragrance of Madurai jasmine and Hosur roses overseas. Along the way, importers asked for more from the same trusted source, and our range grew into rice, edible oils, spices, millets, grains and oilseeds.</p>
+                        <p>Today we work directly with farmers and suppliers across South India and ship to international buyers with careful grading, export-grade packing and complete paperwork. Our aim is simple: every consignment should reach your port exactly as it left ours.</p>
+                        <button class="btn btn-primary open-quote-modal">Start an Enquiry</button>
+                    </div>
+                    <div class="ab-stats">
+                        <div><span class="stat-num">10+</span><span class="stat-label">EXPORT COUNTRIES</span></div>
+                        <div><span class="stat-num">7</span><span class="stat-label">PRODUCT CATEGORIES</span></div>
+                        <div><span class="stat-num">24h</span><span class="stat-label">FARM TO FREIGHT</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MISSION & VISION -->
+            <section class="hz-section hz-grey">
+                <div class="container ab-mv">
+                    <div class="ab-mv-card ab-dark">
+                        <div class="icon-red"><i class="fa-solid fa-bullseye"></i></div>
+                        <h3>Our Mission</h3>
+                        <p>To deliver premium Indian produce to global buyers with consistent quality, honest pricing and reliable logistics, so that every importer can count on us shipment after shipment.</p>
+                    </div>
+                    <div class="ab-mv-card ab-red">
+                        <div class="icon-white"><i class="fa-solid fa-eye"></i></div>
+                        <h3>Our Vision</h3>
+                        <p>To become a trusted export partner for Indian agricultural products across Asia, the Middle East, Europe and the Americas, built on long-term relationships.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WHAT WE EXPORT -->
+            <section class="hz-section">
+                <div class="container">
+                    <div class="hz-head">
+                        <span class="badge-tag">WHAT WE EXPORT</span>
+                        <h2>Seven Categories, <span class="text-red">One Trusted Source</span></h2>
+                        <p>Choose a category to see the full range and enquire.</p>
+                    </div>
+                    <div class="ab-cat-grid" id="aboutCategories"></div>
+                    <div class="hz-inline-cta">
+                        <p><strong>Need something not listed?</strong> We source custom products on request.</p>
+                        <button class="btn btn-primary open-quote-modal">Request a Custom Quote</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CORE PRINCIPLES -->
+            <div class="container about-page-container">
                 <div class="principles-section">
                     <div class="text-center">
                         <span class="badge-tag">CORE PRINCIPLES</span>
                         <h2>The Zentro Standard</h2>
                     </div>
-
                     <div class="principles-grid">
                         <div class="principle-card">
                             <div class="icon-red"><i class="fa-solid fa-handshake"></i></div>
                             <h3>Strong Partnerships</h3>
-                            <p>Collaborating with local farmers and global distributors to ensure a seamless value chain based on mutual trust.</p>
+                            <p>Working with local farmers and global distributors to build a seamless value chain based on mutual trust.</p>
                         </div>
-
                         <div class="principle-card red-card">
                             <div class="icon-white"><i class="fa-solid fa-bullseye"></i></div>
                             <h3>Quality Commitment</h3>
-                            <p>Every bloom and every cargo is inspected under rigorous standards to maintain our reputation for premium export quality.</p>
+                            <p>Every product and every cargo is inspected to rigorous standards, so our export quality stays consistent.</p>
                         </div>
-
                         <div class="principle-card">
                             <div class="icon-red"><i class="fa-solid fa-rocket"></i></div>
                             <h3>Global Vision</h3>
-                            <p>Pioneering logistics solutions that connect Indian craftsmanship with the dynamic markets of the East and West.</p>
+                            <p>Building logistics solutions that connect Indian farms with the dynamic markets of the East and West.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Why Choose Zentro? Dark Charcoal Section -->
+                <!-- WHY CHOOSE ZENTRO -->
                 <div class="why-dark-section">
                     <div class="why-grid">
                         <div class="why-content">
                             <h2>Why Choose Zentro?</h2>
-                            <p class="why-sub">Our dedication to logistics excellence is built on three pillars of performance.</p>
-
-                            <div class="why-pillar">
-                                <span class="red-bullet"></span>
-                                <div>
-                                    <strong>Unwavering Reliability</strong>
-                                    <p>On-time delivery schedules maintained through proprietary tracking and local expertise in Tamil Nadu.</p>
-                                </div>
-                            </div>
-                            <div class="why-pillar">
-                                <span class="red-bullet"></span>
-                                <div>
-                                    <strong>Export Quality</strong>
-                                    <p>Premium selection process ensuring only the most resilient and vibrant products reach international shores.</p>
-                                </div>
-                            </div>
-                            <div class="why-pillar">
-                                <span class="red-bullet"></span>
-                                <div>
-                                    <strong>International Growth</strong>
-                                    <p>Actively expanding our presence in Singapore and Gulf regions with specialized cargo handling for florals.</p>
-                                </div>
-                            </div>
+                            <p class="why-sub">Three pillars behind every shipment we send.</p>
+                            <div class="why-pillar"><span class="red-bullet"></span><div><strong>Unwavering Reliability</strong><p>Planned dispatch schedules and local expertise in Tamil Nadu, so your cargo moves on time.</p></div></div>
+                            <div class="why-pillar"><span class="red-bullet"></span><div><strong>Export Quality</strong><p>A careful selection and grading process, so only products that meet export standards reach your port.</p></div></div>
+                            <div class="why-pillar"><span class="red-bullet"></span><div><strong>Worldwide Reach</strong><p>Shipping to Singapore, the Gulf and other international markets by air and sea, with products handled according to their needs.</p></div></div>
                         </div>
-
                         <div class="why-visual">
-                            <img src="assets/Why Zentro.png" alt="Tracked by Intelligence" class="why-img">
+                            <img src="assets/why-zentro.jpg" alt="Shipment visibility" class="why-img" loading="lazy">
                             <div class="intel-card">
                                 <i class="fa-solid fa-chart-line"></i>
-                                <strong>Tracked by Intelligence.</strong>
-                                <span>Full visibility from harvest to handover.</span>
+                                <strong>Visible at every step.</strong>
+                                <span>Updates from dispatch to handover.</span>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Red Contact Section ("Let's build business together.") -->
+            <!-- HOW WE WORK -->
+            <section class="process-section">
+                <div class="container">
+                    <div class="section-header-dark">
+                        <h2>How We Work</h2>
+                        <p>From your enquiry to your warehouse, in four clear steps.</p>
+                    </div>
+                    <div class="process-grid">
+                        <div class="process-card"><span class="step-badge">01</span><h4>Send Enquiry</h4><p>Tell us the product, volume and destination.</p></div>
+                        <div class="process-card"><span class="step-badge">02</span><h4>Get Your Quote</h4><p>Receive pricing and terms on WhatsApp or email.</p></div>
+                        <div class="process-card"><span class="step-badge">03</span><h4>Pack &amp; Inspect</h4><p>Quality check, grading and export-grade packing.</p></div>
+                        <div class="process-card"><span class="step-badge">04</span><h4>Ship &amp; Deliver</h4><p>Documentation, freight and tracking to your port.</p></div>
+                    </div>
+                    <div class="hz-inline-cta hz-center"><button class="btn btn-light open-quote-modal">Get a Quote Now</button></div>
+                </div>
+            </section>
+
+            <!-- DOCUMENTATION -->
+            <section class="hz-section hz-grey">
+                <div class="container">
+                    <div class="hz-head">
+                        <span class="badge-tag">EXPORT DOCUMENTATION</span>
+                        <h2>Paperwork <span class="text-red">Handled for You</span></h2>
+                        <p>We prepare the documents your shipment needs for smooth customs clearance.</p>
+                    </div>
+                    <div class="ab-docs">
+                        <div class="ab-doc"><i class="fa-solid fa-leaf"></i><h4>Phytosanitary Certificate</h4><p>For plant products, as required by the destination country.</p></div>
+                        <div class="ab-doc"><i class="fa-solid fa-stamp"></i><h4>Certificate of Origin</h4><p>Confirms the origin of your goods for customs and duty purposes.</p></div>
+                        <div class="ab-doc"><i class="fa-solid fa-file-invoice"></i><h4>Invoice &amp; Packing List</h4><p>Clear commercial documents for every consignment.</p></div>
+                        <div class="ab-doc"><i class="fa-solid fa-building-shield"></i><h4>Customs Support</h4><p>Guidance on clearance and shipping paperwork end to end.</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CERTIFICATIONS (hidden until CERTIFICATIONS is filled in about.js) -->
+            <section class="hz-section" id="certSection" hidden>
+                <div class="container">
+                    <div class="hz-head">
+                        <span class="badge-tag">CERTIFICATIONS</span>
+                        <h2>Certified &amp; <span class="text-red">Compliant</span></h2>
+                        <p>Registrations and certificates that support every export shipment.</p>
+                    </div>
+                    <div class="ab-certs" id="certGrid"></div>
+                </div>
+            </section>
+
+            <!-- TESTIMONIALS (hidden until TESTIMONIALS is filled in about.js) -->
+            <section class="hz-section hz-grey" id="reviewSection" hidden>
+                <div class="container">
+                    <div class="hz-head">
+                        <span class="badge-tag">TESTIMONIALS</span>
+                        <h2>What Our <span class="text-red">Buyers Say</span></h2>
+                    </div>
+                    <div class="ab-reviews" id="reviewGrid"></div>
+                    <div class="hz-inline-cta hz-center" id="reviewLinkWrap" hidden><a class="btn btn-primary" id="reviewLink" target="_blank" rel="noopener noreferrer">Read All Google Reviews</a></div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section class="hz-section">
+                <div class="container ab-faq-wrap">
+                    <div class="hz-head">
+                        <span class="badge-tag">FAQ</span>
+                        <h2>Questions Importers Ask</h2>
+                    </div>
+                    <div class="ab-faq">
+                        <details><summary>Which countries do you ship to?</summary><p>We export to Singapore, the Gulf countries and other international markets. Share your destination and we will confirm shipping options.</p></details>
+                        <details><summary>What is the minimum order quantity?</summary><p>It depends on the product and the shipping mode. Send us your requirement and we will confirm the quantity with your quote.</p></details>
+                        <details><summary>Do you ship by air or sea?</summary><p>Both. Fresh flowers and garlands usually travel by air, while rice, oils, spices, millets and grains can go by sea or air depending on volume and timeline.</p></details>
+                        <details><summary>Can I get samples?</summary><p>Please contact our team with the product you are interested in, and we will let you know the sample options.</p></details>
+                        <details><summary>How are payment terms decided?</summary><p>Payment terms are agreed for each order and mentioned in your quotation.</p></details>
+                        <details><summary>How do I get a quote?</summary><p>Click "Get a Quote" and share your product, volume and destination, or message us directly on WhatsApp.</p></details>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <div class="container about-page-container">
                 <div id="contact" class="red-contact-container">
                     <div class="red-contact-grid">
                         <div class="red-contact-left">
                             <h2>Let's build business together.</h2>
                             <p class="sub">Connect with our export specialists to discuss your bulk enquiries and global logistics needs.</p>
-
                             <div class="contact-info-cards">
-                                <div class="c-info-card">
-                                    <span class="c-label">WHATSAPP</span>
-                                    <a href="tel:+919597209593" class="c-val">+91 95972 09593</a>
-                                </div>
-                                <div class="c-info-card">
-                                    <span class="c-label">EMAIL</span>
-                                    <a href="mailto:info@zentroworldconnect.in" class="c-val">info@zentroworldconnect.in</a>
-                                </div>
+                                <div class="c-info-card"><span class="c-label">WHATSAPP</span><a href="tel:+919597209593" class="c-val">+91 95972 09593</a></div>
+                                <div class="c-info-card"><span class="c-label">EMAIL</span><a href="mailto:info@zentroworldconnect.in" class="c-val">info@zentroworldconnect.in</a></div>
+                                <div class="c-info-card"><span class="c-label">ADDRESS</span><span class="c-val">Railway Station Road, Sivagangai, Tamil Nadu, India - 630561</span></div>
                             </div>
-
                             <div class="contact-btns">
-                                
                                 <button class="btn btn-outline-light open-quote-modal">Send Enquiry</button>
-                                <a href="https://wa.me/919597209593" target="_blank" class="chat-link">Chat on WhatsApp &rarr;</a>
+                                <a href="https://wa.me/919597209593?text=Hello,%20I%20am%20interested%20in%20importing%20from%20Zentro%20World%20Connect." target="_blank" rel="noopener noreferrer" class="chat-link">Chat on WhatsApp &rarr;</a>
+                                <a href="https://maps.google.com/?q=Railway+Station+Road,Sivagangai,Tamil+Nadu,India,630561" target="_blank" rel="noopener noreferrer" class="chat-link">Get Directions &rarr;</a>
                             </div>
-
                             <div class="sivagangai-trust-box">
                                 <p>Rooted in Sivagangai, Tamil Nadu, India 🇮🇳, we are building a reliable export network focused on trust, consistency, and long-term partnerships.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                <div class="ab-map">
+                    <iframe src="https://maps.google.com/maps?q=Railway%20Station%20Road,Sivagangai,Tamil%20Nadu,India,630561&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="320" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Zentro World Connect, Sivagangai, Tamil Nadu"></iframe>
+                </div>
             </div>
+
         </div>
     </main>
 
@@ -297,6 +396,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Main Script -->
     <script src="catalog-data.js?v=1.0"></script>
-    <script src="script.js?v=7.0"></script>
+    <script src="script.js?v=7.3"></script>
+    <script src="about.js?v=1.1"></script>
 </body>
 </html>
