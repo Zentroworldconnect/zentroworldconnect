@@ -802,6 +802,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         destination:
                             destInput.value.trim(),
 
+                        packaging:
+                            (document.getElementById('mPackaging').value.trim()) || 'N/A',
+
+                        trade_term:
+                            document.getElementById('mTradeTerm').value || 'CIF',
+
                         notes:
                             document
                                 .getElementById('mAdditionalNotes')
@@ -815,9 +821,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                         try {
 
-                            await supabaseClient
+                            let { error } = await supabaseClient
                                 .from('inquiries')
                                 .insert([newInquiry]);
+
+                            /* If the new columns are not created yet, keep the details inside notes so nothing is lost */
+                            if (error && /packaging|trade_term/i.test(error.message || '')) {
+                                const { packaging, trade_term, ...legacy } = newInquiry;
+                                legacy.notes = `Trade Term: ${trade_term} | Packaging: ${packaging}\n${legacy.notes}`;
+                                ({ error } = await supabaseClient.from('inquiries').insert([legacy]));
+                            }
+
+                            if (error) console.error("Supabase insert error:", error);
 
                         } catch (err) {
 
@@ -860,8 +875,10 @@ I would like to request an Export Quote:
 📧 Email: ${newInquiry.email}
 📞 Phone: ${newInquiry.phone}
 🌺 Product: ${newInquiry.product_name}
-📦 Expected Volume: ${newInquiry.volume}
-✈️ Destination Airport: ${newInquiry.destination}
+📦 Packaging: ${newInquiry.packaging}
+⚖️ Quantity: ${newInquiry.volume}
+🚢 Trade Term: ${newInquiry.trade_term}
+⚓ Destination Port: ${newInquiry.destination}
 📝 Notes: ${newInquiry.notes}`;
 
 
