@@ -1,6 +1,92 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/products",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "fresh-flowers-garlands"
+        }
+      ],
+      "destination": "/flowers-garlands-export",
+      "permanent": true
+    },
+    {
+      "source": "/products",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "rice"
+        }
+      ],
+      "destination": "/rice-export",
+      "permanent": true
+    },
+    {
+      "source": "/products",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "edible-oils"
+        }
+      ],
+      "destination": "/edible-oils-export",
+      "permanent": true
+    },
+    {
+      "source": "/products",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "spices-seasonings"
+        }
+      ],
+      "destination": "/spices-export",
+      "permanent": true
+    },
+    {
+      "source": "/products",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "millets"
+        }
+      ],
+      "destination": "/millets-export",
+      "permanent": true
+    },
+    {
+      "source": "/products",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "other-grains-cereals"
+        }
+      ],
+      "destination": "/grains-cereals-export",
+      "permanent": true
+    },
+    {
+      "source": "/products",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "edible-seeds-oilseeds"
+        }
+      ],
+      "destination": "/seeds-oilseeds-export",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(admin|migrate-images)",

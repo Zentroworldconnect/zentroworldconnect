@@ -2103,3 +2103,6 @@ img {
 .ab-review blockquote { margin: 0; color: var(--text-dark, #222); line-height: 1.7; }
 .ab-review figcaption { margin-top: auto; display: flex; flex-direction: column; }
 .ab-review figcaption span { color: var(--text-muted); font-size: .85rem; }
+
+/* Selected small pill (subcategory filter) was white text on a pale background */
+.pill-btn.pill-sm.active, .pill-btn.pill-sm:hover { background-color: var(--primary); color: #fff; border-color: var(--primary); }

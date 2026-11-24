@@ -148,3 +148,14 @@ window.ZENTRO_CATALOG = [
         ]
     }
 ];
+
+/* Separate page URL for each main category (used for internal links) */
+window.ZENTRO_CATEGORY_PAGES = {
+    "fresh-flowers-garlands": "/flowers-garlands-export",
+    "rice": "/rice-export",
+    "edible-oils": "/edible-oils-export",
+    "spices-seasonings": "/spices-export",
+    "millets": "/millets-export",
+    "other-grains-cereals": "/grains-cereals-export",
+    "edible-seeds-oilseeds": "/seeds-oilseeds-export"
+};

@@ -14,6 +14,7 @@
     /* =================================== */
 
     var ICONS = { 'fresh-flowers-garlands': 'fa-spa', 'rice': 'fa-bowl-rice', 'edible-oils': 'fa-droplet', 'spices-seasonings': 'fa-pepper-hot', 'millets': 'fa-wheat-awn', 'other-grains-cereals': 'fa-seedling', 'edible-seeds-oilseeds': 'fa-leaf' };
+    function catUrl(slug) { var m = window.ZENTRO_CATEGORY_PAGES || {}; return m[slug] || ('/products?cat=' + slug); }
     function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -21,7 +22,7 @@
         var cat = window.ZENTRO_CATALOG || [];
         if (grid) grid.innerHTML = cat.map(function (c) {
             var n = c.subcategories.reduce(function (t, s) { return t + s.products.length; }, 0);
-            return '<a class="ab-cat" href="/products?cat=' + esc(c.slug) + '"><i class="fa-solid ' + (ICONS[c.slug] || 'fa-box-open') + '"></i><strong>' + esc(c.name) + '</strong><span>' + n + ' products</span></a>';
+            return '<a class="ab-cat" href="' + catUrl(c.slug) + '"><i class="fa-solid ' + (ICONS[c.slug] || 'fa-box-open') + '"></i><strong>' + esc(c.name) + '</strong><span>' + n + ' products</span></a>';
         }).join('');
 
 

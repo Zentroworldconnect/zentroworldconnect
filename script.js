@@ -536,6 +536,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlCat = urlParams.get('cat');
     const urlSub = urlParams.get('sub');
 
+    /* Dedicated category pages set <body data-category="slug"> */
+    const presetCat = document.body.getAttribute('data-category');
+    if (presetCat && findCategory(presetCat)) {
+        currentCategory = presetCat;
+        if (urlSub) currentSub = urlSub;
+    }
+
     if (urlCat) {
         const legacy = LEGACY_CATEGORIES[urlCat];
         currentCategory = legacy ? legacy.category : urlCat;
