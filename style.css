@@ -365,7 +365,7 @@ ul {
 }
 
 .heritage-img-1, .heritage-img-2 {
-    width: 50%;
+    width: 100%;
     height: 500px;
     object-fit: cover;
     border-radius: var(--radius-md);
