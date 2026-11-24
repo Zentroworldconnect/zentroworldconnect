@@ -937,11 +937,11 @@ I would like to request an Export Quote:
 
             const href = l.getAttribute('href') || '';
 
-            if (href === 'about.html') {
+            if (href === '/about' || href === 'about.html') {
                 l.classList.toggle('active', !onContact);
             }
 
-            if (href === 'about.html#contact') {
+            if (href === '/about#contact' || href === 'about.html#contact') {
                 l.classList.toggle('active', onContact);
             }
         });

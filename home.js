@@ -98,13 +98,13 @@
                 ? '<img src="' + esc(photo) + '" alt="' + esc(c.name) + '" loading="lazy">'
                 : '<div class="hz-cat-icon"><i class="fa-solid ' + v.icon + '"></i></div>';
             var subs = c.subcategories.length > 1 ? c.subcategories.map(function (s) {
-                return '<a href="products.html?cat=' + esc(c.slug) + '&sub=' + esc(s.slug) + '">' + esc(s.name) + '</a>';
+                return '<a href="/products?cat=' + esc(c.slug) + '&sub=' + esc(s.slug) + '">' + esc(s.name) + '</a>';
             }).join('') : '';
-            return '<article class="hz-cat-card"><a href="products.html?cat=' + esc(c.slug) + '" class="hz-cat-media">' + media + '</a>' +
+            return '<article class="hz-cat-card"><a href="/products?cat=' + esc(c.slug) + '" class="hz-cat-media">' + media + '</a>' +
                 '<div class="hz-cat-body"><h3>' + esc(c.name) + '</h3><p>' + esc(v.blurb) + '</p>' +
                 '<span class="hz-cat-count">' + total + ' products</span>' +
                 (subs ? '<div class="hz-cat-subs">' + subs + '</div>' : '') +
-                '<a href="products.html?cat=' + esc(c.slug) + '" class="hz-cat-link">Explore ' + esc(c.name) + ' &rarr;</a></div></article>';
+                '<a href="/products?cat=' + esc(c.slug) + '" class="hz-cat-link">Explore ' + esc(c.name) + ' &rarr;</a></div></article>';
         }).join('');
     }
 
