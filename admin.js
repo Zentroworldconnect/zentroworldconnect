@@ -971,7 +971,7 @@ renderProductsTable();
             if (inquiries.length === 0) {
                 inquiriesTableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="text-center py-4 text-muted">No inquiries received yet. Submit a quote on the frontpage.</td>
+                        <td colspan="9" class="text-center py-4 text-muted">No inquiries received yet. Submit a quote on the frontpage.</td>
                     </tr>
                 `;
                 return;
@@ -983,7 +983,9 @@ renderProductsTable();
                     <td>${inq.date ? inq.date.split(',')[0] : 'N/A'}</td>
                     <td><strong>${inq.name}</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">${inq.company}</span></td>
                     <td>${inq.product_name}</td>
+                    <td>${inq.packaging || '-'}</td>
                     <td>${inq.volume}</td>
+                    <td><span class="inquiry-status-badge">${inq.trade_term || '-'}</span></td>
                     <td>${inq.destination}</td>
                     <td>
                         <div class="actions-cell">
@@ -1043,11 +1045,19 @@ renderProductsTable();
                         <p class="val"><strong>${inq.product_name}</strong></p>
                     </div>
                     <div class="inquiry-detail-block">
-                        <span class="label">Required Volume</span>
+                        <span class="label">Packaging Specifications</span>
+                        <p class="val">${inq.packaging || '-'}</p>
+                    </div>
+                    <div class="inquiry-detail-block">
+                        <span class="label">Quantity</span>
                         <p class="val">${inq.volume}</p>
                     </div>
                     <div class="inquiry-detail-block">
-                        <span class="label">Destination Airport</span>
+                        <span class="label">Trade Term</span>
+                        <p class="val"><strong>${inq.trade_term || '-'}</strong></p>
+                    </div>
+                    <div class="inquiry-detail-block">
+                        <span class="label">Destination Port</span>
                         <p class="val">${inq.destination}</p>
                     </div>
                     <div class="inquiry-detail-block">
@@ -1059,7 +1069,7 @@ renderProductsTable();
                         <p class="val"><a href="tel:${cleanPhone(inq.phone)}" style="color:var(--primary);text-decoration:underline;">${inq.phone}</a></p>
                     </div>
                     <div class="inquiry-detail-block full-width">
-                        <span class="label">Additional Sourcing & Packaging Notes</span>
+                        <span class="label">Additional Notes</span>
                         <p class="val notes-val">${inq.notes}</p>
                     </div>
                 </div>
@@ -1106,7 +1116,7 @@ renderProductsTable();
                 }
 
                 // Headers
-                let csvContent = "Date,Name,Company,Email,Phone,Variety,Volume,Destination,Notes\n";
+                let csvContent = "Date,Name,Company,Email,Phone,Product,Packaging,Quantity,Trade Term,Destination Port,Notes\n";
 
                 // Loop through inquiries
                 list.forEach(inq => {
@@ -1117,7 +1127,9 @@ renderProductsTable();
                         `"${(inq.email || '').replace(/"/g, '""')}"`,
                         `"${(inq.phone || '').replace(/"/g, '""')}"`,
                         `"${(inq.product_name || '').replace(/"/g, '""')}"`,
+                        `"${(inq.packaging || '').replace(/"/g, '""')}"`,
                         `"${(inq.volume || '').replace(/"/g, '""')}"`,
+                        `"${(inq.trade_term || '').replace(/"/g, '""')}"`,
                         `"${(inq.destination || '').replace(/"/g, '""')}"`,
                         `"${(inq.notes || '').replace(/"/g, '""')}"`
                     ].join(",");

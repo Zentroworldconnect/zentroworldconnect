@@ -21,7 +21,7 @@
         var cat = window.ZENTRO_CATALOG || [];
         if (grid) grid.innerHTML = cat.map(function (c) {
             var n = c.subcategories.reduce(function (t, s) { return t + s.products.length; }, 0);
-            return '<a class="ab-cat" href="products.html?cat=' + esc(c.slug) + '"><i class="fa-solid ' + (ICONS[c.slug] || 'fa-box-open') + '"></i><strong>' + esc(c.name) + '</strong><span>' + n + ' products</span></a>';
+            return '<a class="ab-cat" href="/products?cat=' + esc(c.slug) + '"><i class="fa-solid ' + (ICONS[c.slug] || 'fa-box-open') + '"></i><strong>' + esc(c.name) + '</strong><span>' + n + ' products</span></a>';
         }).join('');
 
 

@@ -12,8 +12,21 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Zentro World Connect</title>
-    <meta name="description" content="Learn about Zentro World Connect - from local strength in Sivagangai, Tamil Nadu to global reach in exports of flowers, rice, edible oils, spices, millets and grains. Contact our export team.">
+    <title>About Zentro World Connect | Exporters from Tamil Nadu, India</title>
+    <meta name="description" content="Zentro World Connect exports flowers, rice, edible oils, spices, millets and grains from Sivagangai, Tamil Nadu to buyers worldwide. Meet our export team.">
+    <link rel="canonical" href="https://zentroworldconnect.in/about">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Zentro World Connect">
+    <meta property="og:title" content="About Zentro World Connect | Exporters from Tamil Nadu, India">
+    <meta property="og:description" content="Zentro World Connect exports flowers, rice, edible oils, spices, millets and grains from Sivagangai, Tamil Nadu to buyers worldwide. Meet our export team.">
+    <meta property="og:url" content="https://zentroworldconnect.in/about">
+    <meta property="og:image" content="https://zentroworldconnect.in/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Zentro World Connect | Exporters from Tamil Nadu, India">
+    <meta name="twitter:description" content="Zentro World Connect exports flowers, rice, edible oils, spices, millets and grains from Sivagangai, Tamil Nadu to buyers worldwide. Meet our export team.">
+    <meta name="twitter:image" content="https://zentroworldconnect.in/assets/og-image.jpg">
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <!-- Google Fonts -->
@@ -31,15 +44,15 @@
     <!-- Header & Navigation Bar -->
     <header class="header">
         <div class="container header-container">
-            <a href="index.html" class="logo-wrapper">
+            <a href="/" class="logo-wrapper">
                 <img src="assets/logo new.png" alt="Zentro World Connect Logo" class="site-logo">
             </a>
 
             <nav class="nav-menu" id="navMenu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="products.html" class="nav-link">Products</a>
-                <a href="about.html" class="nav-link active">About</a>
-                <a href="about.html#contact" class="nav-link">Contact</a>
+                <a href="/" class="nav-link">Home</a>
+                <a href="/products" class="nav-link">Products</a>
+                <a href="/about" class="nav-link active">About</a>
+                <a href="/about#contact" class="nav-link">Contact</a>
             </nav>
 
             <div class="header-actions">
@@ -60,7 +73,7 @@
             <div class="container about-page-container">
                 <div class="about-hero-grid">
                     <div class="about-hero-visual">
-                        <img src="assets/slide-4.jpg" alt="Global shipping port" class="about-port-img">
+                        <img src="assets/Sunset at the Container Port.png" alt="Global shipping port" class="about-port-img">
                         <div class="overlay-card">
                             <span class="number">01.</span>
                             <strong>Strategic Network Growth</strong>
@@ -72,7 +85,7 @@
                         <p class="lead-text">From Sivagangai, Tamil Nadu, we export fresh flowers and garlands, rice, edible oils, spices, millets, grains and oilseeds to importers in Singapore, the Gulf and beyond, with quality checks and complete documentation on every shipment.</p>
                         <div class="ab-actions">
                             <button class="btn btn-primary open-quote-modal">Get a Quote</button>
-                            <a href="products.html" class="btn btn-outline">Explore Products</a>
+                            <a href="/products" class="btn btn-outline">Explore Products</a>
                         </div>
                     </div>
                 </div>
@@ -287,7 +300,7 @@
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-brand">
-                <a href="index.html" class="logo-wrapper">
+                <a href="/" class="logo-wrapper">
                     <img src="assets/logo new.png" alt="Zentro World Connect Logo" class="site-logo">
                 </a>
                 <p><strong>Nachiappan KR</strong> (Managing Director)
@@ -302,10 +315,10 @@
             <div class="footer-links">
                 <h4>QUICK LINKS</h4>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="products.html">Products</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="about.html#contact">Contact</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/products">Products</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/about#contact">Contact</a></li>
                 </ul>
             </div>
 
@@ -321,8 +334,8 @@
             <div class="container footer-bottom-content">
                 <p>&copy; 2026 Zentro Exports. Excellence in Floral Export. | <a href="admin.html" style="color: var(--primary); font-weight: 600;"><i class="fa-solid fa-lock"></i> Admin Panel</a></p>
                 <div class="bottom-links">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
                 </div>
             </div>
         </div>
@@ -368,19 +381,34 @@
 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="mCargoVolume">Expected Volume *</label>
-                        <input type="text" id="mCargoVolume" required placeholder="e.g. 500 kg, 10,000 stems">
-                        <span class="error-msg">Volume is required</span>
+                        <label for="mPackaging">Packaging Specifications</label>
+                        <input type="text" id="mPackaging" placeholder="e.g. 25 kg PP bags, 1 L PET bottles, 10 kg cartons">
                     </div>
                     <div class="form-group">
-                        <label for="mDestinationAirport">Destination Airport / Country *</label>
-                        <input type="text" id="mDestinationAirport" required placeholder="e.g. Heathrow (LHR), London">
-                        <span class="error-msg">Destination is required</span>
+                        <label for="mCargoVolume">Quantity *</label>
+                        <input type="text" id="mCargoVolume" required placeholder="e.g. 500 kg, 20 MT, 1 x 20ft container">
+                        <span class="error-msg">Quantity is required</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mTradeTerm">Trade Term</label>
+                        <select id="mTradeTerm">
+                            <option value="CIF" selected>CIF</option>
+                            <option value="FOB">FOB</option>
+                            <option value="CFR">CFR</option>
+                            <option value="EXW">EXW</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mDestinationAirport">Destination Port *</label>
+                        <input type="text" id="mDestinationAirport" required placeholder="e.g. Port of Singapore, Jebel Ali (Dubai)">
+                        <span class="error-msg">Destination port is required</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="mAdditionalNotes">Additional Specifications</label>
-                    <textarea id="mAdditionalNotes" rows="3" placeholder="Stem length, packing details..."></textarea>
+                    <label for="mAdditionalNotes">Additional Notes</label>
+                    <textarea id="mAdditionalNotes" rows="3" placeholder="Any other requirements, grade, delivery timeline..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block"><i class="fa-brands fa-whatsapp"></i> Send Quote Request via WhatsApp</button>
             </form>
